@@ -7,6 +7,9 @@ No guarantys
 Software as it is
 Open Source
 
+Beep may use
+libasound2-dev
+
 https://learn.microsoft.com/en-us/previous-versions/dd743680(v=vs.85)1
 https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/itoa-itow?view=msvc-170
 https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/strrev-wcsrev?view=msvc-170

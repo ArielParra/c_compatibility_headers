@@ -6,6 +6,7 @@
 //#include<conio.h>
 //#include<stdlib.h>
 #include "ansiCompat.h"
+#include "legacyCompat.h"// Sleep()
 
 //int main(int argc,char *argv[]){
 //int main(int argc,char **argv){
@@ -20,7 +21,7 @@ int main(){
         printf(colors[i]);
         printf("TEXT COLOR:%s%s\n",CLR_RST,colors_names[i]);
         Sleep(1000);
-        sysClear();
+        printf(CLR_SCRN);
     }
     //printf(CLR_RST);//IMPLICIT
     
@@ -31,7 +32,7 @@ int main(){
     for(size_t i=0;i<bg_colors_size;i++) {
         printf("BACKGROUND COLOR: %s%s\n",bg_colors_names[i] ,bg_colors[i]);
         Sleep(1000);
-        sysClear();
+        printf(CLR_SCRN);
     }
     printf(CLR_RST);//IMPLICIT
 

@@ -1,7 +1,11 @@
 #include<stdio.h>//printf()
 #include<string.h>
 #include<math.h>//floor()
-#include "allCompat.h"
+//#include "allCompat.h"
+#include "legacyCompat.h"
+#include "ansiCompat.h"
+#include "multiCompat.h"
+#include "Play_Sound.h"
 
 void hello_world_UTF8(){//graphic created using https://fsymbols.com/
     int x=getx()/2 - floor(91/2);//91 is lenght
@@ -38,7 +42,7 @@ fflush(stdout);//insted of '/n' in each line
 //int main(int argc,char **argv){
 //int main(void){
 int main(){
-    Start_Compat();//while in ncurses mode, you need to use gotoxy to print
+    startCompat();//while in ncurses mode, you need to use gotoxy to print
     printf(HIDE_CRSR);
     hello_world_UTF8();
     for(int i=0;i<3;i++){
@@ -101,7 +105,7 @@ int main(){
     gotoxy(x,y++);printf("Sound Stop\n");
     Sleep(1000);
         
-    Exit_Compat();//includes printf(SHOW_CRSR);
+    exitCompat();//includes printf(SHOW_CRSR);
     return 0;
 }
 

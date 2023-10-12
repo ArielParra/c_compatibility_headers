@@ -23,18 +23,17 @@ extern "C" {
     //void sysPause(){system("read -r -n 1 -p 'Presiona cualquier tecla para contiuar . . .'");}//Español
     void sysPause(){system("read -r -n 1 -p 'Press any key to continue . . .'");}//English
     /*Redefinition of Windows system("pause") to sysPause() or system("cls" to sysclear)*/
-    #define system(cmd) do{ if(strcmp(cmd,"pause")==0){sysPause();} else if(strcmp(cmd,"cls")==0){sysClear();} else{system(cmd);} }while(0)
+    #define system(cmd) do{ if(strcmp(cmd,"pause")==0 || strcmp(cmd,"PAUSE")==0){sysPause();} else if(strcmp(cmd,"cls")==0 || strcmp(cmd,"CLS")==0){sysClear();} else{system(cmd);} }while(0)
     char *strrev(char *str){
-      char *p1, *p2;
+      char *p1,*p2;
       if (! str || ! *str)
             return str;
-      for (p1 = str, p2 = str + strlen(str) - 1; p2 > p1; ++p1, --p2){
-            *p1 ^= *p2;
-            *p2 ^= *p1;
-            *p1 ^= *p2;
+      for (p1=str,p2=str+strlen(str)-1;p2>p1;++p1,--p2){
+            *p1^=*p2;*p2^=*p1;*p1^=*p2;
       }
     return str;
     }
+    //to save lines of code in header
     #define TO_ASCII(num, str, base) \
     do { \
     if(base<2){exit(1);} \

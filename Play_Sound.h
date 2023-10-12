@@ -16,10 +16,24 @@ extern "C" {
     void Play_Sound(const char* file){PlaySound(TEXT(file),NULL,SND_ASYNC);}//qSound will stop while using getch()
     void Stop_Sound(){PlaySound(NULL, 0, 0);}
 
-    /*using sox.exe from: https://sourceforge.net/projects/sox/ */
-    //void Play_Sound(const char* file){char SoundCommand[strlen(file)+24+11];strcpy(SoundCommand, "sox.exe -t waveaudio -d ");strcat(SoundCommand, file);strcat(SoundCommand,">NUL 2>&1 &");system(SoundCommand);}
-    //void Stop_Sound(){system("taskkill /F /IM sox.exe");}
+    /* Using sox or ffmpeg ffplay command, 
+    sox.exe needs 14 dlls to work and only uses 4.96MB in total, 
+    ffplay.exe is standalon without dlls, but it is 77.2MB in size,
+    You can get sox portable from: https://sourceforge.net/projects/sox/files/sox/14.4.2/sox-14.4.2-win32.zip/download
+    You can get ffmpeg portable from: https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z
+    */
 
+    /* Warnings!
+    Carefull with the windows routes, you need four backslashes per backslash in the system() function.
+    Might work wihtout backlashes in newer Windows, but may need them for retrocompatibility in cmd
+    If you modify the SoundCommand,please modify the string size 
+    */    
+
+    //void Play_Sound(const char* file){char SoundCommand[strlen(file)+18+28];strcpy(SoundCommand, ".\\\\sox.exe .\\\\");strcat(SoundCommand, file);strcat(SoundCommand," -t waveaudio -d >NUL 2>&1 &");system(SoundCommand);}
+    //void Stop_Sound(){system("taskkill /F /IM sox.exe");}
+    
+    //void Play_Sound(const char* file){char SoundCommand[strlen(file)+29+11];strcpy(SoundCommand, ".\\\\ffplay.exe -nodisp .\\\\");strcat(SoundCommand, file);strcat(SoundCommand,">NUL 2>&1 &");system(SoundCommand);}
+    //void Stop_Sound(){system("taskkill /F /IM ffplay.exe");}
 
 #elif defined(__linux__)
 

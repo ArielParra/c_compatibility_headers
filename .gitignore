@@ -2,11 +2,11 @@ build/
 .vscode/
 obj/
 bin/
-example1
-example2
-example3
-example4
-example5
+example-leg
+example-ansi
+example-play
+example-multi
+example-all
 *.out
 *.exe
 *.dat

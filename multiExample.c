@@ -1,12 +1,12 @@
 #include<stdio.h>//printf()
-#include<string.h>
 #include<math.h>//floor()
 #include "multiCompat.h"
+#include "legacyCompat.h"
 
 void hello_world_UTF8(){//graphic created using https://fsymbols.com/
-    int x=getx()/2 - floor(91/2);//91 is lenght
+    int x=getx()/2 - floor(91/2);//91 is lengh,floor to even
     int y=gety()/2 - 6/2;        //6 is height
-    //IMPORTANT: Use either '/n' or fflush(stdout) 
+    //IMPORTANT: needs '\n' or fflush(stdout);
     gotoxy(x,y++);printf("██╗░░██╗███████╗██╗░░░░░██╗░░░░░░█████╗░  ░██╗░░░░░░░██╗░█████╗░██████╗░██╗░░░░░██████╗░██╗\n");
     gotoxy(x,y++);printf("██║░░██║██╔════╝██║░░░░░██║░░░░░██╔══██╗  ░██║░░██╗░░██║██╔══██╗██╔══██╗██║░░░░░██╔══██╗██║\n");
     gotoxy(x,y++);printf("███████║█████╗░░██║░░░░░██║░░░░░██║░░██║  ░╚██╗████╗██╔╝██║░░██║██████╔╝██║░░░░░██║░░██║██║\n");
@@ -38,41 +38,29 @@ fflush(stdout);//insted of '/n' in each line
 //int main(int argc,char **argv){
 //int main(void){
 int main(){
-    Start_Compat();//while in ncurses mode, you need to use gotoxy to print
+    startCompat();//while in ncurses mode, you need to use gotoxy to print
     hello_world_UTF8();
-    for(int i=0;i<3;i++){
-        gotoxy(getx()/2 - floor(21/2), gety()/2 +3 + i);
-        printf("%d seconds have elapsed\n",i+1);
+    for(int i=1;i<=3;i++){
+        gotoxy(getx()/2 - floor(21/2), gety()/2 +3 + i-1);
+        printf("%d seconds have passed\n",i);
+        Sleep(1000);
+    }
+ 
+    sysClear();
+
+    hola_mundo_UTF8();//fflush(stdout) needed, but implicit in the function
+    for(int i=1;i<=3;i++){
+        gotoxy(getx()/2 - floor(21/2), gety()/2 +3 + i-1);
+        printf("%d seconds have passed\n",i);
         Sleep(1000);
     }
 
+    
+
     Sleep(2000);
     sysClear();// to clear the graphics
-    
 
-    int x=getx()/2 - 40/2;//Pre definition, to align the next gotoxy()
-    int y=gety()/2 - 1;
-    
-    Play_Sound("song.wav");
-    gotoxy(x,y++);printf("You can use the song file name as argument");fflush(stdout);
-    gotoxy(x,y++);printf("Sound Play");fflush(stdout);
-    Sleep(5000);
-    Stop_Sound();
-    gotoxy(x,y++);printf("Sound Stop");fflush(stdout);
-    Sleep(1000);
-    
-    y++;//add one line
-
-    const char* song="song.wav";
-    gotoxy(x,y++);printf("Or you can use a const variable as argument\n");//insted of fflush(stdou)
-    Play_Sound(song);
-    gotoxy(x,y++);printf("Sound Play\n");
-    Sleep(5000);
-    Stop_Sound();
-    gotoxy(x,y++);printf("Sound Stop\n");
-    Sleep(1000);
-        
-    Exit_Compat();//includes printf(SHOW_CRSR);
+    exitCompat();//includes printf(SHOW_CRSR);
     return 0;
 }
 

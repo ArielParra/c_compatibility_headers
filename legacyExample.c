@@ -3,6 +3,7 @@
 //#include<conio.h>
 //#include<stdlib.h>//You make want to verify the uses of system()
 #include<stdio.h>
+#include<stdlib.h>
 #include"legacyCompat.h"
 
 //int main(int argc,char *argv[]){

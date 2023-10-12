@@ -24,13 +24,13 @@ all: $(Name1) $(Name2) $(Name3) $(Name4) $(Name5)
 $(Name1): legacyExample.c legacyCompat.h
 	$(CC) -o $(call FixPath,$(Name1)) $< $(FLAGS) $(CFLAGS)
 
-$(Name2): Play_SoundExample.c Play_Sound.h
+$(Name2): Play_SoundExample.c Play_Sound.h legacyCompat.h
 	$(CC) -o $(call FixPath,$(Name2)) $< $(FLAGS) $(CFLAGS)
 
-$(Name3): ansiExample.c ansiCompat.h
+$(Name3): ansiExample.c ansiCompat.h legacyCompat.h
 	$(CC) -o $(call FixPath,$(Name3)) $< $(FLAGS) $(CFLAGS)
 
-$(Name4): multiExample.c multiCompat.h
+$(Name4): multiExample.c multiCompat.h legacyCompat.h
 	$(CC) -o $(call FixPath,$(Name4)) $< $(FLAGS) $(CFLAGS)
 
 $(Name5): allExample.c allCompat.h
