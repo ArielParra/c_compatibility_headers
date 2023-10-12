@@ -1,2 +1,12 @@
-# c_compatibility_headers
-C/C++ compatibility headers from Windows to MacOs and Linux. 
+# FAQ
+This may not be sutable for production :P
+legacyCompat uses deprecated functions in Windows
+song.wav from https://freemusicarchive.org/music/John_Harrison_with_the_Wichita_State_University_Chamber_Players/The_Four_Seasons_Vivaldi
+# Licence
+No guarantys
+Software as it is
+Open Source
+
+https://learn.microsoft.com/en-us/previous-versions/dd743680(v=vs.85)1
+https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/itoa-itow?view=msvc-170
+https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/strrev-wcsrev?view=msvc-170
