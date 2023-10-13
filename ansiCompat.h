@@ -45,16 +45,16 @@ extern "C" {
 #define WHITE_LIGHT        "\x1b[97m"
     
 /*Dark colors*/
-#define BLACK_DARK        "\x1b[100m"
-#define RED_DARK          "\x1b[101m"       
-#define GREEN_DARK        "\x1b[102m"      
-#define YELLOW_DARK       "\x1b[103m"   
-#define BLUE_DARK         "\x1b[104m"       
-#define MAGENTA_DARK      "\x1b[105m"    
-#define CYAN_DARK         "\x1b[106m"
-#define WHITE_DARK        "\x1b[107m"
+#define BLACK_DARK        "\x1b[1;30m"
+#define RED_DARK          "\x1b[1;31m"
+#define GREEN_DARK        "\x1b[1;32m"
+#define YELLOW_DARK       "\x1b[1;33m"
+#define BLUE_DARK         "\x1b[1;34m"
+#define MAGENTA_DARK      "\x1b[1;35m"
+#define CYAN_DARK         "\x1b[1;36m"
+#define WHITE_DARK        "\x1b[1;37m"
 
-/*Background Colors*/
+/*Background Colors (ansi)*/
 #define BG_BLACK        "\x1b[40m"
 #define BG_RED          "\x1b[41m"
 #define BG_GREEN        "\x1b[42m"
@@ -64,16 +64,15 @@ extern "C" {
 #define BG_CYAN         "\x1b[46m"
 #define BG_WHITE        "\x1b[47m"
 
-/*Background Light Colors*/
-#define BG_BLACK_LIGHT        "\x1b[2;40m"
-#define BG_BLACK_LIGHT        "\x1b[2;40m"
-#define BG_RED_LIGHT          "\x1b[2;41m"
-#define BG_GREEN_LIGHT        "\x1b[2;42m"
-#define BG_YELLOW_LIGHT       "\x1b[2;43m"
-#define BG_BLUE_LIGHT         "\x1b[2;44m"
-#define BG_MAGENTA_LIGHT      "\x1b[2;45m"
-#define BG_CYAN_LIGHT         "\x1b[2;46m"
-#define BG_WHITE_LIGHT        "\x1b[2;47m"
+/*Background Light Colors (axiterm)*/
+#define BG_BLACK_LIGHT        "\x1b[100m"
+#define BG_RED_LIGHT          "\x1b[101m"
+#define BG_GREEN_LIGHT        "\x1b[102m"
+#define BG_YELLOW_LIGHT       "\x1b[103m"
+#define BG_BLUE_LIGHT         "\x1b[104m"
+#define BG_MAGENTA_LIGHT      "\x1b[105m"
+#define BG_CYAN_LIGHT         "\x1b[106m"
+#define BG_WHITE_LIGHT        "\x1b[107m"
 
 /*Background Dark Colors*/
 #define BG_BLACK_DARK        "\x1b[1;40m"
@@ -86,16 +85,58 @@ extern "C" {
 #define BG_CYAN_DARK         "\x1b[1;46m"
 #define BG_WHITE_DARK        "\x1b[1;47m"
 
-#if defined(_WIN32) || defined(_CYGWIN_)
-    /*KEYS for getch() from conio.h*/
-    #define KEY_LEFT 75
-    #define KEY_RIGHT 77
-    #define KEY_UP 72
-    #define KEY_DOWN 80
-    #define KEY_ENTER 13
-#else //for all *NIX 
-    #define KEY_ENTER '\n' 
-#endif//Windows OS detection
+#include<ctype.h>
+void color(char arg[2]){
+
+ printf(CLR_RST); //by default
+    
+    /*ForeGround (text color)*/
+    if (isdigit(arg[0]) || isalpha(arg[0])){
+            switch (arg[0]) { 
+                case '0': printf(BLACK); break; 
+                case '1': printf(BLUE); break; 
+                case '2': printf(GREEN); break; 
+                case '3': printf(CYAN); break;        //Windows aqua
+                case '4': printf(RED); break; 
+                case '5': printf(MAGENTA); break;     //Windows purple
+                case '6': printf(YELLOW); break; 
+                case '7': printf(WHITE); break; 
+                case '8': printf(BLACK_LIGHT); break; //Windows purple
+                case '9': printf(BLUE_LIGHT); break; 
+                case 'a': case 'A': printf(GREEN_LIGHT); break; 
+                case 'b': case 'B': printf(CYAN_LIGHT); break; 
+                case 'c': case 'C': printf(RED_LIGHT); break; 
+                case 'd': case 'D': printf(MAGENTA_LIGHT); break; 
+                case 'e': case 'E': printf(YELLOW_LIGHT); break; 
+                case 'f': case 'F': printf(WHITE_LIGHT); break; 
+                default: printf(CLR_RST); //for unknown argument 
+            } 
+    }
+    /*BackGround*/
+    if(arg[1]!='\0' && (isdigit(arg[1]) || isalpha(arg[1])) ){
+            switch (arg[1]) { 
+                case '0': printf(BG_BLACK); break; 
+                case '1': printf(BG_BLUE); break; 
+                case '2': printf(BG_GREEN); break; 
+                case '3': printf(BG_CYAN); break;        //Windows aqua
+                case '4': printf(BG_RED); break; 
+                case '5': printf(BG_MAGENTA); break;     //Windows purple
+                case '6': printf(BG_YELLOW); break; 
+                case '7': printf(BG_WHITE); break; 
+                case '8': printf(BG_BLACK_LIGHT); break; //Windows gray
+                case '9': printf(BG_BLUE_LIGHT); break; 
+                case 'a': case 'A': printf(BG_GREEN_LIGHT); break; 
+                case 'b': case 'B': printf(BG_CYAN_LIGHT); break; 
+                case 'c': case 'C': printf(BG_RED_LIGHT); break; 
+                case 'd': case 'D': printf(BG_MAGENTA_LIGHT); break; 
+                case 'e': case 'E': printf(BG_YELLOW_LIGHT); break; 
+                case 'f': case 'F': printf(BG_WHITE_LIGHT); break; 
+                default: printf(CLR_RST); //for unknown argument
+            }//switch 
+    }//if
+}//color()
+
+
 
 #ifdef __cplusplus
 }

@@ -1,10 +1,7 @@
 #include<stdio.h>//printf()
 #include<string.h>
 #include<math.h>//floor()
-/*You need to manualy comment the windows libraries*/
-//#include<windows.h> 
-//#include<conio.h>
-//#include<stdlib.h>
+#include<stdlib.h>
 #include "ansiCompat.h"
 #include "legacyCompat.h"// Sleep()
 

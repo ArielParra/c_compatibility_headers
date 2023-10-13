@@ -8,6 +8,7 @@
 #if defined(_WIN32) || defined(__CYGWIN__)
 #else
 #define system(cmd) do { \
+    printf("\x1b[0m"); \
     if (strncmp(cmd, "color", 5) == 0 || strncmp(cmd, "COLOR", 5) == 0) { \
         if(cmd[5] == '\0') { \
             /* Reset colors if no argument is provided */ \
@@ -65,16 +66,16 @@ int main(){
         for(char j='a';j<='f';j++){
             strcpy(command,"color ");command[6]=i;command[7]=j;command[8]='\0';
             system(command);
-            printf("%s%s\n",command,CLR_RST);
+            printf("\n%s",command);
         }
     }
     for(char i='0';i<='9';i++){
         for(char j='a';j<='f';j++){
             strcpy(command,"color ");command[6]=j;command[7]=i;command[8]='\0';
             system(command);
-            printf("%s%s\n",command,CLR_RST);
+            printf("\n%s",command);
         }
     }
-    printf("\n%s",CLR_RST);
+    printf("%s\n",CLR_RST);
 return 0;
 }

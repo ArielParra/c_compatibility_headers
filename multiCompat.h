@@ -12,9 +12,15 @@ extern "C" {
 #if defined(_WIN32) || defined(_CYGWIN_)
     #include<stdio.h>  //scanf(),printf()
     #include<conio.h>  //kbhit(), getch();
-    //#include<windows.h>
-    #include<ConsoleApi2.h> //(via WinCon.h, include Windows.h,SetConsoleOutputCP(),CONSOLE_SCREEN_BUFFER_INFO
-    #include<Mmsystem.h>    //PlaySound() need -lwinmm as compiler argument
+
+    /*KEYS for getch() from conio.h*/
+    #define KEY_LEFT 75
+    #define KEY_RIGHT 77
+    #define KEY_UP 72
+    #define KEY_DOWN 80
+    #define KEY_ENTER 13
+
+    #include<windows.h>//SetConsoleOutputCP(),CONSOLE_SCREEN_BUFFER_INFO,PlaySound() need -lwinmm as compiler argument
     void startCompat(){SetConsoleOutputCP(CP_UTF8);}//Unicode compatibility, can be done with system("chcp 65001 > NUL"); too
     void exitCompat(){return;}
     void pauseCompat(){return;};
@@ -29,6 +35,8 @@ extern "C" {
 
     #include <ncurses.h>//getch(),scanw() need -lncurses as compiler argument
     /*ncurses.h includes stdio.h */ 
+    /*for getch*/
+    #define KEY_ENTER '\n' 
     void gotoxy(int x,int y){printf("%c[%d;%df",0x1B,y,x);}
     int getx(){return getmaxx(stdscr);}
     int gety(){return getmaxy(stdscr);}
