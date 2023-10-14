@@ -29,10 +29,10 @@ extern "C" {
     If you modify the SoundCommand,please modify the string size 
     */    
 
-    //void Play_Sound(const char* file){char SoundCommand[strlen(file)+18+28];strcpy(SoundCommand, ".\\\\sox.exe .\\\\");strcat(SoundCommand, file);strcat(SoundCommand," -t waveaudio -d >NUL 2>&1 &");system(SoundCommand);}
+    //void Play_Sound(const char* file){char SoundCommand[strlen(file)+27+28];strcpy(SoundCommand, "start /b .\\\\sox.exe .\\\\");strcat(SoundCommand, file);strcat(SoundCommand," -t waveaudio -d >NUL 2>&1 &");system(SoundCommand);}
     //void Stop_Sound(){system("taskkill /F /IM sox.exe");}
     
-    //void Play_Sound(const char* file){char SoundCommand[strlen(file)+29+11];strcpy(SoundCommand, ".\\\\ffplay.exe -nodisp .\\\\");strcat(SoundCommand, file);strcat(SoundCommand,">NUL 2>&1 &");system(SoundCommand);}
+    //void Play_Sound(const char* file){char SoundCommand[strlen(file)+38+11];strcpy(SoundCommand, "start /b .\\\\ffplay.exe -nodisp .\\\\");strcat(SoundCommand, file);strcat(SoundCommand,">NUL 2>&1 &");system(SoundCommand);}
     //void Stop_Sound(){system("taskkill /F /IM ffplay.exe");}
 
 #elif defined(__linux__)
