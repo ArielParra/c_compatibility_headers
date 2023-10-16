@@ -18,7 +18,6 @@ Name3 = example-ansi
 Name4 = example-multi
 Name5 = example-all
 
-
 all: $(Name1) $(Name2) $(Name3) $(Name4) $(Name5)
 
 $(Name1): legacyExample.c legacyCompat.h

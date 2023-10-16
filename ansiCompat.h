@@ -8,18 +8,18 @@ extern "C" {
 /*ANSI Escape Codes Definitions*/
 
 /*Text modifiers*/
-#define BOLD          "\x1b[1m"  
-#define UNDER         "\x1b[4m"  // Underline
-#define UNDER_NOT     "\x1b[24m" // Not Underline
-#define INREVERSE     "\x1b[7m"  
-#define REVERSE       "\x1b[27m"
+#define BOLD_ON       "\x1b[1m"  
+#define BOLD_OFF      "\x1b[21m"  
+#define UNDER_ON      "\x1b[4m"  // Underline
+#define UNDER_OFF     "\x1b[24m" // Not Underline
+#define REVERSE_ON    "\x1b[7m"  
+#define REVERSE_OFF   "\x1b[27m"
 #define BLINK_ON      "\x1b[5m"
 #define BLINK_OFF     "\x1b[25m"
 
     
 /*Terminal modifiers*/
 #define CLR_RST   "\x1b[0m"      //Reset color to default terminal color
-#define BG_RST    "\x1b[49m"      //Reset color to default terminal color
 #define HIDE_CRSR "\033[?25l"    //Hide Terminal Cursor
 #define SHOW_CRSR "\033[?25h"    //Show Terminal Cursor
 #define CLR_SCRN  "\e[1;1H\e[2J" //Clear Screen 
@@ -33,6 +33,7 @@ extern "C" {
 #define MAGENTA      "\x1b[35m"    
 #define CYAN         "\x1b[36m"
 #define WHITE        "\x1b[37m"
+#define DEFAULT      "\x1b[39m" 
 
 /*Light colors (aixterm)*/
 #define BLACK_LIGHT        "\x1b[90m"
@@ -44,16 +45,6 @@ extern "C" {
 #define CYAN_LIGHT         "\x1b[96m"
 #define WHITE_LIGHT        "\x1b[97m"
     
-/*Dark colors*/
-#define BLACK_DARK        "\x1b[1;30m"
-#define RED_DARK          "\x1b[1;31m"
-#define GREEN_DARK        "\x1b[1;32m"
-#define YELLOW_DARK       "\x1b[1;33m"
-#define BLUE_DARK         "\x1b[1;34m"
-#define MAGENTA_DARK      "\x1b[1;35m"
-#define CYAN_DARK         "\x1b[1;36m"
-#define WHITE_DARK        "\x1b[1;37m"
-
 /*Background Colors (ansi)*/
 #define BG_BLACK        "\x1b[40m"
 #define BG_RED          "\x1b[41m"
@@ -63,6 +54,7 @@ extern "C" {
 #define BG_MAGENTA      "\x1b[45m"
 #define BG_CYAN         "\x1b[46m"
 #define BG_WHITE        "\x1b[47m"
+#define BG_DEFAULT      "\x1b[49m" 
 
 /*Background Light Colors (axiterm)*/
 #define BG_BLACK_LIGHT        "\x1b[100m"
@@ -74,21 +66,11 @@ extern "C" {
 #define BG_CYAN_LIGHT         "\x1b[106m"
 #define BG_WHITE_LIGHT        "\x1b[107m"
 
-/*Background Dark Colors*/
-#define BG_BLACK_DARK        "\x1b[1;40m"
-#define BG_BLACK_DARK        "\x1b[1;40m"
-#define BG_RED_DARK          "\x1b[1;41m"
-#define BG_GREEN_DARK        "\x1b[1;42m"
-#define BG_YELLOW_DARK       "\x1b[1;43m"
-#define BG_BLUE_DARK         "\x1b[1;44m"
-#define BG_MAGENTA_DARK      "\x1b[1;45m"
-#define BG_CYAN_DARK         "\x1b[1;46m"
-#define BG_WHITE_DARK        "\x1b[1;47m"
-
 #include<ctype.h>
-void color(char arg[2]){
+#include<stdio.h>
+void color(char arg[3]){
 
- printf(CLR_RST); //by default
+printf(CLR_RST); //by default
     
     /*ForeGround (text color)*/
     if (isdigit(arg[0]) || isalpha(arg[0])){
@@ -135,8 +117,6 @@ void color(char arg[2]){
             }//switch 
     }//if
 }//color()
-
-
 
 #ifdef __cplusplus
 }

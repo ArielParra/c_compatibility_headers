@@ -25,8 +25,9 @@ extern "C" {
     void exitCompat(){return;}
     void pauseCompat(){return;};
     void resumeCompat(){return;};
-    #define scanw(args) do{ scanf args; }while (0)
-    #define printw(args) do{ printf args; }while (0)
+    void refresh(){return;};
+    #define scanw(args...) scanf(args)
+    #define printw(args...) printf(args)
     void gotoxy(int x,int y){COORD coordinate;coordinate.X=x;coordinate.Y=y; SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coordinate);}
     int getx(){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Right-csbi.srWindow.Left);}
     int gety(){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Bottom-csbi.srWindow.Top);}
@@ -36,32 +37,34 @@ extern "C" {
     #include <ncurses.h>//getch(),scanw() need -lncurses as compiler argument
     /*ncurses.h includes stdio.h */ 
     /*for getch*/
-    #define KEY_ENTER '\n' 
     void gotoxy(int x,int y){printf("%c[%d;%df",0x1B,y,x);}
     int getx(){return getmaxx(stdscr);}
     int gety(){return getmaxy(stdscr);}
+    #define _getch() getch()
     #include <string.h>//strcat()
     void startCompat(){ //first function to be called inside main
         /*ncurses initialization*/
         initscr();            // Start curses mode
-        raw();                // Line buffering disabled
-        keypad(stdscr, TRUE); // Keyboard status
-        noecho();             // Dont echo() output of getch()
+        keypad(stdscr, TRUE); // enables the use of function keys,arrow keys,etc.
+        noecho();             // Dont echo() output of getch(), for a similiar functionality as conio
         refresh();            // Update the screen to use ncurses mode
+      //raw();                // Line buffering disabled (ctrl+c disabled)
     }//startCompat()
-    void exitCompat(){echo();endwin();}//End curses mode and return to regular terminal
+    #define printw(args...) printw(args);refresh();
+    #define scanw(args...) echo();scanw(args);noecho(); 
+    void exitCompat(){refresh();echo();endwin();}//End curses mode and return to regular terminal
     void pauseCompat(){reset_shell_mode();}
     void resumeCompat(){reset_prog_mode();}
     int kbhit(){
     int ch=0, r=0; 
-    nodelay(stdscr, TRUE);noecho();//turn off getch() blocking and echo
-    ch = getch();// check for input
-    if( ch == ERR){r = FALSE;}// no input
-    else{r = TRUE;ungetch(ch);}// input
-    // restore block and echo
-    echo();nodelay(stdscr, FALSE);
+        nodelay(stdscr, TRUE);
+        ch = getch();
+        if(ch == ERR){r = FALSE;}// no input
+        else{r = TRUE;ungetch(ch);}// input
+        nodelay(stdscr, FALSE);
     return(r);
     }//kbhit()  
+    #define _kbhit() kbhit()
 
 #endif//OS detection 
 

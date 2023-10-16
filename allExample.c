@@ -54,10 +54,6 @@ int main(){
     Sleep(2000);
     sysClear();// to clear the graphics
     
-    const char* colors[] = {BLACK,BLACK_LIGHT,BLACK_DARK,RED,RED_LIGHT,RED_DARK,GREEN,GREEN_LIGHT,GREEN_DARK,YELLOW,YELLOW_LIGHT,YELLOW_DARK,BLUE,BLUE_LIGHT,BLUE_DARK,MAGENTA,MAGENTA_LIGHT,MAGENTA_DARK,CYAN,CYAN_LIGHT,CYAN_DARK,WHITE,WHITE_LIGHT,WHITE_DARK};
-    const char* colors_names[] = { "BLACK", "BLACK_LIGHT", "BLACK_DARK", "RED", "RED_LIGHT", "RED_DARK", "GREEN", "GREEN_LIGHT", "GREEN_DARK", "YELLOW", "YELLOW_LIGHT", "YELLOW_DARK", "BLUE", "BLUE_LIGHT", "BLUE_DARK", "MAGENTA", "MAGENTA_LIGHT", "MAGENTA_DARK", "CYAN", "CYAN_LIGHT", "CYAN_DARK", "WHITE", "WHITE_LIGHT", "WHITE_DARK" };
-    
-
     size_t colors_size=  sizeof(colors) / sizeof(colors[0]);
     
     for(size_t i=0;i<colors_size;i++){
@@ -70,10 +66,6 @@ int main(){
     }
     //printf(CLR_RST);//IMPLICIT
     
-    const char* bg_colors[]={BG_RED,BG_GREEN,BG_YELLOW,BG_BLUE,BG_MAGENTA,BG_CYAN,BG_BLACK,BG_WHITE};
-    const char* bg_colors_names[]={"BG_RED","BG_GREEN","BG_YELLOW","BG_BLUE","BG_MAGENTA","BG_CYAN","BG_BLACK","BG_WHITE"}; 
-    size_t bg_colors_size = sizeof(bg_colors) / sizeof(bg_colors[0]);
-
     for(size_t i=0;i<bg_colors_size;i++) {
         gotoxy(getx()/2 - 15, gety()/2 + 5);
         printf("BACKGROUND COLOR: %s%s\n",bg_colors_names[i] ,bg_colors[i]);

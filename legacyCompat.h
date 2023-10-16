@@ -12,7 +12,7 @@ extern "C" {
     #include<synchapi.h>//Sleep()
     void sysClear(){system("cls");} 
     void sysPause(){system("pause");}
-    char* ultoa(unsigned long num,char* str,int base){return _ultoa(num, str, base);}
+    #define ultoa(args...) _ultoa(args...)
  
 #else
     #include<stdio.h> //sprintf()
@@ -56,6 +56,10 @@ extern "C" {
     char* ltoa(long num,char* str,int base){TO_ASCII(num, str, base);}
     char* ultoa(unsigned long num,char* str,int base){TO_ASCII(num, str, base);}
     char* itoa(int num,char* str,int base){TO_ASCII(num, str, base);}
+    #define _ltoa(args...) ltoa(args...)
+    #define _ultoa(args...) ultoa(args...)
+    #define _itoa(args...) itoa(args...)
+    #define _sleep(args) Sleep(args);
 
 #endif//system detection 
 

@@ -1,7 +1,20 @@
+# STATUS: BETA!
+[x] legacyCompat.h
+[x] ansiCompat.h
+[ ] multiCompat.h
+[x] Play_Sound.h
+[ ] allCompat.h
+[ ] beep.h
+[ ] README.md
+[ ] LICENCE.md
+
+---
+
 # FAQ
 This may not be sutable for production :P
 legacyCompat uses deprecated functions in Windows
 song.wav from https://freemusicarchive.org/music/John_Harrison_with_the_Wichita_State_University_Chamber_Players/The_Four_Seasons_Vivaldi
+
 # Licence
 No guarantys
 Software as it is
