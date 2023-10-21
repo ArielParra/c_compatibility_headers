@@ -55,13 +55,12 @@ int main(){
         Sleep(1000);
     }
     
-    Sleep(1000);
+    Sleep(2000);
     sysClear();// to clear the graphics
     
     char string1[100];
     char string2[100];
     
-    sysPause();
     sysClear();
     
     pauseCompat();
@@ -75,26 +74,46 @@ int main(){
  
     printw("If you dont want to pause the ncurses mode");//printw() need a refresh(), but i already include it in the header
     printw("\nYou can use printw() without gotoxy()");
+    printw("\nJust be carefull, it doesnt work the same as printf()");
     printw("\nAnd you can use scanw() as a scanf() substitute");
     printw("\nGive me a string: "); scanw("%s",string2);
-    printw("\nThe string input using scanw=%s",string2);
+    printw("\nThe string input using scanw=%s\n",string2);
+    
     sysPause();
+    sysClear();
 
+    printw("Press any key to quit kbhit()");   
+    int ch=0;
     while (!_kbhit()){//no key is being pressed
-        Sleep(100);
+        //will wait
     }
-    int ch = _getch();
-    printw("1. You pressed the '%c' key!\n",ch);
-    ch = getch();
-    printw("2. You pressed the '%c' key!\n",ch);
-    ch = _getch();
-    printw("3. You pressed the '%c' key!\n",ch);
-    ch = getch();
-    printw("4. You pressed the '%c' key!\n",ch);
-
-    Sleep(5000);
-    exitCompat();
-    return 0;
+    sysClear();
+    printw("You pressed any key! :D\n");
+    sysPause();
+    
+    int quit=0,endline=0;
+    while(quit!=1){
+        ch=getch();
+        sysClear();
+        gotoxy(0,1); printf("using getch(), Press any key to echo it or press 'Q'/'q' to exit\n");
+        gotoxy(0,2); printf("You pressed: ");
+        switch(ch){
+            case KEY_UP:        gotoxy(14,2);printf("'UP'\n");break;
+            case KEY_LEFT:      gotoxy(14,2);printf("'LEFT'\n");break;
+            case KEY_RIGHT:     gotoxy(14,2);printf("'RIGHT'\n");break;
+            case KEY_DOWN:      gotoxy(14,2);printf("'DOWN'\n");break;
+            case KEY_BACKSPACE: gotoxy(14,2);printf("'BACKSPACE'\n");break;
+            case KEY_ENTER://WINDOWS
+            case '\n':     //*NIX
+                gotoxy(14,2);printf("ENTER'\n");break;
+            case 'Q':
+            case 'q': quit=1;break;
+            default:  gotoxy(14,2);printf("'%c'\n",ch);break;
+        }
+        endline++;
+    }
+exitCompat();
+return 0;
 }
 
 

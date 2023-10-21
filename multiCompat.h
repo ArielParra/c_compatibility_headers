@@ -50,8 +50,8 @@ extern "C" {
         refresh();            // Update the screen to use ncurses mode
       //raw();                // Line buffering disabled (ctrl+c disabled)
     }//startCompat()
-    #define printw(args...) printw(args);refresh();
-    #define scanw(args...) echo();scanw(args);noecho(); 
+    #define printw(args...) do{printw(args);refresh();}while(0)
+    #define scanw(args...) do{echo();scanw(args);noecho();}while(0)
     void exitCompat(){refresh();echo();endwin();}//End curses mode and return to regular terminal
     void pauseCompat(){reset_shell_mode();}
     void resumeCompat(){reset_prog_mode();}
