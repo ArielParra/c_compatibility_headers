@@ -1,7 +1,7 @@
 #include<stdio.h>//printf()
 #include<math.h>//floor()
-#include "multiCompat.h"
-#include "legacyCompat.h"
+#include "ncursesCompat.h"
+#include "stdlibCompat.h"
 
 void hello_world_UTF8(){//graphic created using https://fsymbols.com/
     int x=getx()/2 - floor(91/2);//91 is lengh,floor to even
@@ -39,7 +39,10 @@ fflush(stdout);//insted of '/n' in each line
 //int main(void){
 int main(){
     startCompat();//while in ncurses mode, you need to use gotoxy tu sue printf()
+    sysClear();
+
     hello_world_UTF8();
+    
     for(int i=1;i<=3;i++){
         gotoxy(getx()/2 - floor(21/2), gety()/2 +3 + i-1);
         printf("%d seconds have passed\n",i);
@@ -105,15 +108,14 @@ int main(){
             case KEY_BACKSPACE: gotoxy(14,2);printf("'BACKSPACE'\n");break;
             case KEY_ENTER://WINDOWS
             case '\n':     //*NIX
-                gotoxy(14,2);printf("ENTER'\n");break;
+                                gotoxy(14,2);printf("ENTER'\n");break;
             case 'Q':
             case 'q': quit=1;break;
-            default:  gotoxy(14,2);printf("'%c'\n",ch);break;
+            default:            gotoxy(14,2);printf("'%c'\n",ch);break;
         }
         endline++;
-    }
+    }//while()
+
 exitCompat();
 return 0;
 }
-
-

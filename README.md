@@ -1,28 +1,35 @@
 # STATUS: BETA!
-[x] legacyCompat.h
-[x] ansiCompat.h
-[ ] multiCompat.h
-[x] Play_Sound.h
-[ ] allCompat.h
-[ ] beep.h
-[ ] README.md
-[ ] LICENCE.md
+
+- [x] stdlibCompat.h
+- [x] ansiCompat.h
+- [x] Play_Sound.h
+- [ ] ncursesCompat.h
+- [ ] allCompat.h
+- [ ] beep.h
+- [ ] README.md
+- [ ] LICENCE.md
+- [ ] ConsultedReferences.md
 
 ---
 
 # FAQ
 This may not be sutable for production :P
-legacyCompat uses deprecated functions in Windows
-song.wav from https://freemusicarchive.org/music/John_Harrison_with_the_Wichita_State_University_Chamber_Players/The_Four_Seasons_Vivaldi
+stdlibCompat uses deprecated functions in Windows
+song.wav clip downloaded from https://freemusicarchive.org/music/John_Harrison_with_the_Wichita_State_University_Chamber_Players/The_Four_Seasons_Vivaldi
 
 # Licence
-No guarantys
-Software as it is
-Open Source
+No guaranties
+Software is as it is
+it is Open Source, dont know which licence yet
 
-Beep may use
-libasound2-dev
+# Warnings
+This project is mainly to use with GCC compiler and Glibc, compatibility with Compilers like LLVM/CLANG and/or other C librarys like ulibc, musl or bionic is unkown and most likely may not work as intended. 
 
-https://learn.microsoft.com/en-us/previous-versions/dd743680(v=vs.85)1
-https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/itoa-itow?view=msvc-170
-https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/strrev-wcsrev?view=msvc-170
+this project has only been tested in Windows 10, linux and MacOS, BSD or other *NIX will probably works with manual patches
+The GNU make
+
+ncursesCompat may need ncurses and/or ncurses-dev package 
+
+Beep may need libasound2-dev package
+
+

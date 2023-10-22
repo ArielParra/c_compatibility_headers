@@ -1,11 +1,7 @@
 #include<stdio.h>//printf()
 #include<string.h>
 #include<math.h>//floor()
-//#include "allCompat.h"
-#include "legacyCompat.h"
-#include "ansiCompat.h"
-#include "multiCompat.h"
-#include "Play_Sound.h"
+#include "allCompat.h"
 
 void hello_world_UTF8(){//graphic created using https://fsymbols.com/
     int x=getx()/2 - floor(91/2);//91 is lenght
@@ -43,7 +39,9 @@ fflush(stdout);//insted of '/n' in each line
 //int main(void){
 int main(){
     startCompat();//while in ncurses mode, you need to use gotoxy to print
-    printf(HIDE_CRSR);
+    sysClear();
+
+    printf(CURSOR_OFF);
     hello_world_UTF8();
     for(int i=0;i<3;i++){
         gotoxy(getx()/2 - floor(21/2), gety()/2 +3 + i);
@@ -52,27 +50,7 @@ int main(){
     }
 
     Sleep(2000);
-    sysClear();// to clear the graphics
-    
-    size_t colors_size=  sizeof(colors) / sizeof(colors[0]);
-    
-    for(size_t i=0;i<colors_size;i++){
-        printf(colors[i]);
-        hola_mundo_UTF8();//fflush(stdout); IMPORTANT, but implicit because it is inside the function
-        gotoxy(getx()/2 - 15, gety()/2 + 5);
-        printf("TEXT COLOR:%s%s\n",CLR_RST,colors_names[i]);
-        Sleep(1000);
-        sysClear();
-    }
-    //printf(CLR_RST);//IMPLICIT
-    
-    for(size_t i=0;i<bg_colors_size;i++) {
-        gotoxy(getx()/2 - 15, gety()/2 + 5);
-        printf("BACKGROUND COLOR: %s%s\n",bg_colors_names[i] ,bg_colors[i]);
-        Sleep(1000);
-        sysClear();
-    }
-    printf(CLR_RST);//IMPLICIT
+    sysClear();//to clear the graphics
     
 
     int x=getx()/2 - 40/2;//Pre definition, to align the next gotoxy()
@@ -97,8 +75,6 @@ int main(){
     gotoxy(x,y++);printf("Sound Stop\n");
     Sleep(1000);
         
-    exitCompat();//includes printf(SHOW_CRSR);
+    exitCompat();
     return 0;
 }
-
-

@@ -1,10 +1,9 @@
 /*You need to manualy comment the windows libraries*/
 //#include<windows.h> 
 //#include<conio.h>
-//#include<stdlib.h>//You make want to verify the uses of system()
 #include<stdio.h>
-#include<stdlib.h>
-#include"legacyCompat.h"
+#include<stdlib.h>//You make want to verify the uses of system()
+#include"stdlibCompat.h"
 
 //int main(int argc,char *argv[]){
 //int main(int argc,char **argv){
@@ -33,7 +32,7 @@ int main() {
         printf("this the string in base %d: \"%s\"\n", base[i],stringI);
     } 
 
-    int numL=456;
+    long numL=456;
     char stringL[100];
     printf("\nThis is a long num: %ld\n", numL);
     for(size_t i =0;i<4;i++){
@@ -41,7 +40,7 @@ int main() {
         printf("this the string in base %d: \"%s\"\n", base[i],stringL);
     }
 
-    int numU=789;
+    unsigned long int numU=789;
     char stringU[100];
     printf("\nThis is a unsigned long num: %lu\n", numU);
     

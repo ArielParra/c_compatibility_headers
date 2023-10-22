@@ -1,5 +1,5 @@
-#ifndef legacyCompat_h 
-#define legacyCompat_h 
+#ifndef stdlibCompat_h 
+#define stdlibCompat_h 
 
 #ifdef __cplusplus
 extern "C" {
@@ -12,7 +12,7 @@ extern "C" {
     #include<synchapi.h>//Sleep()
     void sysClear(){system("cls");} 
     void sysPause(){system("pause");}
-    #define ultoa(args...) _ultoa(args...)
+    #define ultoa(args...) _ultoa(args)
  
 #else
     #include<stdio.h> //sprintf()
@@ -56,14 +56,14 @@ extern "C" {
     char* ltoa(long num,char* str,int base){TO_ASCII(num, str, base);}
     char* ultoa(unsigned long num,char* str,int base){TO_ASCII(num, str, base);}
     char* itoa(int num,char* str,int base){TO_ASCII(num, str, base);}
-    #define _ltoa(args...) ltoa(args...)
-    #define _ultoa(args...) ultoa(args...)
-    #define _itoa(args...) itoa(args...)
-    #define _sleep(args) Sleep(args);
+    #define _ltoa(args...) ltoa(args)
+    #define _ultoa(args...) ultoa(args)
+    #define _itoa(args...) itoa(args)
+    #define _sleep(args) Sleep(args)
 
 #endif//system detection 
 
 #ifdef __cplusplus
 }
 #endif//__cplusplus
-#endif//legacyCompat_h 
+#endif//stdlibCompat_h 

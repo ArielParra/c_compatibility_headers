@@ -5,8 +5,9 @@
 extern "C" {
 #endif
 
-#include "legacyCompat.h"
-#include "multiCompat.h"
+/*Will implent all functions when finished*/
+#include "stdlibCompat.h"
+#include "ncursesCompat.h"
 #include "ansiCompat.h"
 #include "Play_Sound.h"
 

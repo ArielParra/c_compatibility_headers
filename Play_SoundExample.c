@@ -4,7 +4,7 @@
 //#include<conio.h>
 //#include<stdlib.h>
 #include "Play_Sound.h"
-#include "legacyCompat.h"
+#include "stdlibCompat.h"
 
 //int main(int argc,char *argv[]){
 //int main(int argc,char **argv){

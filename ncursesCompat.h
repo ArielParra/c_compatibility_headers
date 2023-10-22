@@ -1,5 +1,5 @@
-#ifndef multiCompat_h
-#define multiCompat_h
+#ifndef ncursesCompat_h
+#define ncursesCompat_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,22 +10,29 @@ extern "C" {
 
 /*OS detection*/
 #if defined(_WIN32) || defined(_CYGWIN_)
-    #include<stdio.h>  //scanf(),printf()
-    #include<conio.h>  //kbhit(), getch();
+    #include<stdio.h>//scanf(),printf()
+    #include<conio.h>//kbhit(),getch();
 
-    /*KEYS for getch() from conio.h*/
+    /*KEYS for getch() from <conio.h>*/
     #define KEY_LEFT 75
     #define KEY_RIGHT 77
     #define KEY_UP 72
     #define KEY_DOWN 80
     #define KEY_ENTER 13
+    #define KEY_ENTER 13
+    #define KEY_BACKSPACE 8
+    #define KEY_TAB 15
 
-    #include<windows.h>//SetConsoleOutputCP(),CONSOLE_SCREEN_BUFFER_INFO,PlaySound() need -lwinmm as compiler argument
-    void startCompat(){SetConsoleOutputCP(CP_UTF8);}//Unicode compatibility, can be done with system("chcp 65001 > NUL"); too
-    void exitCompat(){return;}
-    void pauseCompat(){return;};
-    void resumeCompat(){return;};
-    void refresh(){return;};
+    #include<windows.h>//SetConsoleOutputCP(),GetConsoleScreenBufferInfo(),GetStdHandle(),SetConsoleCursorPosition(),COORD
+    //For some old MinGW/CYGWIN distributions
+    #ifndef CP_UTF8 
+    #define CP_UTF8 65001 
+    #endif
+    void startCompat(){SetConsoleOutputCP(CP_UTF8);}//Unicode compatibility, can also be done with system("chcp 65001 > NUL");
+    void exitCompat(void){};
+    void pauseCompat(void){};
+    void resumeCompat(void){};
+    void refresh(void){};
     #define scanw(args...) scanf(args)
     #define printw(args...) printf(args)
     void gotoxy(int x,int y){COORD coordinate;coordinate.X=x;coordinate.Y=y; SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coordinate);}
@@ -35,7 +42,7 @@ extern "C" {
 #else//*NIX
 
     #include <ncurses.h>//getch(),scanw() need -lncurses as compiler argument
-    /*ncurses.h includes stdio.h */ 
+    /*<ncurses.h> includes <stdio.h> */ 
     /*for getch*/
     void gotoxy(int x,int y){printf("%c[%d;%df",0x1B,y,x);}
     int getx(){return getmaxx(stdscr);}
@@ -72,4 +79,4 @@ extern "C" {
 }
 #endif//__cplusplus
 
-#endif//multiCompat_h
+#endif//ncursesCompat_h
