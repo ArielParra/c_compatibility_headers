@@ -1,5 +1,4 @@
 #include<stdio.h>//printf()
-#include<math.h>//floor()
 #include "ncursesCompat.h"
 #include "stdlibCompat.h"
 
@@ -11,7 +10,7 @@ int main(){
     sysClear();
 
     for(int i=1;i<=3;i++){
-        gotoxy(getx()/2 - floor(21/2), gety()/2 +3 + i-1);
+        gotoxy(getmaxx(stdscr)/2 - 21/2, getmaxy(stdscr)/2 +3 + i-1);
         printf("%d seconds have passed\n",i);
         Sleep(1000);
     }
@@ -57,37 +56,37 @@ int main(){
     while(quit!=1){
         ch=getch();
         sysClear();
-        gotoxy(0,1); printf("using getch(), Press any key to echo it or press 'Q'/'q' to exit\n");
+        gotoxy(0,0); printf("you cant quit wiht ctrl + c on geth() mode, so exit with 'q' key \n");
+        gotoxy(0,1); printf("using getch(), Press any key to echo it\n");
         gotoxy(0,2); printf("You pressed: ");
         switch(ch){
-            case KEY_UP:        gotoxy(14,2);printf("'UP'\n");break;
-            case KEY_LEFT:      gotoxy(14,2);printf("'LEFT'\n");break;
-            case KEY_RIGHT:     gotoxy(14,2);printf("'RIGHT'\n");break;
-            case KEY_DOWN:      gotoxy(14,2);printf("'DOWN'\n");break;
+            case KEY_UP:        gotoxy(14,2);printf("'UP (or 'K' on Windows)'\n");break;
+            case KEY_LEFT:      gotoxy(14,2);printf("'LEFT (or 'M' on Windows)'\n");break;
+            case KEY_RIGHT:     gotoxy(14,2);printf("'RIGHT (or 'H' on Windows)'\n");break;
+            case KEY_DOWN:      gotoxy(14,2);printf("'DOWN (or 'P' on Windows)'\n");break;
             case KEY_BACKSPACE: gotoxy(14,2);printf("'BACKSPACE'\n");break;
-            case KEY_IC:        gotoxy(14,2);printf("'INSERT'\n");break;
-            case KEY_DC:        gotoxy(14,2);printf("'SUPR'\n");break;
+            case KEY_IC:        gotoxy(14,2);printf("'INSERT (or 'R' on Windows)'\n");break;
+            case KEY_DC:        gotoxy(14,2);printf("'SUPR (or 'S' on Windows)'\n");break;
             case KEY_PPAGE:     gotoxy(14,2);printf("'PrevPag/RePag\n");break;
             case KEY_NPAGE:     gotoxy(14,2);printf("'NextPag/AvPag'\n");break;
-            case KEY_END:       gotoxy(14,2);printf("'END'\n");break;
-            case KEY_HOME:      gotoxy(14,2);printf("'HOME/BEG'\n");break;
+            case KEY_END:       gotoxy(14,2);printf("'END (or 'O' on Windows)'\n");break;
+            case KEY_HOME:      gotoxy(14,2);printf("'HOME/BEG (or 'G' on Windows)'\n");break;
             case KEY_ESC:       gotoxy(14,2);printf("'ESC'\n");break;
             case KEY_TAB:       gotoxy(14,2);printf("'TAB'\n");break;
             case KEY_SPACE:     gotoxy(14,2);printf("'SPACE BAR'\n");break;
-            case KEY_F(1):      gotoxy(14,2);printf("'F1'\n");break;
-            case KEY_F(2):      gotoxy(14,2);printf("'F2'\n");break;
-            case KEY_F(3):      gotoxy(14,2);printf("'F3'\n");break;
-            case KEY_F(4):      gotoxy(14,2);printf("'F4'\n");break;
-            case KEY_F(5):      gotoxy(14,2);printf("'F5'\n");break;
-            case KEY_F(6):      gotoxy(14,2);printf("'F6'\n");break;
-            case KEY_F(7):      gotoxy(14,2);printf("'F7'\n");break;
-            case KEY_F(8):      gotoxy(14,2);printf("'F8'\n");break;
-            case KEY_F(9):      gotoxy(14,2);printf("'F9'\n");break;
-            case KEY_F(10):     gotoxy(14,2);printf("'F10'\n");break;
-            case KEY_F(11):     gotoxy(14,2);printf("'F11'\n");break;
-            case KEY_F(12):     gotoxy(14,2);printf("'F12'\n");break;
+            case KEY_F1:        gotoxy(14,2);printf("'F1 (or ';' on Windows)'\n");break;
+            case KEY_F2:        gotoxy(14,2);printf("'F2 (or '<' on Windows)'\n");break;
+            case KEY_F3:        gotoxy(14,2);printf("'F3 (or '=' on Windows)'\n");break;
+            case KEY_F4:        gotoxy(14,2);printf("'F4 (or '>' on Windows)'\n");break;
+            case KEY_F5:        gotoxy(14,2);printf("'F5 (or '?' on Windows)'\n");break;
+            case KEY_F6:        gotoxy(14,2);printf("'F6 (or '@' on Windows)'\n");break;
+            case KEY_F7:        gotoxy(14,2);printf("'F7 (or 'A' on Windows)'\n");break;
+            case KEY_F8:        gotoxy(14,2);printf("'F8 (or 'B' on Windows)'\n");break;
+            case KEY_F9:        gotoxy(14,2);printf("'F9 (or 'C' on Windows)'\n");break;
+            case KEY_F10:       gotoxy(14,2);printf("'F10 (or 'D' on Windows)'\n");break;
+            case KEY_F11:       gotoxy(14,2);printf("'F11'\n");break;
+            case KEY_F12:       gotoxy(14,2);printf("'F12'\n");break;
             case KEY_ENTER:     gotoxy(14,2);printf("ENTER'\n");break;
-            case 'Q':
             case 'q': quit=1;break;
             default:            gotoxy(14,2);printf("'%c'\n",ch);break;
         }

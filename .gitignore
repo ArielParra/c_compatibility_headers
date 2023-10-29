@@ -2,11 +2,11 @@ build/
 .vscode/
 obj/
 bin/
-example-stdlibCompat
-example-play_Sound
-example-ansiCompat
-example-ncursesCompat
-example-allCompat
+example-stdlibCompat-*
+example-play_Sound-*
+example-ansiCompat-*
+example-ncursesCompat-*
+example-allCompat-*
 *.out
 *.exe
 *.dat

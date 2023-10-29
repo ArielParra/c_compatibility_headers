@@ -14,38 +14,40 @@ extern "C" {
     #include<conio.h>//kbhit(),getch();
 
     /*KEYS for getch() from <conio.h>*/
-    #define KEY_LEFT 75
-    #define KEY_RIGHT 77
-    #define KEY_UP 72
-    #define KEY_DOWN 80
-    #define KEY_ENTER 13
-    #define KEY_SPACE ' '
-    #define KEY_TAB 9
-    #define KEY_ESC 27
-    #define KEY_BACKSPACE 8
-    #define KEY_HOME 71
-    #define KEY_IC 82
-    #define KEY_DC 83
-    #define KEY_PPAGE 73
-    #define KEY_NPAGE 81
-    #define KEY_F(1)  59
-    #define KEY_F(2)  60
-    #define KEY_F(3)  61
-    #define KEY_F(4)  62
-    #define KEY_F(5)  63
-    #define KEY_F(6)  64
-    #define KEY_F(7)  65
-    #define KEY_F(8)  66
-    #define KEY_F(9)  67
-    #define KEY_F(10) 68
-    #define KEY_F(11) 133
-    #define KEY_F(12) 134
-    
+    #define KEY_LEFT 75     //ascii 75 is K
+    #define KEY_RIGHT 77    //ascii 77 is M
+    #define KEY_UP 72       //ascii 72 is H
+    #define KEY_DOWN 80     //ascii 80 is P
+    #define KEY_ENTER 13   
+    #define KEY_SPACE 32  
+    #define KEY_TAB 9       
+    #define KEY_ESC 27     
+    #define KEY_BACKSPACE 8 
+    #define KEY_HOME 71     //ascii 71 is G
+    #define KEY_END 79      //ascii 79 is O
+    #define KEY_IC 82       //ascii 82 is R
+    #define KEY_DC 83       //ascii 83 is S
+    #define KEY_PPAGE 73    //ascii 73 is I
+    #define KEY_NPAGE 81    //ascii 81 is Q
+    #define KEY_F1  59      //ascii 59 is ;
+    #define KEY_F2  60      //ascii 60 is <
+    #define KEY_F3  61      //ascii 61 is =
+    #define KEY_F4  62      //ascii 62 is >
+    #define KEY_F5  63      //ascii 63 is ?
+    #define KEY_F6  64      //ascii 64 is @
+    #define KEY_F7  65      //ascii 65 is A
+    #define KEY_F8  66      //ascii 66 is B
+    #define KEY_F9  67      //ascii 67 is C
+    #define KEY_F10 68      //ascii 68 is D
+    #define KEY_F11 133     
+    #define KEY_F12 134     
+
     #include<windows.h>//GetConsoleScreenBufferInfo(),GetStdHandle(),SetConsoleCursorPosition(),COORD
+    void *stdscr;//compatibility with ncurses stdscr variable
     void gotoxy(int x,int y){COORD coordinate;coordinate.X=x;coordinate.Y=y; SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coordinate);}
-    int getx(){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Right-csbi.srWindow.Left);}
-    int gety(){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Bottom-csbi.srWindow.Top);}
-    
+    int getmaxx(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Right-csbi.srWindow.Left);}
+    int getmaxy(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Bottom-csbi.srWindow.Top);}
+    void getmaxyx(void *stdscr,int *maxY, int *maxX){*maxY=getmaxx(stdscr); *maxX=getmaxy(stdscr);}
     /*ncurses on Windows*/
     void startCompat(void){}
     void exitCompat(void){}
@@ -110,31 +112,7 @@ extern "C" {
     #include <ncurses.h>//getch(),scanw() need -lncurses as compiler argument
     /*<ncurses.h> includes <stdio.h> */ 
     void gotoxy(int x,int y){printf("%c[%d;%df",0x1B,y,x);}
-    int getx(){return getmaxx(stdscr);}
-    int gety(){return getmaxy(stdscr);}
-    #define _getch() getch()
-    
-    #undef  KEY_ENTER // on ncurses is ctrl + m 
-    #define KEY_ENTER '\n'
-    #define KEY_SPACE ' '
-    #define KEY_TAB 9
-    #define KEY_ESC 27
-    
-    #include <string.h>//strcat()
-    void startCompat(){ //first function to be called inside main
-        /*ncurses initialization*/
-        initscr();            // Start curses mode
-        keypad(stdscr, TRUE); // enables the use of function keys,arrow keys,etc.
-        noecho();             // Dont echo() output of getch(), for a similiar functionality as conio
-        cbreak();             // will break with ctrl +c like on windows
-        refresh();            // Update the screen to use ncurses mode
-      //raw();                // Line buffering disabled (ctrl+c disabled)
-    }//startCompat()
-    #define printw(args...) do{printw(args);refresh();}while(0)
-    #define scanw(args...) do{echo();scanw(args);noecho();}while(0)
-    void exitCompat(){refresh();echo();fflush(stdout);endwin();}//End curses mode and return to regular terminal
-    void pauseCompat(){reset_shell_mode();}
-    void resumeCompat(){reset_prog_mode();}
+   
     int kbhit(){
     int ch=0, r=0; 
         nodelay(stdscr, TRUE);
@@ -145,6 +123,51 @@ extern "C" {
     return(r);
     }//kbhit()  
     #define _kbhit() kbhit()
+    int nocbreak_getch() {
+        raw();
+        int ch = getch();
+        cbreak();
+        return ch;
+    }
+    #undef getch
+    #define getch() nocbreak_getch()
+    #define _getch() nocbreak_getch()
+    #undef  KEY_ENTER // on ncurses is ctrl + m 
+    #define KEY_ENTER '\n'
+    #define KEY_SPACE ' '
+    #define KEY_TAB 9
+    #define KEY_ESC 27
+    /*You cant use parenthesis on windows*/
+    #define KEY_F1  KEY_F(1)
+    #define KEY_F2  KEY_F(2)
+    #define KEY_F3  KEY_F(3)
+    #define KEY_F4  KEY_F(4)
+    #define KEY_F5  KEY_F(5)
+    #define KEY_F6  KEY_F(6)
+    #define KEY_F7  KEY_F(7)
+    #define KEY_F8  KEY_F(8)
+    #define KEY_F9  KEY_F(9)
+    #define KEY_F10 KEY_F(10)
+    #define KEY_F11 KEY_F(11)
+    #define KEY_F12 KEY_F(12)
+
+    
+    #include <string.h>//strcat()
+    void startCompat(){ //first function to be called inside main
+        /*ncurses initialization*/
+        initscr();            // Start curses mode
+        keypad(stdscr, TRUE); // enables the use of function keys,arrow keys,etc.
+        noecho();             // Dont echo() output of getch(), for a similiar functionality as conio
+        cbreak();             // will break with ctrl +c like on windows
+        refresh();            // Update the screen to use ncurses mode
+        //raw();              // Line buffering disabled (ctrl+c disabled)
+    }//startCompat()
+    #define printw(args...) do{printw(args);refresh();}while(0)
+    #define scanw(args...) do{echo();scanw(args);noecho();}while(0)
+    void exitCompat(){refresh();echo();fflush(stdout);endwin();}//End curses mode and return to regular terminal
+    void pauseCompat(){reset_shell_mode();}
+    void resumeCompat(){reset_prog_mode();}
+
 
 #endif//OS detection 
 

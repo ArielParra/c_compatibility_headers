@@ -16,10 +16,22 @@ extern "C" {
     Carefull with the windows routes, you need four backslashes per backslash in the system() function.
     Might work wihtout backlashes in newer Windows, but may need them for retrocompatibility in cmd
     If you modify the SoundCommand,please modify the string size 
-    */    
+    */
 
     #include <windows.h>//PlaySound() need -lwinmm as compiler argument
-    void Play_Sound(const char* file){PlaySound(TEXT(file),NULL,SND_ASYNC);}//qSound will stop while using getch()
+    
+    //void Play_Sound(const char* file){PlaySound(TEXT(file),NULL,SND_ASYNC);}//PlaySound() will stop while using getch()
+
+    DWORD WINAPI ThreadFunction(LPVOID lpParameter) {
+    const char* file = (const char*)lpParameter;
+    PlaySoundA(file, NULL, SND_ASYNC); 
+    return 0;
+    }
+    #include<stdio.h>//fprintf(),stderr
+    void Play_Sound(const char* file) {
+	HANDLE hThread = CreateThread(NULL, 0, ThreadFunction, (LPVOID)file, 0, NULL);
+    if (!hThread) {fprintf(stderr, "Failed to create Play_Sound() thread.\n");exit(1);}
+    }//Play_Sound() will not stop while using getch()
     void Stop_Sound(){PlaySound(NULL, 0, 0);}
 
     /* Using sox or ffmpeg ffplay command, 
