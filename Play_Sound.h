@@ -12,6 +12,12 @@ extern "C" {
 /*OS detection*/
 #if defined(_WIN32) || defined(_CYGWIN_)
 
+    /* Warnings!
+    Carefull with the windows routes, you need four backslashes per backslash in the system() function.
+    Might work wihtout backlashes in newer Windows, but may need them for retrocompatibility in cmd
+    If you modify the SoundCommand,please modify the string size 
+    */    
+
     #include <windows.h>//PlaySound() need -lwinmm as compiler argument
     void Play_Sound(const char* file){PlaySound(TEXT(file),NULL,SND_ASYNC);}//qSound will stop while using getch()
     void Stop_Sound(){PlaySound(NULL, 0, 0);}
@@ -23,12 +29,6 @@ extern "C" {
     You can get ffmpeg portable from: https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z
     */
 
-    /* Warnings!
-    Carefull with the windows routes, you need four backslashes per backslash in the system() function.
-    Might work wihtout backlashes in newer Windows, but may need them for retrocompatibility in cmd
-    If you modify the SoundCommand,please modify the string size 
-    */    
-
     //void Play_Sound(const char* file){char SoundCommand[strlen(file)+27+28];strcpy(SoundCommand, "start /b .\\\\sox.exe .\\\\");strcat(SoundCommand, file);strcat(SoundCommand," -t waveaudio -d >NUL 2>&1 &");system(SoundCommand);}
     //void Stop_Sound(){system("taskkill /F /IM sox.exe");}
     
@@ -37,6 +37,7 @@ extern "C" {
 
 #elif defined(__linux__)
 
+    //*WSL Linux needs ffplay command from ffmpeg
     void Play_Sound(const char* file){char SoundCommand[strlen(file)+6+17];strcpy(SoundCommand, "aplay ");strcat(SoundCommand, file);strcat(SoundCommand,">/dev/null 2>&1 &");system(SoundCommand);}
     void Stop_Sound(){system("pkill aplay");}
 

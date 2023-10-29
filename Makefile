@@ -1,22 +1,26 @@
 ifdef OS  #Windows OS Detection
-	CC = gcc.exe
-	FLAGS = -lwinmm
-	RM = del /Q
+	CC := gcc.exe
+	FLAGS := -lwinmm
+	RM := del /Q
 	FixPath = $(subst /,\,$1)
+	UNAME := Windows
+	EXT := .exe
 else  	  #*NIX using GNU make
-	CC = gcc
-	FLAGS = -lncurses
-	RM = rm -f 
+	CC := gcc
+	FLAGS := -lncurses
+	RM := rm -f 
 	FixPath = $1
+	UNAME = $(shell uname)
+	EXT :=
 endif
 
-CFLAGS = -O2 -s
+CFLAGS := -O2 -s
 
-Name1 = example-stdlibCompat
-Name2 = example-play_Sound
-Name3 = example-ansiCompat
-Name4 = example-ncursesCompat
-Name5 = example-allCompat
+Name1 := example-stdlibCompat-$(UNAME)
+Name2 := example-play_Sound-$(UNAME)
+Name3 := example-ansiCompat-$(UNAME)
+Name4 := example-ncursesCompat-$(UNAME)
+Name5 := example-allCompat-$(UNAME)
 
 all: $(Name1) $(Name2) $(Name3) $(Name4) $(Name5)
 
@@ -36,19 +40,8 @@ $(Name5): allExample.c allCompat.h
 	$(CC) -o $(call FixPath,$(Name5)) $< $(FLAGS) $(CFLAGS)
 
 clean:
-ifdef OS
-	$(RM) $(call FixPath,$(Name1).exe)
-	$(RM) $(call FixPath,$(Name2).exe)
-	$(RM) $(call FixPath,$(Name3).exe)
-	$(RM) $(call FixPath,$(Name4).exe)
-	$(RM) $(call FixPath,$(Name5).exe)
-	$(RM) $(call FixPath,a.exe)
-else
-	$(RM) $(call FixPath,$(Name1))
-	$(RM) $(call FixPath,$(Name2))
-	$(RM) $(call FixPath,$(Name3))
-	$(RM) $(call FixPath,$(Name4))
-	$(RM) $(call FixPath,$(Name5))
-	$(RM) $(call FixPath,a.out)
-endif
-
+	$(RM) $(call FixPath,$(Name1)$(EXT))
+	$(RM) $(call FixPath,$(Name2)$(EXT))
+	$(RM) $(call FixPath,$(Name3)$(EXT))
+	$(RM) $(call FixPath,$(Name4)$(EXT))
+	$(RM) $(call FixPath,$(Name5)$(EXT))

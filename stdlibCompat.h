@@ -24,9 +24,9 @@ extern "C" {
     void sysPause(){system("read -r -n 1 -p 'Press any key to continue . . .'");}//English
     /*Redefinition of Windows system("pause") to sysPause() or system("cls" to sysclear)*/
     #define system(cmd) do{ \
-    if(strcmp(cmd,"pause")==0 || strcmp(cmd,"PAUSE")==0) \
-        {sysPause();} else if(strcmp(cmd,"cls")==0 || strcmp(cmd,"CLS")==0)\
-        {sysClear();} else{system(cmd);}\
+        if(strcmp(cmd,"pause")==0 || strcmp(cmd,"PAUSE")==0){sysPause();}\
+        else if(strcmp(cmd,"cls")==0 || strcmp(cmd,"CLS")==0){sysClear();}\
+        else{system(cmd);}\
     }while(0)
     char *strrev(char *str){
       char *p1,*p2;

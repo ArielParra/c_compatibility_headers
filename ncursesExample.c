@@ -3,55 +3,13 @@
 #include "ncursesCompat.h"
 #include "stdlibCompat.h"
 
-void hello_world_UTF8(){//graphic created using https://fsymbols.com/
-    int x=getx()/2 - floor(91/2);//91 is lengh,floor to even
-    int y=gety()/2 - 6/2;        //6 is height
-    //IMPORTANT: needs '\n' or fflush(stdout);
-    gotoxy(x,y++);printf("██╗░░██╗███████╗██╗░░░░░██╗░░░░░░█████╗░  ░██╗░░░░░░░██╗░█████╗░██████╗░██╗░░░░░██████╗░██╗\n");
-    gotoxy(x,y++);printf("██║░░██║██╔════╝██║░░░░░██║░░░░░██╔══██╗  ░██║░░██╗░░██║██╔══██╗██╔══██╗██║░░░░░██╔══██╗██║\n");
-    gotoxy(x,y++);printf("███████║█████╗░░██║░░░░░██║░░░░░██║░░██║  ░╚██╗████╗██╔╝██║░░██║██████╔╝██║░░░░░██║░░██║██║\n");
-    gotoxy(x,y++);printf("██╔══██║██╔══╝░░██║░░░░░██║░░░░░██║░░██║  ░░████╔═████║░██║░░██║██╔══██╗██║░░░░░██║░░██║╚═╝\n");
-    gotoxy(x,y++);printf("██║░░██║███████╗███████╗███████╗╚█████╔╝  ░░╚██╔╝░╚██╔╝░╚█████╔╝██║░░██║███████╗██████╔╝██╗\n");
-    gotoxy(x,y++);printf("╚═╝░░╚═╝╚══════╝╚══════╝╚══════╝░╚════╝░  ░░░╚═╝░░░╚═╝░░░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░╚═╝\n");
-}
-
-void hola_mundo_UTF8(){//graphic created using https://fsymbols.com/
-    int height=6,lenght=81;
-    lenght-=1;//so it become even 
-    int x=getx()/2 - lenght/2;
-    int y=gety()/2 - height/2;
-    const char* hola_mundo[]={\
-    "██╗░░██╗░█████╗░██╗░░░░░░█████╗░  ███╗░░░███╗██╗░░░██╗███╗░░██╗██████╗░░█████╗░██╗",\
-    "██║░░██║██╔══██╗██║░░░░░██╔══██╗  ████╗░████║██║░░░██║████╗░██║██╔══██╗██╔══██╗██║",\
-    "███████║██║░░██║██║░░░░░███████║  ██╔████╔██║██║░░░██║██╔██╗██║██║░░██║██║░░██║██║",\
-    "██╔══██║██║░░██║██║░░░░░██╔══██║  ██║╚██╔╝██║██║░░░██║██║╚████║██║░░██║██║░░██║╚═╝",\
-    "██║░░██║╚█████╔╝███████╗██║░░██║  ██║░╚═╝░██║╚██████╔╝██║░╚███║██████╔╝╚█████╔╝██╗",\
-    "╚═╝░░╚═╝░╚════╝░╚══════╝╚═╝░░╚═╝  ╚═╝░░░░░╚═╝░╚═════╝░╚═╝░░╚══╝╚═════╝░░╚════╝░╚═╝"};
-    for(size_t i=0;i<height;i++){
-        gotoxy(x,y++);
-        printf(hola_mundo[i]);
-    }
-fflush(stdout);//insted of '/n' in each line
-}
-
 //int main(int argc,char *argv[]){
 //int main(int argc,char **argv){
 //int main(void){
 int main(){
-    startCompat();//while in ncurses mode, you need to use gotoxy tu sue printf()
+    startCompat();//while in ncurses mode, you need to use gotoxy to use printf()
     sysClear();
 
-    hello_world_UTF8();
-    
-    for(int i=1;i<=3;i++){
-        gotoxy(getx()/2 - floor(21/2), gety()/2 +3 + i-1);
-        printf("%d seconds have passed\n",i);
-        Sleep(1000);
-    }
- 
-    sysClear();
-
-    hola_mundo_UTF8();//fflush(stdout) needed, but implicit in the function
     for(int i=1;i<=3;i++){
         gotoxy(getx()/2 - floor(21/2), gety()/2 +3 + i-1);
         printf("%d seconds have passed\n",i);
@@ -91,7 +49,8 @@ int main(){
         //will wait
     }
     sysClear();
-    printw("You pressed any key! :D\n");
+    printw("You pressed any key! :D");
+    gotoxy(0,1);printf("\n");
     sysPause();
     
     int quit=0,endline=0;
@@ -106,16 +65,35 @@ int main(){
             case KEY_RIGHT:     gotoxy(14,2);printf("'RIGHT'\n");break;
             case KEY_DOWN:      gotoxy(14,2);printf("'DOWN'\n");break;
             case KEY_BACKSPACE: gotoxy(14,2);printf("'BACKSPACE'\n");break;
-            case KEY_ENTER://WINDOWS
-            case '\n':     //*NIX
-                                gotoxy(14,2);printf("ENTER'\n");break;
+            case KEY_IC:        gotoxy(14,2);printf("'INSERT'\n");break;
+            case KEY_DC:        gotoxy(14,2);printf("'SUPR'\n");break;
+            case KEY_PPAGE:     gotoxy(14,2);printf("'PrevPag/RePag\n");break;
+            case KEY_NPAGE:     gotoxy(14,2);printf("'NextPag/AvPag'\n");break;
+            case KEY_END:       gotoxy(14,2);printf("'END'\n");break;
+            case KEY_HOME:      gotoxy(14,2);printf("'HOME/BEG'\n");break;
+            case KEY_ESC:       gotoxy(14,2);printf("'ESC'\n");break;
+            case KEY_TAB:       gotoxy(14,2);printf("'TAB'\n");break;
+            case KEY_SPACE:     gotoxy(14,2);printf("'SPACE BAR'\n");break;
+            case KEY_F(1):      gotoxy(14,2);printf("'F1'\n");break;
+            case KEY_F(2):      gotoxy(14,2);printf("'F2'\n");break;
+            case KEY_F(3):      gotoxy(14,2);printf("'F3'\n");break;
+            case KEY_F(4):      gotoxy(14,2);printf("'F4'\n");break;
+            case KEY_F(5):      gotoxy(14,2);printf("'F5'\n");break;
+            case KEY_F(6):      gotoxy(14,2);printf("'F6'\n");break;
+            case KEY_F(7):      gotoxy(14,2);printf("'F7'\n");break;
+            case KEY_F(8):      gotoxy(14,2);printf("'F8'\n");break;
+            case KEY_F(9):      gotoxy(14,2);printf("'F9'\n");break;
+            case KEY_F(10):     gotoxy(14,2);printf("'F10'\n");break;
+            case KEY_F(11):     gotoxy(14,2);printf("'F11'\n");break;
+            case KEY_F(12):     gotoxy(14,2);printf("'F12'\n");break;
+            case KEY_ENTER:     gotoxy(14,2);printf("ENTER'\n");break;
             case 'Q':
             case 'q': quit=1;break;
             default:            gotoxy(14,2);printf("'%c'\n",ch);break;
         }
         endline++;
     }//while()
-
+sysClear();
 exitCompat();
 return 0;
 }

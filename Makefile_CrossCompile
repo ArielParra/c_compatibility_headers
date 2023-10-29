@@ -1,0 +1,68 @@
+#Cross Compiling from within Linux
+
+EXT =
+CFLAGS = -O2 -s
+FLAGS = -lncurses
+
+ifeq ($(TARGET),)
+$(error TARGET is not set. Please specify a target platform, e.g., 'make TARGET=OS', OS can be either linux,windows,macos,freebsd or openbsd)
+
+else ifeq ($(TARGET), linux)
+CC = gcc
+UNAME = Linux
+
+else ifeq ($(TARGET), windows)
+#using mingw-w64 (mingw-w64-toolchain)
+CC = x86_64-w64-mingw32-gcc
+FLAGS = -lwinm
+UNAME = Windows
+EXT = .exe
+
+else ifeq ($(TARGET), macos)
+#Using o64-gcc from osxcross-git
+CC = o64-gcc
+UNAME = MacOS
+
+else ifeq ($(TARGET), openbsd)
+#from the arch-linux aur 
+CC = x86_64-pc-openbsd7-gcc 
+UNAME = OpenBSD
+
+else ifeq ($(TARGET), freebsd)
+#from the arch-linux aur 
+CC = x86_64-pc-freebsd13-gcc 
+UNAME = OpenBSD
+
+else
+$(error TARGET is invalid. Please use a valid target platform, linux,windows,macos,freebsd or openbsd)
+endif
+
+Name1 := example-stdlibCompat-$(UNAME)
+Name2 := example-play_Sound-$(UNAME)
+Name3 := example-ansiCompat-$(UNAME)
+Name4 := example-ncursesCompat-$(UNAME)
+Name5 := example-allCompat-$(UNAME)
+
+all: $(Name1) $(Name2) $(Name3) $(Name4) $(Name5)
+
+$(Name1): stdlibExample.c stdlibCompat.h
+	$(CC) -o $(Name1) $< $(FLAGS) $(CFLAGS)
+
+$(Name2): Play_SoundExample.c Play_Sound.h stdlibCompat.h
+	$(CC) -o $(Name2) $< $(FLAGS) $(CFLAGS)
+
+$(Name3): ansiExample.c ansiCompat.h stdlibCompat.h
+	$(CC) -o $(Name3) $< $(FLAGS) $(CFLAGS)
+
+$(Name4): ncursesExample.c ncursesCompat.h stdlibCompat.h
+	$(CC) -o $(Name4) $< $(FLAGS) $(CFLAGS)
+
+$(Name5): allExample.c allCompat.h
+	$(CC) -o $(Name5) $< $(FLAGS) $(CFLAGS)
+
+clean:
+	$(RM) $(Name1)$(EXT)
+	$(RM) $(Name2)$(EXT)
+	$(RM) $(Name3)$(EXT)
+	$(RM) $(Name4)$(EXT)
+	$(RM) $(Name5)$(EXT)

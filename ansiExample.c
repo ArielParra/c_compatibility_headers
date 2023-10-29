@@ -9,7 +9,7 @@
 //int main(int argc,char **argv){
 //int main(void){
 int main(){
-    setAnsi();
+    setANSI();
     const char* colors[] = { BLACK, BLACK_LIGHT, RED, RED_LIGHT, GREEN, GREEN_LIGHT, YELLOW, YELLOW_LIGHT, BLUE, BLUE_LIGHT, MAGENTA, MAGENTA_LIGHT, CYAN, CYAN_LIGHT, WHITE, WHITE_LIGHT };
     const char* colors_names[] = { "BLACK", "BLACK_LIGHT", "RED", "RED_LIGHT", "GREEN", "GREEN_LIGHT", "YELLOW", "YELLOW_LIGHT", "BLUE", "BLUE_LIGHT", "MAGENTA", "MAGENTA_LIGHT", "CYAN", "CYAN_LIGHT", "WHITE", "WHITE_LIGHT" };
     size_t colors_size = sizeof(colors) / sizeof(colors[0]);
@@ -36,17 +36,27 @@ int main(){
 
     char string[100];
     printf("%s%s",RESET_COLOR,CLEAR_SCREEN);
-    printf("\n%sBlinkinkg text (*NIX only)%s",BLINK_ON,BLINK_OFF);
+    printf("\n%s*Blinkinkg text%s",BLINK_ON,BLINK_OFF);
+    printf("\n%sCrossed text%s",CROSS_ON,CROSS_OFF);
+    printf("\nInvisible text: '%sHello World!%s'",INVISIBLE_ON,INVISIBLE_OFF);
+    printf("\n%sDIM text%s",DIM_ON,DIM_OFF);
+    printf("\n%sReversed text %s",REVERSE_ON,REVERSE_OFF);
+    printf("\n%sITALIC text%s",ITALIC_ON,ITALIC_OFF);
     printf("\n%sUnderlined text %s",UNDERLINE_ON,UNDERLINE_OFF);
     printf("\n%sBold text%s", BOLD_ON,BOLD_OFF);
-    printf("\n%sReversed text %s",REVERSE_ON,REVERSE_OFF);
+    printf("\n%s%s%s%s%s%s%s%sCombination text %s%s%s%s%s%s%s%s",BLINK_ON,CROSS_ON,REVERSE_ON,DIM_ON,ITALIC_ON,UNDERLINE_ON,BOLD_ON,REVERSE_ON, BLINK_OFF,CROSS_OFF,REVERSE_OFF,DIM_OFF,ITALIC_OFF,UNDERLINE_OFF,BOLD_OFF,REVERSE_OFF);
     printf("\n(Cursor ON) Give me a string: ");
     scanf("%s",string);
     printf("\n%sYour string: '%s', ",CURSOR_OFF,string);
     printf("\n(Cursor OFF) Give me a string: ");
     scanf("%s",string);
     printf("\nYour string: '%s'",string);
+    printf("%s",CURSOR_ON);
     
+    printf(RESET_TEXT);
+    sysPause();
+    sysClear();
+    fflush(stdout);
     printf("\ncolor() function adapts the windows COLOR command\n");
     char command[3];
     for(char i='0';i<='9';i++){

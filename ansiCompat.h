@@ -8,20 +8,31 @@ extern "C" {
 /*ANSI Escape Codes Definitions*/
 
 /*Text modifiers*/
+#define RESET_TEXT       "\x1b[0m"
 #define BOLD_ON          "\x1b[1m"
-#define BOLD_OFF         "\x1b[21m" 
+#define BOLD_OFF         "\x1b[22m" 
+#define UNDERLINE_ON     "\x1b[4m"    
 #define UNDERLINE_ON     "\x1b[4m"    
 #define UNDERLINE_OFF    "\x1b[24m"
 #define REVERSE_ON       "\x1b[7m"    
 #define REVERSE_OFF      "\x1b[27m"    
+/*Usually not supported */
+#define DIM_ON           "\x1b[2m"
+#define DIM_OFF          "\x1b[22m"
+#define INVISIBLE_ON     "\x1b[8m"
+#define INVISIBLE_OFF    "\x1b[28m"
+#define CROSS_ON       "\x1b[9m"
+#define CROSS_OFF      "\x1b[29m"
+
 #define BLINK_ON         "\x1b[5m"    
 #define BLINK_OFF        "\x1b[25m"    
+#define ITALIC_ON        "\x1b[3m"    
+#define ITALIC_OFF        "\x1b[23m"    
 
-    
 /*Terminal modifiers*/
 #define RESET_COLOR      "\x1b[0m"      //Reset color to default terminal color
-#define CURSOR_OFF       "\033[?25l"    //Hide Terminal Cursor
-#define CURSOR_ON        "\033[?25h"    //Show Terminal Cursor
+#define CURSOR_OFF       "\033[?25h"    //Hide Terminal Cursor
+#define CURSOR_ON        "\033[?25l"    //Show Terminal Cursor
 #define CLEAR_SCREEN     "\e[1;1H\e[2J" //Clear Screen 
 
 /*Regular colors (ansi)*/
@@ -69,24 +80,36 @@ extern "C" {
 /*Windows ANSI compatibility by setting output mode to handle virtual terminal sequences*/
 #if defined(_WIN32) || defined(__CYGWIN__)
 
-#include <windows.h>
+#include <windows.h>//DWORD,GetConsoleMode(),GetStdHandle(),SetConsoleOutputCP()
 
 //For some old MinGW/CYGWIN distributions
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING 
 #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #endif
+#ifndef CP_UTF8 
+#define CP_UTF8 65001 
+#endif
 
-void setAnsi(){
+void setANSI(){//sets virtual terminal
     DWORD console_mode;
     GetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), &console_mode);
     console_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
     SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), console_mode);
 }
+void setUTF8(){SetConsoleOutputCP(CP_UTF8);}//Unicode compatibility, can also be done with system("chcp 65001 > NUL");
+
 #else//*NIX
-void setAnsi(void){};//dummy function
+void setANSI(void){}
+void setUTF8(void){}
+//void setUTF8(){system("export LANG=en_US.UTF-8");}//not needed in most *NIX systems
 #endif//windows detection
 
-#include<stdio.h>
+#include<stdio.h>//printf()
+
+void setTitle(const char *str){
+    printf("\033]0;%s\007",str);
+}
+
 void color(const char *arg){
 
     printf(RESET_COLOR); //by default
