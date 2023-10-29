@@ -100,8 +100,9 @@ void setUTF8(){SetConsoleOutputCP(CP_UTF8);}//Unicode compatibility, can also be
 
 #else//*NIX
 void setANSI(void){}
-void setUTF8(void){}
-//void setUTF8(){system("export LANG=en_US.UTF-8");}//not needed in most *NIX systems
+void setUTF8(void){}//not needed in most *NIX systems
+//void setUTF8(){system("export LANG=en_US.UTF-8");}
+//void setUTF8(){setlocale(LC_ALL, "en_US.UTF-8");}//with <ncurses.h> needs -lncurses as compiler argument
 #endif//windows detection
 
 #include<stdio.h>//printf()

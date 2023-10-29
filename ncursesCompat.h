@@ -11,6 +11,7 @@ extern "C" {
 /*OS detection*/
 #if defined(_WIN32) || defined(_CYGWIN_)
     #include<stdio.h>//scanf(),printf()
+
     #include<conio.h>//kbhit(),getch();
 
     /*KEYS for getch() from <conio.h>*/
@@ -18,7 +19,7 @@ extern "C" {
     #define KEY_RIGHT 77    //ascii 77 is M
     #define KEY_UP 72       //ascii 72 is H
     #define KEY_DOWN 80     //ascii 80 is P
-    #define KEY_ENTER 13   
+    #define KEY_ENTER 13    //'\n' on ncurses
     #define KEY_SPACE 32  
     #define KEY_TAB 9       
     #define KEY_ESC 27     
@@ -43,31 +44,73 @@ extern "C" {
     #define KEY_F12 134     
 
     #include<windows.h>//GetConsoleScreenBufferInfo(),GetStdHandle(),SetConsoleCursorPosition(),COORD
-    void *stdscr;//compatibility with ncurses stdscr variable
-    void gotoxy(int x,int y){COORD coordinate;coordinate.X=x;coordinate.Y=y; SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coordinate);}
-    int getmaxx(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Right-csbi.srWindow.Left);}
-    int getmaxy(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Bottom-csbi.srWindow.Top);}
-    void getmaxyx(void *stdscr,int *maxY, int *maxX){*maxY=getmaxx(stdscr); *maxX=getmaxy(stdscr);}
-    /*ncurses on Windows*/
+
+    /*My Functions*/
     void startCompat(void){}
     void exitCompat(void){}
     void pauseCompat(void){}
     void resumeCompat(void){}
+
+    /*ncurses compatibility for Windows*/
     
-    void refresh(){fflush(stdout);}
+    /*Dummy functions*/
     void initrflush(void){}
+    void echo(void){}
+    void noecho(void){}
     void cbreak(void){}
     void nocbreak(void){}
+    void raw(void){}
+    void start_color(void){} 
+    void *stdscr=NULL;
+
+    /*ncurses functions*/
+    void gotoxy(int x,int y){COORD coordinate;coordinate.X=x;coordinate.Y=y; SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coordinate);}
+    int getmaxx(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Right-csbi.srWindow.Left);}
+    int getmaxy(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Bottom-csbi.srWindow.Top);}
+    void getmaxyx(void *stdscr, int *y, int *x) {*y=getmaxy(stdscr);*x=getmaxx(stdscr);}
+    #define getmaxyx(stdscr, maxY, maxX) getmaxyx(stdscr, &maxY, &maxX) //force the use of pointers
+    #define move(x,y) gotoxy(x,y)
+    void addch(char ch) {printf("%c", ch);}
+    void addstr(const char* str) { while (*str) { addch(*str); str++;} }
+    void mvaddch(int y, int x, char ch) {gotoxy(x, y);addch(ch);}
+    int mvgetch(int y, int x) {gotoxy(x, y);return getch();}
+    void getstr(char* str) {scanf("%s", str);}
+    void mvgetstr(int y, int x, char* str) {gotoxy(x, y);getstr(str);}
     int has_colors(){return 1;}
-    void start_colors(void){}
-    void initsrc(){startCompat();}
-    #include<stdio.h>//scanf(),printf()
+    void refresh(){fflush(stdout);}
+    void initscr(){startCompat();}
+    void endwin(){exitCompat();}
+    void keypad(void *stdscr,int bool){}
+    void clrtobot() {
+        CONSOLE_SCREEN_BUFFER_INFO csbi;COORD cursorPos;DWORD count;DWORD cellCount;
+        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+        cellCount = (csbi.dwSize.X - csbi.dwCursorPosition.X) + (csbi.dwSize.X * (csbi.dwSize.Y - csbi.dwCursorPosition.Y - 1));
+        cursorPos.X = csbi.dwCursorPosition.X;cursorPos.Y = csbi.dwCursorPosition.Y;
+        FillConsoleOutputCharacter(GetStdHandle(STD_OUTPUT_HANDLE), ' ', cellCount, cursorPos, &count);
+        FillConsoleOutputAttribute(GetStdHandle(STD_OUTPUT_HANDLE), csbi.wAttributes, cellCount, cursorPos, &count);
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), csbi.dwCursorPosition);
+    }
+
+    void clear() {
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);COORD topLeft = {0, 0};
+        DWORD written;CONSOLE_SCREEN_BUFFER_INFO csbi;DWORD cellsToClear;
+        GetConsoleScreenBufferInfo(hConsole, &csbi);
+        cellsToClear = csbi.dwSize.X * csbi.dwSize.Y;
+        FillConsoleOutputCharacter(hConsole, ' ', cellsToClear, topLeft, &written);
+        FillConsoleOutputAttribute(hConsole, csbi.wAttributes, cellsToClear, topLeft, &written);
+        SetConsoleCursorPosition(hConsole, topLeft);
+    }
+
     #define scanw(args...) scanf(args)
     #define printw(args...) printf(args)
-    #define keypad(args...) do { } while (0)
-    
+    #define mvprintw(x, y, format, ...) do { \
+        gotoxy(x,y);\
+        printf(format, __VA_ARGS__); \
+    } while (0)
+/*
+//atron atroff ncurses functions
     #include<string.h>//strdup(),strtok(),strcmp()
-    #define atron(args) do{ \
+    #define attron(args) do{ \
         char *attributes = strdup(args); \
         char *token = strtok(attributes, " |"); \
         while (token != NULL) { \
@@ -76,14 +119,13 @@ extern "C" {
             else if (strcmp(token, "A_BLINK") == 0)     {printf("\x1b[5m");}\
             else if (strcmp(token, "A_ITALIC") == 0)    {printf("\x1b[3m");}\
             else if (strcmp(token, "A_INVIS") == 0)     {printf("\x1b[8m");}\
-            /*else if (strcmp(token, "A_PROTECT") == 0)   {}*/\
             else if ( (strcmp(token, "A_REVERSE") == 0) ||\
             (strcmp(token, "A_SANDOUT") == 0) )         {printf("\x1b[7m");}\
             token = strtok(NULL, " |"); \
-        }/*while*/\
+        }\
         free(attributes); \
     }while(0)
-    #define atroff(args) do{ \
+    #define attroff(args) do{ \
         char *attributes = strdup(args); \
         char *token = strtok(attributes, " |"); \
         while (token != NULL) { \
@@ -92,21 +134,20 @@ extern "C" {
             else if (strcmp(token, "A_BLINK") == 0)     {printf("\x1b[25m");}\
             else if (strcmp(token, "A_ITALIC") == 0)    {printf("\x1b[23m");}\
             else if (strcmp(token, "A_INVIS") == 0)     {printf("\x1b[28m");}\
-            /*else if (strcmp(token, "A_PROTECT") == 0)   {}*/\
             else if ( (strcmp(token, "A_REVERSE") == 0) ||\
             (strcmp(token, "A_SANDOUT") == 0) )         {printf("\x1b[27m");}\
             token = strtok(NULL, " |"); \
-        }/*while*/\
+        }\
         free(attributes); \
     }while(0)
     #define mvprintw(row, col, format, ...) do { \
         gotoxy(x+1,y+1);\
         printf(format, __VA_ARGS__); \
     } while (0)    
-    #define atrr_on(args) atron(args)
-    #define atrr_off(args) atroff(args)
+    #define atrr_on(args) attron(args)
+    #define atrr_off(args) attroff(args)
 
-
+*/
 #else//*NIX
     
     #include <ncurses.h>//getch(),scanw() need -lncurses as compiler argument
@@ -117,7 +158,7 @@ extern "C" {
     int ch=0, r=0; 
         nodelay(stdscr, TRUE);
         ch = getch();
-        if(ch == ERR){r = FALSE;}// no input
+        if(ch == ERR){r = FALSE;}  // no input
         else{r = TRUE;ungetch(ch);}// input
         nodelay(stdscr, FALSE);
     return(r);
