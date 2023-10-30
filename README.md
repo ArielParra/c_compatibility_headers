@@ -7,14 +7,24 @@
 - [ ] allCompat.h
 - [ ] beep.h
 - [ ] README.md
+- [ ] Code comments and pretty identation
+- [ ] man pages for each header file
+    - [ ] stdlibCompat.h
+    - [ ] ansiCompat.h
+    - [ ] Play_Sound.h
+    - [ ] ncursesCompat.h
+    - [ ] allCompat.h
 - [ ] LICENCE.md
 - [ ] ConsultedReferences.md
 
 ---
 
+
 # FAQ
+ncursesCompat makes some ncurses.h functions work on windows with the use of conio.h and windows.h and turns some ncurses.h functions like getch() function work as Windows conio.h getch() to get a "Unified and expected behavior" between Windows and *NIX
 This may not be sutable for production :P
 stdlibCompat uses deprecated functions in Windows
+this project uses alot of macros to define and redifine functions
 song.wav clip downloaded from https://freemusicarchive.org/music/John_Harrison_with_the_Wichita_State_University_Chamber_Players/The_Four_Seasons_Vivaldi
 
 # Licence

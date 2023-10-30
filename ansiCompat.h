@@ -35,47 +35,49 @@ extern "C" {
 #define CURSOR_ON        "\033[?25l"    //Show Terminal Cursor
 #define CLEAR_SCREEN     "\e[1;1H\e[2J" //Clear Screen 
 
-/*Regular colors (ansi)*/
-#define BLACK            "\x1b[30m"
-#define RED              "\x1b[31m"       
-#define GREEN            "\x1b[32m"      
-#define YELLOW           "\x1b[33m"   
-#define BLUE             "\x1b[34m"       
-#define MAGENTA          "\x1b[35m"    
-#define CYAN             "\x1b[36m"
-#define WHITE            "\x1b[37m"
-#define DEFAULT          "\x1b[39m" 
+/*Foreground colors (ansi)*/
+#define FG_BLACK            "\x1b[30m"
+#define FG_RED              "\x1b[31m"       
+#define FG_GREEN            "\x1b[32m"      
+#define FG_YELLOW           "\x1b[33m"   
+#define FG_BLUE             "\x1b[34m"       
+#define FG_MAGENTA          "\x1b[35m"    
+#define FG_CYAN             "\x1b[36m"
+#define FG_WHITE            "\x1b[37m"
+#define FG_DEFAULT          "\x1b[39m" 
+
 
 /*Light colors (aixterm)*/
-#define BLACK_LIGHT      "\x1b[90m"
-#define RED_LIGHT        "\x1b[91m"       
-#define GREEN_LIGHT      "\x1b[92m"      
-#define YELLOW_LIGHT     "\x1b[93m"   
-#define BLUE_LIGHT       "\x1b[94m"       
-#define MAGENTA_LIGHT    "\x1b[95m"    
-#define CYAN_LIGHT       "\x1b[96m"
-#define WHITE_LIGHT      "\x1b[97m"
+#define FG_BLACK_LIGHT      "\x1b[90m"
+#define FG_RED_LIGHT        "\x1b[91m"       
+#define FG_GREEN_LIGHT      "\x1b[92m"      
+#define FG_YELLOW_LIGHT     "\x1b[93m"   
+#define FG_BLUE_LIGHT       "\x1b[94m"       
+#define FG_MAGENTA_LIGHT    "\x1b[95m"    
+#define FG_CYAN_LIGHT       "\x1b[96m"
+#define FG_WHITE_LIGHT      "\x1b[97m"
     
 /*Background Colors (ansi)*/
-#define BG_BLACK         "\x1b[40m"
-#define BG_RED           "\x1b[41m"
-#define BG_GREEN         "\x1b[42m"
-#define BG_YELLOW        "\x1b[43m"
-#define BG_BLUE          "\x1b[44m"
-#define BG_MAGENTA       "\x1b[45m"
-#define BG_CYAN          "\x1b[46m"
-#define BG_WHITE         "\x1b[47m"
-#define BG_DEFAULT       "\x1b[49m" 
+#define BG_BLACK            "\x1b[40m"
+#define BG_RED              "\x1b[41m"
+#define BG_GREEN            "\x1b[42m"
+#define BG_YELLOW           "\x1b[43m"
+#define BG_BLUE             "\x1b[44m"
+#define BG_MAGENTA          "\x1b[45m"
+#define BG_CYAN             "\x1b[46m"
+#define BG_WHITE            "\x1b[47m"
+#define BG_DEFAULT          "\x1b[49m" 
 
 /*Background Light Colors (axiterm)*/
-#define BG_BLACK_LIGHT   "\x1b[100m"
-#define BG_RED_LIGHT     "\x1b[101m"
-#define BG_GREEN_LIGHT   "\x1b[102m"
-#define BG_YELLOW_LIGHT  "\x1b[103m"
-#define BG_BLUE_LIGHT    "\x1b[104m"
-#define BG_MAGENTA_LIGHT "\x1b[105m"
-#define BG_CYAN_LIGHT    "\x1b[106m"
-#define BG_WHITE_LIGHT   "\x1b[107m"
+#define BG_BLACK_LIGHT      "\x1b[100m"
+#define BG_RED_LIGHT        "\x1b[101m"
+#define BG_GREEN_LIGHT      "\x1b[102m"
+#define BG_YELLOW_LIGHT     "\x1b[103m"
+#define BG_BLUE_LIGHT       "\x1b[104m"
+#define BG_MAGENTA_LIGHT    "\x1b[105m"
+#define BG_CYAN_LIGHT       "\x1b[106m"
+#define BG_WHITE_LIGHT      "\x1b[107m"
+
 
 /*Windows ANSI compatibility by setting output mode to handle virtual terminal sequences*/
 #if defined(_WIN32) || defined(__CYGWIN__)
@@ -107,9 +109,9 @@ void setUTF8(void){}//not needed in most *NIX systems
 
 #include<stdio.h>//printf()
 
-void setTitle(const char *str){
-    printf("\033]0;%s\007",str);
-}
+void setTitle(const char *str){printf("\033]0;%s\007",str);}
+
+void ansiGotoxy(int x,int y){printf("%c[%d;%df",0x1B,y,x);}
 
 void color(const char *arg){
 
@@ -119,22 +121,22 @@ void color(const char *arg){
     //if( isdigit(arg[0]) || isalpha(arg[0]) ){ // uses <ctype.h>
     if( ( arg[0] >= '0' && arg[0] <= '9') || ( (arg[0] >= 'a' && arg[0] <= 'z') || (arg[0] >= 'A' && arg[0] <= 'Z') ) ){
         switch (arg[0]) { 
-            case '0': printf(BLACK); break; 
-            case '1': printf(BLUE); break; 
-            case '2': printf(GREEN); break; 
-            case '3': printf(CYAN); break;        //Windows aqua
-            case '4': printf(RED); break; 
-            case '5': printf(MAGENTA); break;     //Windows purple
-            case '6': printf(YELLOW); break; 
-            case '7': printf(WHITE); break; 
-            case '8': printf(BLACK_LIGHT); break; //Windows purple
-            case '9': printf(BLUE_LIGHT); break; 
-            case 'a': case 'A': printf(GREEN_LIGHT); break; 
-            case 'b': case 'B': printf(CYAN_LIGHT); break; 
-            case 'c': case 'C': printf(RED_LIGHT); break; 
-            case 'd': case 'D': printf(MAGENTA_LIGHT); break; 
-            case 'e': case 'E': printf(YELLOW_LIGHT); break; 
-            case 'f': case 'F': printf(WHITE_LIGHT); break; 
+            case '0': printf(FG_BLACK); break; 
+            case '1': printf(FG_BLUE); break; 
+            case '2': printf(FG_GREEN); break; 
+            case '3': printf(FG_CYAN); break;        //Windows aqua
+            case '4': printf(FG_RED); break; 
+            case '5': printf(FG_MAGENTA); break;     //Windows purple
+            case '6': printf(FG_YELLOW); break; 
+            case '7': printf(FG_WHITE); break; 
+            case '8': printf(FG_BLACK_LIGHT); break; //Windows purple
+            case '9': printf(FG_BLUE_LIGHT); break; 
+            case 'a': case 'A': printf(FG_GREEN_LIGHT); break; 
+            case 'b': case 'B': printf(FG_CYAN_LIGHT); break; 
+            case 'c': case 'C': printf(FG_RED_LIGHT); break; 
+            case 'd': case 'D': printf(FG_MAGENTA_LIGHT); break; 
+            case 'e': case 'E': printf(FG_YELLOW_LIGHT); break; 
+            case 'f': case 'F': printf(FG_WHITE_LIGHT); break; 
             default: printf(RESET_COLOR); //for unknown argument 
         }//siwtch
     }//if

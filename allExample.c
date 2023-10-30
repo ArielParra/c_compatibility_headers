@@ -1,5 +1,5 @@
 #include<stdio.h>//printf()
-#include<string.h>
+#include<string.h>//strcmp()
 #include "allCompat.h"
 
 void hello_world_UTF8(){//graphic created using https://fsymbols.com/
@@ -16,7 +16,6 @@ void hello_world_UTF8(){//graphic created using https://fsymbols.com/
 
 void hola_mundo_UTF8(){//graphic created using https://fsymbols.com/
     int height=6,lenght=81;
-    lenght-=1;//so it become even 
     int x=getmaxx(stdscr)/2 - lenght/2;
     int y=getmaxy(stdscr)/2 - height/2;
     const char* hola_mundo[]={\

@@ -10,8 +10,8 @@
 //int main(void){
 int main(){
     setANSI();
-    const char* colors[] = { BLACK, BLACK_LIGHT, RED, RED_LIGHT, GREEN, GREEN_LIGHT, YELLOW, YELLOW_LIGHT, BLUE, BLUE_LIGHT, MAGENTA, MAGENTA_LIGHT, CYAN, CYAN_LIGHT, WHITE, WHITE_LIGHT };
-    const char* colors_names[] = { "BLACK", "BLACK_LIGHT", "RED", "RED_LIGHT", "GREEN", "GREEN_LIGHT", "YELLOW", "YELLOW_LIGHT", "BLUE", "BLUE_LIGHT", "MAGENTA", "MAGENTA_LIGHT", "CYAN", "CYAN_LIGHT", "WHITE", "WHITE_LIGHT" };
+    const char* colors[] = { FG_BLACK, FG_BLACK_LIGHT, FG_RED, FG_RED_LIGHT, FG_GREEN, FG_GREEN_LIGHT, FG_YELLOW, FG_YELLOW_LIGHT, FG_BLUE, FG_BLUE_LIGHT, FG_MAGENTA, FG_MAGENTA_LIGHT, FG_CYAN, FG_CYAN_LIGHT, FG_WHITE, FG_WHITE_LIGHT };
+    const char* colors_names[] = { "FG_BLACK", "FG_BLACK_LIGHT", "FG_RED", "FG_RED_LIGHT", "FG_GREEN", "FG_GREEN_LIGHT", "FG_YELLOW", "FG_YELLOW_LIGHT", "FG_BLUE", "FG_BLUE_LIGHT", "FG_MAGENTA", "FG_MAGENTA_LIGHT", "FG_CYAN", "FG_CYAN_LIGHT", "FG_WHITE", "FG_WHITE_LIGHT" };
     size_t colors_size = sizeof(colors) / sizeof(colors[0]);
 
     printf(CLEAR_SCREEN);
@@ -108,4 +108,3 @@ int main(){
     printf("\n%sCursor is now ON", CURSOR_ON);
     return 0;
 }
-
