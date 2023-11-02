@@ -14,8 +14,8 @@ extern "C" {
 
 
     /* Warnings!
-    Carefull with the windows routes, you need four backslashes per backslash in the system() function.
-    Might work wihtout backlashes in newer Windows, but may need them for retrocompatibility in cmd
+    Carefull with the music file routes on Windows, you need four backslashes per backslash in the system() function.
+    Might work wiht normal slashes in newer Windows using pwsh, but may need them for retrocompatibility in cmd
     If you modify the SoundCommand,please modify the string size 
     */
 

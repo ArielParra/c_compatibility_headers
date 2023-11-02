@@ -5,14 +5,17 @@
 extern "C" {
 #endif
 
-/*Shared C libraries*/
+/*Shared C library*/
 #include<stdlib.h>//system()
-/*shared getch() Key definitions */
+
+/*shared getch() Key definitions  | START*/
 #define KEY_SPACE 32
 #define KEY_TAB 9
 #define KEY_ESC 27
+/*shared getch() Key definitions | END */
 
-/*<conio.h> Turbo C color macros*/
+
+/*<conio.h> Turbo C color macros | START*/
 #define BLACK        0
 #define BLUE         1
 #define GREEN        2
@@ -29,15 +32,15 @@ extern "C" {
 #define LIGHTMAGENTA 13
 #define YELLOW       14
 #define WHITE        15
+/*<conio.h> Turbo C color macros | END*/
 
 
-/*OS detection*/
-#if defined(_WIN32) || defined(_CYGWIN_)
+#if defined(_WIN32) || defined(_CYGWIN_) /*OS detection | START*/
     #include<stdio.h>//scanf(),printf()
     #include<windows.h>//GetConsoleScreenBufferInfo(),GetStdHandle(),SetConsoleCursorPosition(),COORD
     #include<conio.h>//kbhit(),getch();
 
-    /*Old turbo C <conio.h> functions*/
+    /*Old turbo C <conio.h> functions | START*/
     #include <stdio.h>
     void clrscr(){system("cls");}; 
     void gotoxy(int x,int y){COORD coordinate;coordinate.X=x;coordinate.Y=y; SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coordinate);}
@@ -57,19 +60,12 @@ extern "C" {
         csbi.wAttributes |= color;
         SetConsoleTextAttribute(hConsole, csbi.wAttributes);
     }
-    #ifdef delay
-        #undef delay
-    #endif
     void delay(int ms){Sleep(ms);} 
+    #define cputs _cputs
+    /*Old turbo C <conio.h> functions | END*/
 
-    #ifndef cprintf
-        #define cprintf _cprintf
-    #endif
-    #ifndef cputs
-        #define cputs _cputs
-    #endif
-
-    /*KEYS for getch() from <conio.h> to be compatible with ncurses definitions*/
+    /*KEYS for getch() from <conio.h> | START*/
+    //to be compatible with ncurses definitions
     #define KEY_LEFT 75     //ascii 75 is K
     #define KEY_RIGHT 77    //ascii 77 is M
     #define KEY_UP 72       //ascii 72 is H
@@ -82,7 +78,7 @@ extern "C" {
     #define KEY_DC 83       //ascii 83 is S
     #define KEY_PPAGE 73    //ascii 73 is I
     #define KEY_NPAGE 81    //ascii 81 is Q
-    /*You cant use parenthesis on Windows so KEY_F(1) will be KEY_F1*/
+    //You cant use parenthesis on Windows so KEY_F(1) will be KEY_F1
     #define KEY_F1  59      //ascii 59 is ;
     #define KEY_F2  60      //ascii 60 is <
     #define KEY_F3  61      //ascii 61 is =
@@ -95,16 +91,15 @@ extern "C" {
     #define KEY_F10 68      //ascii 68 is D
     #define KEY_F11 133     
     #define KEY_F12 134     
+    /*KEYS for getch() from <conio.h> | END*/
 
-    /*My Functions*/
-    void startCompat(void){}
-    void exitCompat(void){}
-    void pauseCompat(void){}
-    void resumeCompat(void){}
+    /*My Functions | START*/
+    void startCompat(){}
+    void exitCompat(){}
+    /*My Functions | START*/
 
-    /*ncurses compatibility for Windows*/
 
-    /*Dummy functions*/
+    /*Dummy functions |END*/
     void initrflush(void){}
     void reset_shell_mode(void){}
     void reset_prog_mode(void){}
@@ -114,10 +109,13 @@ extern "C" {
     void nocbreak(void){}
     void raw(void){}
     void *stdscr=NULL;
+    /*Dummy functions | END*/
 
-    /*ncurses functions*/
+    /*ncurses functions | START*/
     int getmaxx(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Right-csbi.srWindow.Left);}
     int getmaxy(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Bottom-csbi.srWindow.Top);}
+    #define LINES getmaxy(stdscr) 
+    #define COLS getmaxx(stdscr) 
     void getmaxyx(void *stdscr, int *y, int *x) {*y=getmaxy(stdscr);*x=getmaxx(stdscr);}
     #define getmaxyx(stdscr, maxY, maxX) getmaxyx(stdscr, &maxY, &maxX) //force the use of pointers
     #define move(y,x) gotoxy(x,y)
@@ -128,9 +126,9 @@ extern "C" {
     void getstr(char* str) {scanf("%s", str);}
     void mvgetstr(int y, int x, char* str) {gotoxy(x, y);getstr(str);}
     void refresh(){fflush(stdout);}
-    void initscr(){startCompat();}
-    void endwin(){exitCompat();}
-    void keypad(void *stdscr,int bool){}
+    //void initscr(){startCompat();}
+    //void endwin(){exitCompat();}
+    void keypad(void *stdscr,int boolean){}
     void clrtobot() {
         CONSOLE_SCREEN_BUFFER_INFO csbi;COORD cursorPos;DWORD count;DWORD cellCount;
         GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
@@ -157,11 +155,12 @@ extern "C" {
         gotoxy(x,y);\
         printf(format, __VA_ARGS__); \
     } while (0)
-
+    /*ncurses functions | END*/
 
 #else//*NIX
-/*conio.h Compatibility*/
 
+    /*conio.h Compatibility | START*/
+    
     /*<ncurses.h> includes <stdio.h> */ 
     #include <ncurses.h>//getch(),scanw(),
     #warning "ncurses.h needs -lncurses as a compiler argument"
@@ -176,8 +175,7 @@ extern "C" {
         refresh();            // Update the screen to use ncurses mode
     }//startCompat()
     void exitCompat(){refresh();echo();fflush(stdout);endwin();}
-    void pauseCompat(){reset_shell_mode();}
-    void resumeCompat(){reset_prog_mode();}
+
 
     #define printw(args...) do{printw(args);refresh();}while(0)     // to work similar to printf
     #define scanw(args...) do{echo();scanw(args);noecho();}while(0) // to work similar to scanf
@@ -200,7 +198,7 @@ extern "C" {
         cbreak();
         return ch;
     }
-    #undef getch
+    #undef  getch
     #define getch() nocbreak_getch()
     #define _getch() nocbreak_getch()
     
@@ -224,8 +222,10 @@ extern "C" {
     #define scanw(args...) do{echo();scanw(args);noecho();}while(0)     // to work similar to scanf
     #define cprintf(format, ...)do { printf(format, __VA_ARGS__); } while (0)
     #define _cprintf cprintf
+    /*conio.h Compatibility | END*/
 
-#endif//OS detection 
+
+#endif/*OS detection | END*/
 
 #ifdef __cplusplus
 }

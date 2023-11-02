@@ -10,24 +10,23 @@ extern "C" {
 /*Text modifiers*/
 #define RESET_TEXT       "\x1b[0m"
 #define BOLD_ON          "\x1b[1m"
-#define BOLD_OFF         "\x1b[22m" 
-#define UNDERLINE_ON     "\x1b[4m"    
-#define UNDERLINE_ON     "\x1b[4m"    
+#define BOLD_OFF         "\x1b[22m"
+#define UNDERLINE_ON     "\x1b[4m"
+#define UNDERLINE_ON     "\x1b[4m"
 #define UNDERLINE_OFF    "\x1b[24m"
-#define REVERSE_ON       "\x1b[7m"    
-#define REVERSE_OFF      "\x1b[27m"    
+#define REVERSE_ON       "\x1b[7m"
+#define REVERSE_OFF      "\x1b[27m"
+#define INVISIBLE_ON     "\x1b[8m"
+#define INVISIBLE_OFF    "\x1b[28m"
 /*Usually not supported */
 #define DIM_ON           "\x1b[2m"
 #define DIM_OFF          "\x1b[22m"
-#define INVISIBLE_ON     "\x1b[8m"
-#define INVISIBLE_OFF    "\x1b[28m"
-#define CROSS_ON       "\x1b[9m"
-#define CROSS_OFF      "\x1b[29m"
-
-#define BLINK_ON         "\x1b[5m"    
-#define BLINK_OFF        "\x1b[25m"    
-#define ITALIC_ON        "\x1b[3m"    
-#define ITALIC_OFF        "\x1b[23m"    
+#define CROSS_ON         "\x1b[9m"
+#define CROSS_OFF        "\x1b[29m"
+#define BLINK_ON         "\x1b[5m"
+#define BLINK_OFF        "\x1b[25m"
+#define ITALIC_ON        "\x1b[3m"
+#define ITALIC_OFF       "\x1b[23m"
 
 /*Terminal modifiers*/
 #define RESET_COLOR      "\x1b[0m"      //Reset color to default terminal color
