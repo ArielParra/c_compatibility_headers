@@ -5,7 +5,61 @@
 #include"ansiCompat.h"
 #include"stdlibCompat.h"
 
-/*Redefintion of system(), INCOMPATIBLE with legacyCompat*/
+
+void color(const char *arg){
+
+    printf(RESET_COLOR); //by default
+
+    /*ForeGround (text color)*/
+    //if( isdigit(arg[0]) || isalpha(arg[0]) ){ // uses <ctype.h>
+    if( ( arg[0] >= '0' && arg[0] <= '9') || ( (arg[0] >= 'a' && arg[0] <= 'z') || (arg[0] >= 'A' && arg[0] <= 'Z') ) ){
+        switch (arg[0]) { 
+            case '0': printf(FG_BLACK); break; 
+            case '1': printf(FG_BLUE); break; 
+            case '2': printf(FG_GREEN); break; 
+            case '3': printf(FG_CYAN); break;        //Windows aqua
+            case '4': printf(FG_RED); break; 
+            case '5': printf(FG_MAGENTA); break;     //Windows purple
+            case '6': printf(FG_YELLOW); break; 
+            case '7': printf(FG_WHITE); break; 
+            case '8': printf(FG_BLACK_LIGHT); break; //Windows purple
+            case '9': printf(FG_BLUE_LIGHT); break; 
+            case 'a': case 'A': printf(FG_GREEN_LIGHT); break; 
+            case 'b': case 'B': printf(FG_CYAN_LIGHT); break; 
+            case 'c': case 'C': printf(FG_RED_LIGHT); break; 
+            case 'd': case 'D': printf(FG_MAGENTA_LIGHT); break; 
+            case 'e': case 'E': printf(FG_YELLOW_LIGHT); break; 
+            case 'f': case 'F': printf(FG_WHITE_LIGHT); break; 
+            default: printf(RESET_COLOR); //for unknown argument 
+        }//siwtch
+    }//if
+
+    /*BackGround*/
+    //if(arg[1]!='\0' && arg[2] == '\0' && ( isdigit(arg[1]) || isalpha(arg[1]) ) ){ // uses <ctype.h> 
+    if(arg[1] != '\0' && arg[2] == '\0' && ( (arg[1] >= '0' && arg[1] <= '9') || ( (arg[1] >= 'a' && arg[1] <= 'z') || (arg[1] >= 'A' && arg[1] <= 'Z') ) ) ) {
+        switch (arg[1]) { 
+            case '0': printf(BG_BLACK); break; 
+            case '1': printf(BG_BLUE); break; 
+            case '2': printf(BG_GREEN); break; 
+            case '3': printf(BG_CYAN); break;        //Windows aqua
+            case '4': printf(BG_RED); break; 
+            case '5': printf(BG_MAGENTA); break;     //Windows purple
+            case '6': printf(BG_YELLOW); break; 
+            case '7': printf(BG_WHITE); break; 
+            case '8': printf(BG_BLACK_LIGHT); break; //Windows gray
+            case '9': printf(BG_BLUE_LIGHT); break; 
+            case 'a': case 'A': printf(BG_GREEN_LIGHT); break; 
+            case 'b': case 'B': printf(BG_CYAN_LIGHT); break; 
+            case 'c': case 'C': printf(BG_RED_LIGHT); break; 
+            case 'd': case 'D': printf(BG_MAGENTA_LIGHT); break; 
+            case 'e': case 'E': printf(BG_YELLOW_LIGHT); break; 
+            case 'f': case 'F': printf(BG_WHITE_LIGHT); break; 
+            default: printf(RESET_COLOR); //for unknown argument
+        }//switch 
+    }//if
+}//color()
+
+/*Redefintion of system(), INCOMPATIBLE with stdlibCompat*/
 #define system(cmd) do { \
     if (strncmp(cmd, "color", 5) == 0 || strncmp(cmd, "COLOR", 5) == 0) { \
         if(cmd[5] == '\0') { \

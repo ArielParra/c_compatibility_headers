@@ -12,14 +12,12 @@
 
 #undef initscr
 #undef endwin
-void initscr(){setANSI();}
+void initscr(){setANSI();setUTF8();}
 void endwin(){clear();}
 
 /*Dummy functions | START*/
 void start_color(void){}
-#ifndef attr_t
-#define attr_t unsigned int
-#endif
+typedef unsigned int attr_t;
 int has_colors(){return 1;}
 /*Dummy functions | END*/
 
@@ -46,9 +44,9 @@ struct ColorPair {
 struct ColorPair colorPairs[MAX_COLOR_PAIRS];
 
 // GLOBAL VARIABLES
-attr_t nextColorPair = 1;
-attr_t currentAttrs = 0;
-short currentPair = 0;
+attr_t GV_nextColorPair = 1;
+attr_t GV_currentAttrs  = 0;
+short  GV_currentPair   = 0;
 
 void init_pair(attr_t pairNumber, attr_t foreground,attr_t background) {
     if (pairNumber > 0 && pairNumber < MAX_COLOR_PAIRS) {
@@ -62,7 +60,7 @@ void init_pair(attr_t pairNumber, attr_t foreground,attr_t background) {
 
 // Function to set the console text attributes based on a color pair
 void setConsoleColor(attr_t pairNumber) {
-    currentPair = pairNumber;
+    GV_currentPair = pairNumber;
     if(pairNumber==0){
         printf("%s", RESET_COLOR);
     }else{
@@ -99,45 +97,37 @@ void setConsoleColor(attr_t pairNumber) {
     #define A_STANDOUT   A_REVERSE
 
     void attron(attr_t attributes){
-        currentAttrs = attributes;
-        if (attributes & A_BOLD)      printf("\x1b[%dm",A_BOLD      - MAX_COLOR_PAIRS);
-        if (attributes & A_UNDERLINE) printf("\x1b[%dm",A_UNDERLINE - MAX_COLOR_PAIRS);
-        if (attributes & A_BLINK)     printf("\x1b[%dm",A_BLINK     - MAX_COLOR_PAIRS);
-        if (attributes & A_ITALIC)    printf("\x1b[%dm",A_ITALIC    - MAX_COLOR_PAIRS);
-        if (attributes & A_INVIS)     printf("\x1b[%dm",A_INVIS     - MAX_COLOR_PAIRS);
-        if (attributes & A_REVERSE)   printf("\x1b[%dm",A_REVERSE   - MAX_COLOR_PAIRS);
-        if (attributes & A_DIM)       printf("\x1b[%dm",A_DIM       - MAX_COLOR_PAIRS);
-        else setConsoleColor(attributes);
+        GV_currentAttrs = attributes;/**/
+        if (attributes<MAX_COLOR_PAIRS) setConsoleColor(attributes);//for ncurses COLOR argument
+        else{
+            if (attributes & A_BOLD)      printf("\x1b[%dm",A_BOLD      - MAX_COLOR_PAIRS);
+            if (attributes & A_UNDERLINE) printf("\x1b[%dm",A_UNDERLINE - MAX_COLOR_PAIRS);
+            if (attributes & A_BLINK)     printf("\x1b[%dm",A_BLINK     - MAX_COLOR_PAIRS);
+            if (attributes & A_ITALIC)    printf("\x1b[%dm",A_ITALIC    - MAX_COLOR_PAIRS);
+            if (attributes & A_INVIS)     printf("\x1b[%dm",A_INVIS     - MAX_COLOR_PAIRS);
+            if (attributes & A_REVERSE)   printf("\x1b[%dm",A_REVERSE   - MAX_COLOR_PAIRS);
+            if (attributes & A_DIM)       printf("\x1b[%dm",A_DIM       - MAX_COLOR_PAIRS);
+        }
     }
     void attrset(attr_t attributes){
         printf("%s", RESET_COLOR);
         attron(attributes);
     }
     void attroff(attr_t attributes){
-        if (attributes & A_BOLD)      printf("\x1b[%dm",A_BOLD      + 21 - MAX_COLOR_PAIRS);
-        if (attributes & A_UNDERLINE) printf("\x1b[%dm",A_UNDERLINE + 20 - MAX_COLOR_PAIRS);
-        if (attributes & A_BLINK)     printf("\x1b[%dm",A_BLINK     + 20 - MAX_COLOR_PAIRS);
-        if (attributes & A_ITALIC)    printf("\x1b[%dm",A_ITALIC    + 20 - MAX_COLOR_PAIRS);
-        if (attributes & A_INVIS)     printf("\x1b[%dm",A_INVIS     + 20 - MAX_COLOR_PAIRS);
-        if (attributes & A_REVERSE)   printf("\x1b[%dm",A_REVERSE   + 20 - MAX_COLOR_PAIRS);
-        if (attributes & A_DIM)       printf("\x1b[%dm",A_DIM       + 20 - MAX_COLOR_PAIRS);
-        else setConsoleColor(0);
+        if (attributes<MAX_COLOR_PAIRS) setConsoleColor(0);//for ncurses COLOR argument
+        else{
+            if (attributes & A_BOLD)      printf("\x1b[%dm",A_BOLD      + 21 - MAX_COLOR_PAIRS);
+            if (attributes & A_UNDERLINE) printf("\x1b[%dm",A_UNDERLINE + 20 - MAX_COLOR_PAIRS);
+            if (attributes & A_BLINK)     printf("\x1b[%dm",A_BLINK     + 20 - MAX_COLOR_PAIRS);
+            if (attributes & A_ITALIC)    printf("\x1b[%dm",A_ITALIC    + 20 - MAX_COLOR_PAIRS);
+            if (attributes & A_INVIS)     printf("\x1b[%dm",A_INVIS     + 20 - MAX_COLOR_PAIRS);
+            if (attributes & A_REVERSE)   printf("\x1b[%dm",A_REVERSE   + 20 - MAX_COLOR_PAIRS);
+            if (attributes & A_DIM)       printf("\x1b[%dm",A_DIM       + 20 - MAX_COLOR_PAIRS);
+        }
     }
 
     #define atrr_on(args)  attron(args)
     #define atrr_off(args) attroff(args)
-
-    void bkgdset(attr_t attributes){
-        if (attributes & COLOR_BLACK)   printf("%s", BG_BLACK); 
-        if (attributes & COLOR_RED)     printf("%s", BG_RED); 
-        if (attributes & COLOR_GREEN)   printf("%s", BG_GREEN); 
-        if (attributes & COLOR_YELLOW)  printf("%s", BG_YELLOW); 
-        if (attributes & COLOR_BLUE)    printf("%s", BG_BLUE); 
-        if (attributes & COLOR_MAGENTA) printf("%s", BG_MAGENTA);
-        if (attributes & COLOR_CYAN)    printf("%s", BG_CYAN); 
-        if (attributes & COLOR_WHITE)   printf("%s", BG_WHITE);
-        else attron(attributes);
-    }
 
 void getyx(void *stdscr, int *y, int *x) {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -148,15 +138,31 @@ void getyx(void *stdscr, int *y, int *x) {
 #define getyx(stdscr, y, x) getyx(stdscr, &y, &x)
 
 /*this fuinctions may not work as expected | START*/
+
+    int bkgdset(attr_t attributes){
+        if (attributes & COLOR_BLACK)   textbackground(BLACK);    
+        if (attributes & COLOR_RED)     textbackground(RED);
+        if (attributes & COLOR_GREEN)   textbackground(GREEN);
+        if (attributes & COLOR_YELLOW)  textbackground(YELLOW);
+        if (attributes & COLOR_BLUE)    textbackground(CYAN);
+        if (attributes & COLOR_MAGENTA) textbackground(MAGENTA); 
+        if (attributes & COLOR_CYAN)    textbackground(BLUE);
+        if (attributes & COLOR_WHITE)   textbackground(WHITE);
+        else attron(attributes);
+        return 0;
+    }
+    #define bkgd bkgdset
+
 int inch() {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
     COORD position = csbi.dwCursorPosition;
     CHAR_INFO buffer;
-    SMALL_RECT rect = { position.X, position.Y, position.X + 1, position.Y + 1 };
+    SMALL_RECT rect = { position.X, position.Y, position.X, position.Y };
     ReadConsoleOutput(GetStdHandle(STD_OUTPUT_HANDLE), &buffer, (COORD){1, 1}, (COORD){0, 0}, &rect);
     return buffer.Char.AsciiChar;
 }
+
 #define A_ATTRIBUTES 0xFFU // You can adjust this value as needed
 #define A_COLOR 0xFFU      // You can adjust this value as needed
 
@@ -167,8 +173,8 @@ int attr_get(attr_t *attrs, short *pair, void *opts) {
     }
 
     // Set the values of attrs and pair based on the current state
-    *attrs = currentAttrs;
-    *pair = currentPair;
+    *attrs = GV_currentAttrs;
+    *pair  = GV_currentPair;
 
     return 0;
 }
@@ -196,8 +202,6 @@ int mvinch(int y, int x) {
     // Combine the character and attributes into a single integer
     return ch | (attr << 8);
 }
-
-
 
 typedef unsigned long chtype;
 

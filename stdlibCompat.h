@@ -53,9 +53,9 @@ extern "C" {
     str[i] = '\0'; \
     return strrev(str);\
     } while (0)
-    char* ltoa(long num,char* str,int base){TO_ASCII(num, str, base);}
+    char* ltoa(long num,char* str,int base){          TO_ASCII(num, str, base);}
     char* ultoa(unsigned long num,char* str,int base){TO_ASCII(num, str, base);}
-    char* itoa(int num,char* str,int base){TO_ASCII(num, str, base);}
+    char* itoa(int num,char* str,int base){           TO_ASCII(num, str, base);}
     #define _ltoa(args...) ltoa(args)
     #define _ultoa(args...) ultoa(args)
     #define _itoa(args...) itoa(args)

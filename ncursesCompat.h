@@ -14,7 +14,6 @@ extern "C" {
 #define KEY_ESC 27
 /*shared getch() Key definitions | END */
 
-
 /*<conio.h> Turbo C color macros | START*/
 #define BLACK        0
 #define BLUE         1
@@ -44,21 +43,37 @@ extern "C" {
     #include <stdio.h>
     void clrscr(){system("cls");}; 
     void gotoxy(int x,int y){COORD coordinate;coordinate.X=x;coordinate.Y=y; SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coordinate);}
-    void textbackground(int color) {
+    void textbackground(int color) {//Not working as expected
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        CONSOLE_SCREEN_BUFFER_INFO csbi;
-        GetConsoleScreenBufferInfo(hConsole, &csbi);
-        csbi.wAttributes &= ~(BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY);
-        csbi.wAttributes |= (color << 4);
-        SetConsoleTextAttribute(hConsole, csbi.wAttributes);
+        int attr = 0;
+        switch (color) {
+            case BLACK:     attr = 0;break;
+            case BLUE:      attr = BACKGROUND_BLUE;break;
+            case GREEN:     attr = BACKGROUND_GREEN;break;
+            case CYAN:      attr = BACKGROUND_GREEN | BACKGROUND_BLUE;break;
+            case RED:       attr = BACKGROUND_RED;break;
+            case MAGENTA:   attr = BACKGROUND_RED | BACKGROUND_BLUE;break;
+            case BROWN:     attr = BACKGROUND_RED | BACKGROUND_GREEN;break;
+            case LIGHTGRAY: attr = BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;break;
+            default:attr = 0; // Default to black background
+        }
+        SetConsoleTextAttribute(hConsole, attr);
     }
-    void textcolor(int color) {
+    void textcolor(int color) {//Not working as expected
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        CONSOLE_SCREEN_BUFFER_INFO csbi;
-        GetConsoleScreenBufferInfo(hConsole, &csbi);
-        csbi.wAttributes &= ~(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-        csbi.wAttributes |= color;
-        SetConsoleTextAttribute(hConsole, csbi.wAttributes);
+        int attr = 0;
+        switch (color) {
+            case BLACK:     attr = 0;break;
+            case BLUE:      attr = FOREGROUND_BLUE;break;
+            case GREEN:     attr = FOREGROUND_GREEN;break;
+            case CYAN:      attr = FOREGROUND_GREEN | FOREGROUND_BLUE;break;
+            case RED:       attr = FOREGROUND_RED;break;
+            case MAGENTA:   attr = FOREGROUND_RED | FOREGROUND_BLUE;break;
+            case BROWN:     attr = FOREGROUND_RED | FOREGROUND_GREEN;break;
+            case LIGHTGRAY: attr = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;break;
+            default:attr = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE; // Default to white
+        }   
+        SetConsoleTextAttribute(hConsole, attr);
     }
     void delay(int ms){Sleep(ms);} 
     #define cputs _cputs
@@ -112,8 +127,8 @@ extern "C" {
     /*Dummy functions | END*/
 
     /*ncurses functions | START*/
-    int getmaxx(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Right-csbi.srWindow.Left);}
-    int getmaxy(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Bottom-csbi.srWindow.Top);}
+    int getmaxx(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Right-csbi.srWindow.Left+1);}
+    int getmaxy(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Bottom-csbi.srWindow.Top+1);}
     #define LINES getmaxy(stdscr) 
     #define COLS getmaxx(stdscr) 
     void getmaxyx(void *stdscr, int *y, int *x) {*y=getmaxy(stdscr);*x=getmaxx(stdscr);}
@@ -159,6 +174,70 @@ extern "C" {
 
 #else//*NIX
 
+    /*Old turbo C <conio.h> functions | START*/
+   void gotoxy(int x,int y){move(y, x);}
+    int kbhit(){
+    int ch=0, r=0; 
+        nodelay(stdscr, TRUE);
+        ch = getch();
+        if(ch == ERR){r = FALSE;}  // no input
+        else{r = TRUE;ungetch(ch);}// input
+        nodelay(stdscr, FALSE);
+    return(r);
+    }//kbhit()  
+    #define _kbhit() kbhit()
+    
+    #include<unistd.h>//usleep()
+    void delay(unsigned int ms){usleep(ms*1000);} 
+
+    void textbackground(int color) {//Not tested
+        int bg_color = COLOR_BLACK;  
+        switch(){
+            case BLACK:         bg_color = COLOR_BLACK;break
+            case BLUE:          bg_color = COLOR_CYAN;break
+            case GREEN:         bg_color = COLOR_GREEN;break
+            case CYAN:          bg_color = COLOR_BLUE;break
+            case RED:           bg_color = COLOR_RED;break
+            case MAGENTA:       bg_color = COLOR_MAGENTA;break
+            case BROWN:         bg_color = COLOR_YELLOW;break
+            case LIGHTGRAY:     bg_color = COLOR_WHITE;break
+            case DARKGRAY:      bg_color = COLOR_BLACK;break
+            case LIGHTBLUE:     bg_color = COLOR_CYAN;break
+            case LIGHTGREEN:    bg_color = COLOR_GREEN;break
+            case LIGHTCYAN:     bg_color = COLOR_BLUE;break
+            case LIGHTRED:      bg_color = COLOR_RED;break
+            case LIGHTMAGENTA:  bg_color = COLOR_MAGENTA;break
+            case YELLOW:        bg_color = COLOR_YELLOW;break;
+            case WHITE:         bg_color = COLOR_WHITE;break;    
+        }
+        bkgd(COLOR_PAIR(bg_color)); refresh();
+    }
+    void textcolor(int color) {//Not tested
+        int fg_color = COLOR_WHITE;  
+        switch(){
+            case BLACK:         fg_color = COLOR_BLACK;break
+            case BLUE:          fg_color = COLOR_CYAN;break
+            case GREEN:         fg_color = COLOR_GREEN;break
+            case CYAN:          fg_color = COLOR_BLUE;break
+            case RED:           fg_color = COLOR_RED;break
+            case MAGENTA:       fg_color = COLOR_MAGENTA;break
+            case BROWN:         fg_color = COLOR_YELLOW;break
+            case LIGHTGRAY:     fg_color = COLOR_WHITE;break
+            case DARKGRAY:      fg_color = COLOR_BLACK;break
+            case LIGHTBLUE:     fg_color = COLOR_CYAN;break
+            case LIGHTGREEN:    fg_color = COLOR_GREEN;break
+            case LIGHTCYAN:     fg_color = COLOR_BLUE;break
+            case LIGHTRED:      fg_color = COLOR_RED;break
+            case LIGHTMAGENTA:  fg_color = COLOR_MAGENTA;break
+            case YELLOW:        fg_color = COLOR_YELLOW;break;
+            case WHITE:         fg_color = COLOR_WHITE;break;
+        }
+        attron(COLOR_PAIR(fg_color));refresh();
+    }
+
+    /*Old turbo C <conio.h> functions | END*/
+
+
     /*conio.h Compatibility | START*/
     
     /*<ncurses.h> includes <stdio.h> */ 
@@ -179,18 +258,6 @@ extern "C" {
 
     #define printw(args...) do{printw(args);refresh();}while(0)     // to work similar to printf
     #define scanw(args...) do{echo();scanw(args);noecho();}while(0) // to work similar to scanf
-
-    void gotoxy(int x,int y){move(y, x);}
-    int kbhit(){
-    int ch=0, r=0; 
-        nodelay(stdscr, TRUE);
-        ch = getch();
-        if(ch == ERR){r = FALSE;}  // no input
-        else{r = TRUE;ungetch(ch);}// input
-        nodelay(stdscr, FALSE);
-    return(r);
-    }//kbhit()  
-    #define _kbhit() kbhit()
 
     int nocbreak_getch() {
         raw();

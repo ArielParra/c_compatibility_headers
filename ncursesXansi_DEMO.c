@@ -3,7 +3,7 @@
 //#include <curses.h>
 //#include <stdlib.h>
 
-/*partial compatibility GRASS_PAIR doesnt work as expected on Windows*/
+/*Right wall bugs are expected on Linux and Windows*/
 #include "ncursesXansiCompat.h"
 
 #define GRASS     ' '
