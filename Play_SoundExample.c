@@ -11,9 +11,9 @@
 //int main(void){
 int main(){
    
-    printf("You can use the song file name as argument\n");
+    printf("You can use the original PlaySound command\n");
     Sleep(2000);
-    Play_Sound("song.wav");
+    PlaySound("song.wav",NULL, SND_ASYNC);
     printf("Sound Play\n");
     Sleep(5000);
     Stop_Sound();
@@ -21,7 +21,7 @@ int main(){
     Sleep(1000);
     
     const char* song="song.wav";
-    printf("Or you can use a const variable as argument\n");//insted of fflush(stdou)
+    printf("Or you can call Play_Sound() with a const string\n");//insted of fflush(stdou)
     Sleep(2000);
     Play_Sound(song);
     printf("Sound Play\n");

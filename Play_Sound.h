@@ -92,10 +92,10 @@ extern "C" {
 #endif//OS detection 
 
 #undef PlaySoundA
-#define PlaySoundA(file, opt, async) do{ Play_Sound(file); }while(0)
+#define PlaySoundA(file, NULL, SND_ASYNC) do{ Play_Sound(file); }while(0)
 
 #undef PlaySound
-#define PlaySound(file, opt, async) do{ Play_Sound(file); }while(0)
+#define PlaySound(file, NULL, SND_ASYNC) do{ Play_Sound(file); }while(0)
 
 #ifdef __cplusplus
 }
