@@ -16,3 +16,4 @@ example-allCompat-*
 *.depend
 *.layout
 *_private.*
+*.gch

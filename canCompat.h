@@ -1,8 +1,13 @@
-#ifndef ncursesXansiCompat_h
-#define ncursesXansiCompat_h
+#ifndef canCompat_h //can stands for: Conio Ansi Ncurses
+#define canCompat_h
 #include <stdio.h>
 #include "ansiCompat.h"
 #include "ncursesCompat.h"
+#include "conioCompat.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #if defined(_WIN32) || defined(_CYGWIN_) /*OS detection | START*/
 
@@ -10,10 +15,8 @@
 
 #warning "atron(), atroff() implemntations needs previous call to setANSI() function to work on CMD"
 
-#undef initscr
-#undef endwin
-void initscr(){setANSI();setUTF8();}
-void endwin(){clear();}
+#define initscr() do{setANSI();setUTF8();}while(0)
+#define endwin()  do{clear();}while(0)
 
 /*Dummy functions | START*/
 void start_color(void){}
@@ -95,10 +98,11 @@ void setConsoleColor(attr_t pairNumber) {
     #define A_REVERSE   32774 //7 + MAX_COLOR_PAIRS
     #define A_INVIS     32775 //8 + MAX_COLOR_PAIRS
     #define A_STANDOUT   A_REVERSE
+    #define A_COLOR 0xFFU      
 
     void attron(attr_t attributes){
-        GV_currentAttrs = attributes;/**/
-        if (attributes<MAX_COLOR_PAIRS) setConsoleColor(attributes);//for ncurses COLOR argument
+        GV_currentAttrs = attributes;
+        if (attributes<MAX_COLOR_PAIRS && attributes & A_COLOR) setConsoleColor(attributes & A_COLOR);//for ncurses COLOR argument
         else{
             if (attributes & A_BOLD)      printf("\x1b[%dm",A_BOLD      - MAX_COLOR_PAIRS);
             if (attributes & A_UNDERLINE) printf("\x1b[%dm",A_UNDERLINE - MAX_COLOR_PAIRS);
@@ -114,7 +118,7 @@ void setConsoleColor(attr_t pairNumber) {
         attron(attributes);
     }
     void attroff(attr_t attributes){
-        if (attributes<MAX_COLOR_PAIRS) setConsoleColor(0);//for ncurses COLOR argument
+        if (attributes<MAX_COLOR_PAIRS && attributes & A_COLOR) setConsoleColor(0);//for ncurses COLOR argument
         else{
             if (attributes & A_BOLD)      printf("\x1b[%dm",A_BOLD      + 21 - MAX_COLOR_PAIRS);
             if (attributes & A_UNDERLINE) printf("\x1b[%dm",A_UNDERLINE + 20 - MAX_COLOR_PAIRS);
@@ -138,7 +142,6 @@ void getyx(void *stdscr, int *y, int *x) {
 #define getyx(stdscr, y, x) getyx(stdscr, &y, &x)
 
 /*this fuinctions may not work as expected | START*/
-
     int bkgdset(attr_t attributes){
         if (attributes & COLOR_BLACK)   textbackground(BLACK);    
         if (attributes & COLOR_RED)     textbackground(RED);
@@ -163,8 +166,6 @@ int inch() {
     return buffer.Char.AsciiChar;
 }
 
-#define A_ATTRIBUTES 0xFFU // You can adjust this value as needed
-#define A_COLOR 0xFFU      // You can adjust this value as needed
 
 int attr_get(attr_t *attrs, short *pair, void *opts) {
     // Check if attrs and pair pointers are valid
@@ -205,7 +206,6 @@ int mvinch(int y, int x) {
 
 typedef unsigned long chtype;
 
-/* A_CHARTEXT is a bitmask to extract the character part */
 #define A_CHARTEXT 0x000000ff
 
 void mvhline(int y, int x, chtype ch, int n) {
@@ -233,4 +233,8 @@ int mvvline(int y, int x, chtype ch, int n) {
 
 #endif/*OS detection | END*/
 
-#endif //ncursesXansiCompat_h
+#ifdef __cplusplus
+}
+#endif//__cplusplus
+
+#endif//canCompat_h

@@ -4,10 +4,13 @@
 - [x] ansiCompat.h
 - [x] Play_Sound.h
 - [ ] ncursesCompat.h
+- [ ] conioCompat.h
+- [ ] canCompat.h
 - [ ] allCompat.h
 - [ ] beep.h
 - [ ] README.md
-- [ ] dependencies
+- [ ] examples and headers on folders
+- [ ] dependencies on README.md
 - [ ] Code comments and pretty identation
 - [ ] man pages for each header file
     - [ ] roadmap and things Ill not do 
@@ -15,6 +18,8 @@
     - [ ] ansiCompat.h
     - [ ] Play_Sound.h
     - [ ] ncursesCompat.h
+    - [ ] conioCompat.h
+    - [ ] canCompat.h
     - [ ] allCompat.h
 - [ ] LICENCE.md
 - [ ] ConsultedReferences.md
