@@ -96,7 +96,7 @@ extern "C" {
 
     /*Old turbo C <conio.h> functions | START*/
     void clrscr(){ system("clear"); }
-    void gotoxy(int x,int y){ move(y,x); }
+    void gotoxy(int x,int y){ printf("%c[%d;%df",0x1B,y,x);fflush(stdout); }
         
     #include<unistd.h>//usleep()
     void delay(unsigned int ms){usleep(ms*1000);} 
@@ -176,12 +176,10 @@ extern "C" {
     }//startCompat()
     void exitCompat(){refresh();echo();fflush(stdout);endwin();}
 
-    #define printw(args...) do{printw(args);refresh();}while(0)     // to work similar to printf
-    #define scanw(args...) do{echo();scanw(args);noecho();}while(0) // to work similar to scanf
-  int getche(){
-        int ch=0;
+    int getche(){
+        raw();
         echo();
-        ch = getch();
+        int ch = getch();
         noecho();
         return ch;
     }
@@ -194,8 +192,6 @@ extern "C" {
     #undef  getch
     #define getch() nocbreak_getch()
     #define _getch() nocbreak_getch()
-
-  
     
     /*conio.h Compatibility | END*/
 

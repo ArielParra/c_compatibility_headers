@@ -107,7 +107,8 @@ extern "C" {
         FillConsoleOutputAttribute(hConsole, csbi.wAttributes, cellsToClear, topLeft, &written);
         SetConsoleCursorPosition(hConsole, topLeft);
     }
-
+    #define scanw(args...) scanf(args)
+    #define printw(args...) printf(args)
     #define mvprintw(x, y, format, ...) do { \
         move(y,x);\
         printf(format, __VA_ARGS__); \
@@ -120,6 +121,11 @@ extern "C" {
     #include <ncurses.h>//getch(),scanw(),
     #warning "ncurses.h needs -lncurses as a compiler argument"
 
+    #undef clear
+    #define clear() do{ wclear(stdscr); refresh(); }while(0)
+    #define printw(args...) do{printw(args);refresh();}while(0)     // to work similar to printf
+    #define scanw(args...) do{echo();scanw(args);noecho();}while(0) // to work similar to scanf
+    
     /*getch() Key definitions*/
     #undef  KEY_ENTER // on ncurses is ctrl + m 
     #define KEY_ENTER '\n' //to work like on windows
