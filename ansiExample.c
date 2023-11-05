@@ -3,7 +3,9 @@
 #include<math.h>//floor()
 #include<stdlib.h>
 #include "ansiCompat.h"
-#include "stdlibCompat.h"// Sleep()
+#include "stdlibCompat.h"//sysClear(), sysPause()
+#include "windowsCompat.h"//Sleep()
+
 
 //int main(int argc,char *argv[]){
 //int main(int argc,char **argv){

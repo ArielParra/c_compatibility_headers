@@ -14,7 +14,7 @@ else  	  #*NIX using GNU make
 	EXT :=
 endif
 
-CFLAGS := -O2 -s -Wall
+CFLAGS := -O2 -s -w
 
 Name1 := example-stdlibCompat-$(UNAME)
 Name2 := example-playSound-$(UNAME)
@@ -30,7 +30,7 @@ $(Name1): stdlibExample.c stdlibCompat.h
 $(Name2): PlaySoundExample.c PlaySound.h windowsCompat.h
 	$(CC) -o $(call FixPath,$(Name2)) $< $(FLAGS) $(CFLAGS)
 
-$(Name3): ansiExample.c ansiCompat.h stdlibCompat.h
+$(Name3): ansiExample.c ansiCompat.h stdlibCompat.h windowsCompat.h
 	$(CC) -o $(call FixPath,$(Name3)) $< $(FLAGS) $(CFLAGS)
 
 $(Name4): ncursesExample.c ncursesCompat.h stdlibCompat.h

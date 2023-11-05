@@ -30,7 +30,7 @@ extern "C" {
 
     /*Redefinition of Windows system("pause") to sysPause() or system("cls" to sysclear)*/
     #define system(cmd) do{ \
-        if(strcmp(cmd,"pause")==0 || strcmp(cmd,"PAUSE") ==0){ sysClear(); } \
+        if(strcmp(cmd,"pause")==0 || strcmp(cmd,"PAUSE") ==0){ sysPause(); } \
         else if(strcmp(cmd,"cls")==0 || strcmp(cmd,"CLS")==0){ sysClear(); } \
         else{system(cmd);}\
     }while(0)
@@ -49,11 +49,11 @@ extern "C" {
     }\
     if (isNegative==1 && base==10){str[i++] = '-';}\
     str[i] = '\0'; \
-        char *p1,*p2;
-        if (! str || ! *str) return str;
-        for (p1=str,p2=str+strlen(str)-1;p2>p1;++p1,--p2){
-            *p1^=*p2;*p2^=*p1;*p1^=*p2;
-        }
+        char *p1,*p2; \
+        if (! str || ! *str) return str; \
+        for (p1=str,p2=str+strlen(str)-1;p2>p1;++p1,--p2){ \
+            *p1^=*p2;*p2^=*p1;*p1^=*p2; \
+        } \
     return str;\
     } while (0)
     char* ltoa(long num,char* str,int base){          TO_ASCII(num, str, base);}

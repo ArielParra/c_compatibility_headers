@@ -20,7 +20,7 @@ else  	  #*NIX using GNU make
 	endif
 endif
 
-CFLAGS := -O2 -s -Wall
+CFLAGS := -O2 -s -w
 
 Name1 := beep-$(UNAME)
 Name2 := mario-$(UNAME)

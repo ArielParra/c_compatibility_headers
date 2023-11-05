@@ -72,7 +72,7 @@ extern "C" {
 #elif defined(__unix__)|| defined(__APPLE__) || defined(__MACH__) //*NIX
 
     #if defined(__linux__)
-
+        #include <stdlib.h>//system()
         void Play_Sound(const char* file){
             char SoundCommand[strlen(file)+15+17];
             if (system("echo $WSL_DISTRO_NAME >/dev/null 2>&1 &") == 0) {

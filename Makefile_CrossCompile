@@ -1,7 +1,7 @@
 #Cross Compiling from within Linux
 
 EXT =
-CFLAGS = -O2 -s -Wall
+CFLAGS = -O2 -s -w
 FLAGS = -lncurses
 
 ifeq ($(TARGET),)
@@ -51,7 +51,7 @@ $(Name1): stdlibExample.c stdlibCompat.h
 $(Name2): PlaySoundExample.c PlaySound.h windowsCompat.h
 	$(CC) -o $(call FixPath,$(Name2)) $< $(FLAGS) $(CFLAGS)
 
-$(Name3): ansiExample.c ansiCompat.h stdlibCompat.h
+$(Name3): ansiExample.c ansiCompat.h stdlibCompat.h windowsCompat.h
 	$(CC) -o $(call FixPath,$(Name3)) $< $(FLAGS) $(CFLAGS)
 
 $(Name4): ncursesExample.c ncursesCompat.h stdlibCompat.h
