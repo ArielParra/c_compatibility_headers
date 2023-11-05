@@ -18,22 +18,23 @@ extern "C" {
 
 #if defined(_WIN32) || defined(__CYGWIN__)
     #define ultoa(args...) _ultoa(args)
- 
+    void sysClear(){ system("cls"); } 
+    void sysPause(){ system("pause"); }
 #else//*NIX
     #include<stdio.h> //sprintf()
     #include<string.h>//strcmp(), strcpy()
+
+    void sysClear(){system("clear");}
+    //void sysPause(){system("read -r -n 1 -p 'Presiona cualquier tecla para contiuar . . .'");}//Español
+    void sysPause(){system("read -r -n 1 -p 'Press any key to continue . . .'");}//English
+
     /*Redefinition of Windows system("pause") to sysPause() or system("cls" to sysclear)*/
     #define system(cmd) do{ \
-        if(strcmp(cmd,"pause")==0 || strcmp(cmd,"PAUSE")==0){\
-            /*system("read -r -n 1 -p 'Presiona cualquier tecla para contiuar . . .'");//Español*/\
-            system("read -r -n 1 -p 'Press any key to continue . . .'");\
-            }\
-        else if(strcmp(cmd,"cls")==0 || strcmp(cmd,"CLS")==0){\
-            system("clear");\
-            }\
+        if(strcmp(cmd,"pause")==0 || strcmp(cmd,"PAUSE") ==0){ sysClear(); } \
+        else if(strcmp(cmd,"cls")==0 || strcmp(cmd,"CLS")==0){ sysClear(); } \
         else{system(cmd);}\
     }while(0)
-
+    
     //to save lines of code in header
     #define TO_ASCII(num, str, base) \
     do { \
@@ -48,7 +49,12 @@ extern "C" {
     }\
     if (isNegative==1 && base==10){str[i++] = '-';}\
     str[i] = '\0'; \
-    return strrev(str);\
+        char *p1,*p2;
+        if (! str || ! *str) return str;
+        for (p1=str,p2=str+strlen(str)-1;p2>p1;++p1,--p2){
+            *p1^=*p2;*p2^=*p1;*p1^=*p2;
+        }
+    return str;\
     } while (0)
     char* ltoa(long num,char* str,int base){          TO_ASCII(num, str, base);}
     char* ultoa(unsigned long num,char* str,int base){TO_ASCII(num, str, base);}

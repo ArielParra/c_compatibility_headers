@@ -13,7 +13,9 @@ extern "C" {
 #include "stdlibCompat.h"
 #include "ncursesCompat.h"
 #include "ansiCompat.h"
-#include "Play_Sound.h"
+#include "PlaySound.h"
+#include "conioCompat.h"
+#include "windowsCompat.h"
 
 
 #include <string.h>//strcmp(), strncmp()

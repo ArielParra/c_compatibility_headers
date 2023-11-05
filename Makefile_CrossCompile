@@ -38,7 +38,7 @@ $(error TARGET is invalid. Please use a valid target platform, linux,windows,mac
 endif
 
 Name1 := example-stdlibCompat-$(UNAME)
-Name2 := example-play_Sound-$(UNAME)
+Name2 := example-playSound-$(UNAME)
 Name3 := example-ansiCompat-$(UNAME)
 Name4 := example-ncursesCompat-$(UNAME)
 Name5 := example-allCompat-$(UNAME)
@@ -46,23 +46,25 @@ Name5 := example-allCompat-$(UNAME)
 all: $(Name1) $(Name2) $(Name3) $(Name4) $(Name5)
 
 $(Name1): stdlibExample.c stdlibCompat.h
-	$(CC) -o $(Name1) $< $(FLAGS) $(CFLAGS)
+	$(CC) -o $(call FixPath,$(Name1)) $< $(FLAGS) $(CFLAGS)
 
-$(Name2): Play_SoundExample.c Play_Sound.h stdlibCompat.h
-	$(CC) -o $(Name2) $< $(FLAGS) $(CFLAGS)
+$(Name2): PlaySoundExample.c PlaySound.h windowsCompat.h
+	$(CC) -o $(call FixPath,$(Name2)) $< $(FLAGS) $(CFLAGS)
 
 $(Name3): ansiExample.c ansiCompat.h stdlibCompat.h
-	$(CC) -o $(Name3) $< $(FLAGS) $(CFLAGS)
+	$(CC) -o $(call FixPath,$(Name3)) $< $(FLAGS) $(CFLAGS)
 
 $(Name4): ncursesExample.c ncursesCompat.h stdlibCompat.h
-	$(CC) -o $(Name4) $< $(FLAGS) $(CFLAGS)
+	$(CC) -o $(call FixPath,$(Name4)) $< $(FLAGS) $(CFLAGS)
 
 $(Name5): allExample.c allCompat.h
-	$(CC) -o $(Name5) $< $(FLAGS) $(CFLAGS)
+	$(CC) -o $(call FixPath,$(Name5)) $< $(FLAGS) $(CFLAGS)
 
 clean:
-	$(RM) $(Name1)$(EXT)
-	$(RM) $(Name2)$(EXT)
-	$(RM) $(Name3)$(EXT)
-	$(RM) $(Name4)$(EXT)
-	$(RM) $(Name5)$(EXT)
+	$(RM) $(call FixPath,$(Name1)$(EXT))
+	$(RM) $(call FixPath,$(Name2)$(EXT))
+	$(RM) $(call FixPath,$(Name3)$(EXT))
+	$(RM) $(call FixPath,$(Name4)$(EXT))
+	$(RM) $(call FixPath,$(Name5)$(EXT))
+	$(RM) $(call FixPath,a.exe)
+	$(RM) $(call FixPath,a.out)

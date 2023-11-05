@@ -56,55 +56,6 @@ int main(){
     printf(RESET_TEXT);
     sysPause();
     sysClear();
-    fflush(stdout);
-    printf("\ncolor() function adapts the windows COLOR command\n");
-    char command[3];
-    for(char i='0';i<='9';i++){
-            command[0]=i;command[1]='\0';
-            color(command);
-            printf(CLEAR_SCREEN);
-            printf("\ncolor(%s)",command);
-            Sleep(500);
-    }
-    printf(RESET_COLOR);
-    for(char i='a';i<='f';i++){
-            command[0]=i;command[1]='\0';
-            color(command);
-            printf(CLEAR_SCREEN);
-            printf("\ncolor(%s)",command);
-            Sleep(500);
-    }
-    
-    for(char i='a';i<='f';i++){
-        for(char j='0';j<='9';j++){
-            command[0]=i;command[1]=j;command[2]='\0';
-            color(command);
-            printf(CLEAR_SCREEN);
-            printf("\ncolor(%c%c)",command[0],command[1]);
-            Sleep(500);
-        }
-    }
-    for(char i='a';i<='f';i++){
-        for(char j='0';j<='9';j++){
-            command[0]=j;command[1]=i;command[2]='\0';
-            color(command);
-            printf(CLEAR_SCREEN);
-            printf("\ncolor(%s)",command);
-            Sleep(500);
-        }
-    }
-    printf(CLEAR_SCREEN);
-    
-    color("  ");
-    printf("\ncolor(\"  \")");
-    
-    //Incorrect function calls, will give compile ERROR
-    color(" ");
-    printf("\ncolor(\" \")");
-    
-    color("");
-    printf("\ncolor(\"\")");
-    
     printf("\n%sCursor is now ON", CURSOR_ON);
     return 0;
 }
