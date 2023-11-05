@@ -3,7 +3,7 @@ build/
 obj/
 bin/
 example-stdlibCompat-*
-example-play_Sound-*
+example-playSound-*
 example-ansiCompat-*
 example-ncursesCompat-*
 example-allCompat-*
