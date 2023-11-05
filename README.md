@@ -5,7 +5,7 @@
 - [x] Play_Sound.h
 - [ ] ncursesCompat.h
 - [ ] conioCompat.h
-- [ ] canCompat.h
+- [ ] windowsCompat.h
 - [ ] allCompat.h
 - [ ] beep.h
 - [ ] README.md
@@ -19,7 +19,7 @@
     - [ ] Play_Sound.h
     - [ ] ncursesCompat.h
     - [ ] conioCompat.h
-    - [ ] canCompat.h
+    - [ ] windowsCompat.h
     - [ ] allCompat.h
 - [ ] LICENCE.md
 - [ ] ConsultedReferences.md

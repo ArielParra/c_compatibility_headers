@@ -49,14 +49,14 @@ extern "C" {
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         int attr = 0;
         switch (color) {
-            case BLACK:     attr = 0;break;
-            case BLUE:      attr = BACKGROUND_BLUE;break;
-            case GREEN:     attr = BACKGROUND_GREEN;break;
-            case CYAN:      attr = BACKGROUND_GREEN | BACKGROUND_BLUE;break;
-            case RED:       attr = BACKGROUND_RED;break;
-            case MAGENTA:   attr = BACKGROUND_RED | BACKGROUND_BLUE;break;
-            case BROWN:     attr = BACKGROUND_RED | BACKGROUND_GREEN;break;
-            case LIGHTGRAY: attr = BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;break;
+            case BLACK:     attr = 0;                                                   break;
+            case BLUE:      attr = BACKGROUND_BLUE;                                     break;
+            case GREEN:     attr = BACKGROUND_GREEN;                                    break;
+            case CYAN:      attr = BACKGROUND_GREEN | BACKGROUND_BLUE;                  break;
+            case RED:       attr = BACKGROUND_RED;                                      break;
+            case MAGENTA:   attr = BACKGROUND_RED | BACKGROUND_BLUE;                    break;
+            case BROWN:     attr = BACKGROUND_RED | BACKGROUND_GREEN;                   break;
+            case LIGHTGRAY: attr = BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE; break;
             default:attr = 0; // Default to black background
         }
         SetConsoleTextAttribute(hConsole, attr);
@@ -65,14 +65,14 @@ extern "C" {
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         int attr = 0;
         switch (color) {
-            case BLACK:     attr = 0;break;
-            case BLUE:      attr = FOREGROUND_BLUE;break;
-            case GREEN:     attr = FOREGROUND_GREEN;break;
-            case CYAN:      attr = FOREGROUND_GREEN | FOREGROUND_BLUE;break;
-            case RED:       attr = FOREGROUND_RED;break;
-            case MAGENTA:   attr = FOREGROUND_RED | FOREGROUND_BLUE;break;
-            case BROWN:     attr = FOREGROUND_RED | FOREGROUND_GREEN;break;
-            case LIGHTGRAY: attr = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;break;
+            case BLACK:     attr = 0;                                                   break;
+            case BLUE:      attr = FOREGROUND_BLUE;                                     break;
+            case GREEN:     attr = FOREGROUND_GREEN;                                    break;
+            case CYAN:      attr = FOREGROUND_GREEN | FOREGROUND_BLUE;                  break;
+            case RED:       attr = FOREGROUND_RED;                                      break;
+            case MAGENTA:   attr = FOREGROUND_RED | FOREGROUND_BLUE;                    break;
+            case BROWN:     attr = FOREGROUND_RED | FOREGROUND_GREEN;                   break;
+            case LIGHTGRAY: attr = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE; break;
             default:attr = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE; // Default to white
         }
         SetConsoleTextAttribute(hConsole, attr);
@@ -192,7 +192,6 @@ extern "C" {
     #undef  getch
     #define getch() nocbreak_getch()
     #define _getch() nocbreak_getch()
-    
     /*conio.h Compatibility | END*/
 
 

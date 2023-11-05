@@ -54,15 +54,33 @@ extern "C" {
     void initrflush(void){}
     void reset_shell_mode(void){}
     void reset_prog_mode(void){}
-    void echo(void){}
-    void noecho(void){}
+
     void cbreak(void){}
     void nocbreak(void){}
     void raw(void){}
     void *stdscr=NULL;
     /*Dummy functions | END*/
 
+    /*Global Variables*/
+    int GV_echo = 0;
+    int GV_scanw = 0;
+
     /*ncurses functions | START*/
+    void echo(){
+        GV_echo = 1;
+        HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+        DWORD mode;
+        GetConsoleMode(hStdin, &mode);
+        SetConsoleMode(hStdin, mode | ENABLE_ECHO_INPUT);
+    }
+    void noecho(){
+        GV_echo = 0;
+        HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+        DWORD mode;
+        GetConsoleMode(hStdin, &mode);
+        SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
+    }
+
     int getmaxx(void *stdscr){
         CONSOLE_SCREEN_BUFFER_INFO csbi;
         GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);
@@ -107,10 +125,25 @@ extern "C" {
         FillConsoleOutputAttribute(hConsole, csbi.wAttributes, cellsToClear, topLeft, &written);
         SetConsoleCursorPosition(hConsole, topLeft);
     }
-    #define scanw(args...) scanf(args)
+    
+    #define scanf(args...) do{ \
+        if(GV_scanw == 1 && GV_echo == 0){ \
+            scanf(args); noecho(); \
+        }else{ \
+            echo(); scanf(args); \
+        } \
+        GV_scanw = 0; \
+    }while(0)
+
+    #define scanw(args...) do { \
+        GV_scanw = 1; \
+        scanf(args); \
+    }while(0)
+    
     #define printw(args...) printf(args)
+
     #define mvprintw(x, y, format, ...) do { \
-        move(y,x);\
+        move(y,x); \
         printf(format, __VA_ARGS__); \
     } while (0)
     /*ncurses functions | END*/
@@ -121,11 +154,6 @@ extern "C" {
     #include <ncurses.h>//getch(),scanw(),
     #warning "ncurses.h needs -lncurses as a compiler argument"
 
-    #undef clear
-    #define clear() do{ wclear(stdscr); refresh(); }while(0)
-    #define printw(args...) do{printw(args);refresh();}while(0)     // to work similar to printf
-    #define scanw(args...) do{echo();scanw(args);noecho();}while(0) // to work similar to scanf
-    
     /*getch() Key definitions*/
     #undef  KEY_ENTER // on ncurses is ctrl + m 
     #define KEY_ENTER '\n' //to work like on windows

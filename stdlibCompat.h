@@ -11,16 +11,15 @@ extern "C" {
 
 /*Shared C libraries*/
 #include<stdlib.h>//system() //Windows: itoa(), ltoa(), _ultoa()
+   
+
 
 #if defined(_WIN32) || defined(__CYGWIN__)
-    #include<synchapi.h>//Sleep()
     #define ultoa(args...) _ultoa(args)
  
-#else
+#else//*NIX
     #include<stdio.h> //sprintf()
     #include<string.h>//strcmp(), strcpy()
-    #include<unistd.h>//usleep()
-    void Sleep(unsigned int ms){usleep(ms*1000);}
     /*Redefinition of Windows system("pause") to sysPause() or system("cls" to sysclear)*/
     #define system(cmd) do{ \
         if(strcmp(cmd,"pause")==0 || strcmp(cmd,"PAUSE")==0){\
@@ -32,15 +31,7 @@ extern "C" {
             }\
         else{system(cmd);}\
     }while(0)
-    char *strrev(char *str){
-      char *p1,*p2;
-      if (! str || ! *str)
-            return str;
-      for (p1=str,p2=str+strlen(str)-1;p2>p1;++p1,--p2){
-            *p1^=*p2;*p2^=*p1;*p1^=*p2;
-      }
-    return str;
-    }
+
     //to save lines of code in header
     #define TO_ASCII(num, str, base) \
     do { \
@@ -70,4 +61,5 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif//__cplusplus
+
 #endif//stdlibCompat_h 
