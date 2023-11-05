@@ -7,6 +7,12 @@ example-play_Sound-*
 example-ansiCompat-*
 example-ncursesCompat-*
 example-allCompat-*
+beep/*.exe
+beep/beep-*
+beep/mario-*
+beep/jingleBell-*
+beep/*.out
+beep/*.exe
 *.out
 *.exe
 *.dat

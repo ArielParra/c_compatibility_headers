@@ -1,24 +1,30 @@
-ifdef OS #Windows
-	CC = gcc.exe
-	FLAGS = -lwinmm
-	RM = del /Q
-else
-	CC = gcc
-	RM = rm -f 
+ifdef OS  #Windows OS Detection
+	CC := gcc.exe
+	FLAGS := -lwinmm
+	RM := del /Q
+	FixPath = $(subst /,\,$1)
+	UNAME := Windows
+	EXT := .exe
+else  	  #*NIX using GNU make
+	CC := gcc
+	FLAGS := -lncurses
+	RM := rm -f 
 	FixPath = $1
-	ifeq ($(shell uname),Darwin) #MacOS
+	UNAME = $(shell uname)
+	EXT :=
+	ifeq ($(UNAME),Darwin) #MacOS
 		FLAGS = -framework AudioUnit
 	endif
-	ifeq ($(shell uname),Linux) #Linux
+	ifeq ($(UNAME),Linux) #Linux
 		FLAGS = -lasound
 	endif
 endif
 
-CFLAGS = -O2 -s
+CFLAGS := -O2 -s -Wall
 
-Name1 = beep
-Name2 = mario
-Name3 = jingleBell
+Name1 := beep-$(UNAME)
+Name2 := mario-$(UNAME)
+Name3 := jingleBell-$(UNAME)
 
 all: $(Name1) $(Name2) $(Name3)
 
@@ -32,11 +38,6 @@ $(Name3): beep_jingleBell.c beep.h
 	$(CC) -o $(call FixPath,$(Name3)) $< $(FLAGS) $(CFLAGS)
 
 clean:
-	$(RM) $(call FixPath,$(Name1).exe)
-	$(RM) $(call FixPath,$(Name1))
-	$(RM) $(call FixPath,$(Name2).exe)
-	$(RM) $(call FixPath,$(Name2))
-	$(RM) $(call FixPath,$(Name3).exe)
-	$(RM) $(call FixPath,$(Name3))
-	$(RM) $(call FixPath,a.exe)
-	$(RM) $(call FixPath,a.out)
+	$(RM) $(call FixPath,$(Name1)$(EXT))
+	$(RM) $(call FixPath,$(Name2)$(EXT))
+	$(RM) $(call FixPath,$(Name3)$(EXT))

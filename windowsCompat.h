@@ -2,24 +2,34 @@
 #define windowsCompat_h 
 
 #ifndef __GNUC__
-#warning "You are not using Gnu C Compiler (GCC)"
+    #warning "You do not have the Gnu C Compiler (GCC)"
+#endif
+
+#ifdef __clang__
+    #warning "Clang compiler is being used"
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#if defined(_WIN32) || defined(__CYGWIN__)
-    #include<windows.h>
-    #include<synchapi.h>//Sleep()
+/*Shared C libraries*/
+#include<stdlib.h>//system()
+#include<string.h>//strcat(),strcpy(),strlen()
 
-void setTitle(){}
+/*OS detection*/
+#if defined(_WIN32) || defined(_CYGWIN_)
 
-#else//*NIX
+    #include <windows.h>//strrev()
+    #include <synchapi.h>//Sleep()
+
+#else //*NIX
 
     #include<unistd.h>//usleep()
     #define TCHAR char *str
     void Sleep(unsigned int ms){usleep(ms*1000);}
+    
+    #include<stdio.h>//printf()
     int SetConsoleTitle(const char *str){printf("\033]0;%s\007",str); return 0;}
     #define SetConsoleTitleA SetConsoleTitle
     char *strrev(char *str){
@@ -31,7 +41,8 @@ void setTitle(){}
         }
     return str;
     }
-#endif//system detection 
+
+#endif//OS detection 
 
 #ifdef __cplusplus
 }

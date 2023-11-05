@@ -3,7 +3,6 @@
 // using the BEEP() function
 
 //#include <stdio.h>
-#include "../legacyCompat.h"
 #include "beep.h"
 
 // Driver Code

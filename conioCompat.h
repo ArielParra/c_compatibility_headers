@@ -5,7 +5,11 @@
    #warning "You are not using Gnu C Compiler (GCC)"
 #endif
 
-#ifdef _TURBOC
+#ifdef __clang__
+#warning "Clang compiler is being used"
+#endif
+
+#if defined(_TURBOC) || defined(__TURBOC__)
    #error "You are using TurboC Compiler"
 #endif
 

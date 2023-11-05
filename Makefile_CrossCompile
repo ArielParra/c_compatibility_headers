@@ -1,7 +1,7 @@
 #Cross Compiling from within Linux
 
 EXT =
-CFLAGS = -O2 -s
+CFLAGS = -O2 -s -Wall
 FLAGS = -lncurses
 
 ifeq ($(TARGET),)

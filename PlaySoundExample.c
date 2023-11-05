@@ -3,8 +3,8 @@
 //#include<windows.h> 
 //#include<conio.h>
 //#include<stdlib.h>
-#include "Play_Sound.h"
-#include "stdlibCompat.h"
+#include "windowsCompat.h"
+#include "PlaySound.h"
 
 //int main(int argc,char *argv[]){
 //int main(int argc,char **argv){

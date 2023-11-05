@@ -14,7 +14,7 @@ else  	  #*NIX using GNU make
 	EXT :=
 endif
 
-CFLAGS := -O2 -s
+CFLAGS := -O2 -s -Wall
 
 Name1 := example-stdlibCompat-$(UNAME)
 Name2 := example-play_Sound-$(UNAME)

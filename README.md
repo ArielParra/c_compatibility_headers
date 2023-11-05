@@ -2,7 +2,6 @@
 
 - [x] stdlibCompat.h
 - [x] ansiCompat.h
-- [x] Play_Sound.h
 - [ ] ncursesCompat.h
 - [ ] conioCompat.h
 - [ ] windowsCompat.h
@@ -16,7 +15,6 @@
     - [ ] roadmap and things Ill not do 
     - [ ] stdlibCompat.h
     - [ ] ansiCompat.h
-    - [ ] Play_Sound.h
     - [ ] ncursesCompat.h
     - [ ] conioCompat.h
     - [ ] windowsCompat.h

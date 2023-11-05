@@ -1,6 +1,5 @@
 //code from: https://cncpp.divilabs.com/2013/12/c-code-for-mario-theme-intro-song.html
 //#include<stdlib.h>  //For System Pause
-#include "../legacyCompat.h"
 #include "beep.h"
     
     int main()
