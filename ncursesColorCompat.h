@@ -1,9 +1,12 @@
-#ifndef canCompat_h //can stands for: Conio Ansi Ncurses
-#define canCompat_h
+#ifndef ncursesColorCompat_h 
+#define ncursesColorCompat_h
 #include <stdio.h>
 #include "ansiCompat.h"
 #include "ncursesCompat.h"
-#include "conioCompat.h"
+
+#ifndef __GNUC__
+#warning "You are not using Gnu C Compiler (GCC)"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -68,24 +71,24 @@ void setConsoleColor(attr_t pairNumber) {
         printf("%s", RESET_COLOR);
     }else{
         switch (colorPairs[pairNumber].FG) {
-            case COLOR_BLACK:   printf("%s", FG_BLACK); break;
-            case COLOR_RED:     printf("%s", FG_RED); break;
-            case COLOR_GREEN:   printf("%s", FG_GREEN); break;
-            case COLOR_YELLOW:  printf("%s", FG_YELLOW); break;
-            case COLOR_BLUE:    printf("%s", FG_BLUE); break;
+            case COLOR_BLACK:   printf("%s", FG_BLACK);   break;
+            case COLOR_RED:     printf("%s", FG_RED);     break;
+            case COLOR_GREEN:   printf("%s", FG_GREEN);   break;
+            case COLOR_YELLOW:  printf("%s", FG_YELLOW);  break;
+            case COLOR_BLUE:    printf("%s", FG_BLUE);    break;
             case COLOR_MAGENTA: printf("%s", FG_MAGENTA); break;
-            case COLOR_CYAN:    printf("%s", FG_CYAN); break;
-            case COLOR_WHITE:   printf("%s", FG_WHITE); break;
+            case COLOR_CYAN:    printf("%s", FG_CYAN);    break;
+            case COLOR_WHITE:   printf("%s", FG_WHITE);   break;
         }//ForeGround
         switch (colorPairs[pairNumber].BG) {
-            case COLOR_BLACK:   printf("%s", BG_BLACK); break;
-            case COLOR_RED:     printf("%s", BG_RED); break;
-            case COLOR_GREEN:   printf("%s", BG_GREEN); break;
-            case COLOR_YELLOW:  printf("%s", BG_YELLOW); break;
-            case COLOR_BLUE:    printf("%s", BG_BLUE); break;
+            case COLOR_BLACK:   printf("%s", BG_BLACK);   break;
+            case COLOR_RED:     printf("%s", BG_RED);     break;
+            case COLOR_GREEN:   printf("%s", BG_GREEN);   break;
+            case COLOR_YELLOW:  printf("%s", BG_YELLOW);  break;
+            case COLOR_BLUE:    printf("%s", BG_BLUE);    break;
             case COLOR_MAGENTA: printf("%s", BG_MAGENTA); break;
-            case COLOR_CYAN:    printf("%s", BG_CYAN); break;
-            case COLOR_WHITE:   printf("%s", BG_WHITE); break;
+            case COLOR_CYAN:    printf("%s", BG_CYAN);    break;
+            case COLOR_WHITE:   printf("%s", BG_WHITE);   break;
         }//BackGround
     }//else
 }
@@ -141,16 +144,30 @@ void getyx(void *stdscr, int *y, int *x) {
 }
 #define getyx(stdscr, y, x) getyx(stdscr, &y, &x)
 
+// Function to set the console text attributes based on a color pair
+void setConsoleBackground(attr_t attributes) {
+        switch (attributes) {
+            case COLOR_BLACK:   printf("%s", BG_BLACK);   break;
+            case COLOR_RED:     printf("%s", BG_RED);     break;
+            case COLOR_GREEN:   printf("%s", BG_GREEN);   break;
+            case COLOR_YELLOW:  printf("%s", BG_YELLOW);  break;
+            case COLOR_BLUE:    printf("%s", BG_BLUE);    break;
+            case COLOR_MAGENTA: printf("%s", BG_MAGENTA); break;
+            case COLOR_CYAN:    printf("%s", BG_CYAN);    break;
+            case COLOR_WHITE:   printf("%s", BG_WHITE);   break;
+        }
+}
+
 /*this fuinctions may not work as expected | START*/
     int bkgdset(attr_t attributes){
-        if (attributes & COLOR_BLACK)   textbackground(BLACK);    
-        if (attributes & COLOR_RED)     textbackground(RED);
-        if (attributes & COLOR_GREEN)   textbackground(GREEN);
-        if (attributes & COLOR_YELLOW)  textbackground(YELLOW);
-        if (attributes & COLOR_BLUE)    textbackground(CYAN);
-        if (attributes & COLOR_MAGENTA) textbackground(MAGENTA); 
-        if (attributes & COLOR_CYAN)    textbackground(BLUE);
-        if (attributes & COLOR_WHITE)   textbackground(WHITE);
+        if (attributes & COLOR_BLACK)   setConsoleBackground(COLOR_BLACK);    
+        if (attributes & COLOR_RED)     setConsoleBackground(COLOR_RED);
+        if (attributes & COLOR_GREEN)   setConsoleBackground(COLOR_GREEN);
+        if (attributes & COLOR_YELLOW)  setConsoleBackground(COLOR_YELLOW);
+        if (attributes & COLOR_BLUE)    setConsoleBackground(COLOR_BLUE);
+        if (attributes & COLOR_MAGENTA) setConsoleBackground(COLOR_MAGENTA); 
+        if (attributes & COLOR_CYAN)    setConsoleBackground(COLOR_CYAN);
+        if (attributes & COLOR_WHITE)   setConsoleBackground(COLOR_WHITE);
         else attron(attributes);
         return 0;
     }
@@ -237,4 +254,4 @@ int mvvline(int y, int x, chtype ch, int n) {
 }
 #endif//__cplusplus
 
-#endif//canCompat_h
+#endif//ncursesColorCompat_h

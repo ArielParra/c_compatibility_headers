@@ -1,6 +1,10 @@
 #ifndef Play_Sound_h
 #define Play_Sound_h
 
+#ifndef __GNUC__
+#warning "You are not using Gnu C Compiler (GCC)"
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -65,9 +69,11 @@ extern "C" {
     */
 #elif defined(__linux__)
 
-    //*WSL Linux needs ffplay command from ffmpeg
     void Play_Sound(const char* file){char SoundCommand[strlen(file)+6+17];strcpy(SoundCommand, "aplay ");strcat(SoundCommand, file);strcat(SoundCommand,">/dev/null 2>&1 &");system(SoundCommand);}
     void Stop_Sound(){system("pkill aplay");}
+    //*WSL Linux needs ffplay command from ffmpeg package
+    //void Play_Sound(const char* file){char SoundCommand[strlen(file)+15+17];strcpy(SoundCommand, "ffplay -nodisp ");strcat(SoundCommand, file);strcat(SoundCommand,">/dev/null 2>&1 &");system(SoundCommand);}
+    //void Stop_Sound(){system("pkill ffplay");}
 
 #elif defined(__APPLE__) || defined(__MACH__)
     
@@ -92,10 +98,12 @@ extern "C" {
 #endif//OS detection 
 
 #undef PlaySoundA
-#define PlaySoundA(file, NULL, SND_ASYNC) do{ Play_Sound(file); }while(0)
+#define PlaySoundA(file, hmod, fdwSound) do{ \
+    if(file==NULL) Stop_Sound();\
+    else Play_Sound(file); }while(0)
 
 #undef PlaySound
-#define PlaySound(file, NULL, SND_ASYNC) do{ Play_Sound(file); }while(0)
+#define PlaySound PlaySoundA
 
 #ifdef __cplusplus
 }

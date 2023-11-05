@@ -11,12 +11,12 @@
 //int main(void){
 int main(){
    
-    printf("You can use the original PlaySound command\n");
+ printf("You can use the original PlaySound command\n");
     Sleep(2000);
     PlaySound("song.wav",NULL, SND_ASYNC);
     printf("Sound Play\n");
     Sleep(5000);
-    Stop_Sound();
+    PlaySoundA(NULL, 0, 0);
     printf("Sound Stop\n\n");
     Sleep(1000);
     

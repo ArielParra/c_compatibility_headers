@@ -8,7 +8,7 @@ extern "C" {
 /*Shared C library*/
 #include<stdlib.h>//system()
 
-/*shared getch() Key definitions  | START*/
+/*shared getch() Key definitions | START*/
 #define KEY_SPACE 32
 #define KEY_TAB 9
 #define KEY_ESC 27
@@ -21,7 +21,6 @@ extern "C" {
     #include<conio.h>//getch();
 
     /*KEYS for getch() from <conio.h> | START*/
-    //to be compatible with ncurses definitions
     #define KEY_LEFT 75     //ascii 75 is K
     #define KEY_RIGHT 77    //ascii 77 is M
     #define KEY_UP 72       //ascii 72 is H
@@ -47,7 +46,6 @@ extern "C" {
     #define KEY_F_10 68     //ascii 68 is D
     #define KEY_F_11 133     
     #define KEY_F_12 134     
-
     /*KEYS for getch() from <conio.h> | END*/
 
     /*Dummy functions |END*/
@@ -65,22 +63,33 @@ extern "C" {
     /*Dummy functions | END*/
 
     /*ncurses functions | START*/
-    int getmaxx(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Right-csbi.srWindow.Left+1);}
-    int getmaxy(void *stdscr){CONSOLE_SCREEN_BUFFER_INFO csbi;GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);return(csbi.srWindow.Bottom-csbi.srWindow.Top+1);}
+    int getmaxx(void *stdscr){
+        CONSOLE_SCREEN_BUFFER_INFO csbi;
+        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);
+        return(csbi.srWindow.Right-csbi.srWindow.Left+1);
+    }
+    int getmaxy(void *stdscr){
+        CONSOLE_SCREEN_BUFFER_INFO csbi;
+        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),&csbi);
+        return(csbi.srWindow.Bottom-csbi.srWindow.Top+1);
+    }
     #define LINES getmaxy(stdscr) 
     #define COLS getmaxx(stdscr) 
     void getmaxyx(void *stdscr, int *y, int *x) {*y=getmaxy(stdscr);*x=getmaxx(stdscr);}
     #define getmaxyx(stdscr, maxY, maxX) getmaxyx(stdscr, &maxY, &maxX) //force the use of pointers
-    void move(int y,int x){COORD coordinate;coordinate.X=x;coordinate.Y=y; SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coordinate);}
-    void addch(char ch) {printf("%c", ch);}
-    void addstr(const char* str) { while (*str) { addch(*str); str++;} }
-    void mvaddch(int y, int x, char ch) {move(y, x);addch(ch);}
-    int  mvgetch(int y, int x) {move(y, x);return getch();}
-    void getstr(char* str) {scanf("%s", str);}
-    void mvgetstr(int y, int x, char* str) {move(y, x);getstr(str);}
-    void refresh(){fflush(stdout);}
+    void move(int y,int x){
+        COORD coordinate;coordinate.Y=y;coordinate.X=x;
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coordinate);
+    }
+    void addch(char ch){ printf("%c", ch); }
+    void addstr(const char* str){ while (*str) { addch(*str); str++;} }
+    void mvaddch(int y, int x, char ch){ move(y, x);addch(ch); }
+    int  mvgetch(int y, int x){ move(y, x);return getch(); }
+    void getstr(char* str){ scanf("%s", str); }
+    void mvgetstr(int y, int x, char* str){ move(y, x);getstr(str); }
+    void refresh(){ fflush(stdout); }
     void keypad(void *stdscr,int boolean){}
-    void clrtobot() {
+    void clrtobot(){
         CONSOLE_SCREEN_BUFFER_INFO csbi;COORD cursorPos;DWORD count;DWORD cellCount;
         GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
         cellCount = (csbi.dwSize.X - csbi.dwCursorPosition.X) + (csbi.dwSize.X * (csbi.dwSize.Y - csbi.dwCursorPosition.Y - 1));
@@ -89,8 +98,7 @@ extern "C" {
         FillConsoleOutputAttribute(GetStdHandle(STD_OUTPUT_HANDLE), csbi.wAttributes, cellCount, cursorPos, &count);
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), csbi.dwCursorPosition);
     }
-
-    void clear() {
+    void clear(){
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);COORD topLeft = {0, 0};
         DWORD written;CONSOLE_SCREEN_BUFFER_INFO csbi;DWORD cellsToClear;
         GetConsoleScreenBufferInfo(hConsole, &csbi);
@@ -100,16 +108,13 @@ extern "C" {
         SetConsoleCursorPosition(hConsole, topLeft);
     }
 
-    #define scanw(args...) scanf(args)
-    #define printw(args...) printf(args)
     #define mvprintw(x, y, format, ...) do { \
-        gotoxy(x,y);\
+        move(y,x);\
         printf(format, __VA_ARGS__); \
     } while (0)
     /*ncurses functions | END*/
 
 #else//*NIX
-
 
     /*<ncurses.h> includes <stdio.h> */ 
     #include <ncurses.h>//getch(),scanw(),
@@ -118,11 +123,6 @@ extern "C" {
     /*getch() Key definitions*/
     #undef  KEY_ENTER // on ncurses is ctrl + m 
     #define KEY_ENTER '\n' //to work like on windows
-
-    /*getch() Key definitions*/
-    #undef  KEY_ENTER // on ncurses is ctrl + m 
-    #define KEY_ENTER '\n' //to work like on windows
-
 
 #endif/*OS detection | END*/
 

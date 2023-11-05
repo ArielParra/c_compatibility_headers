@@ -4,7 +4,7 @@
 //#include <stdlib.h>
 
 /*Right wall bugs are expected on Linux and Windows*/
-#include "canCompat.h"
+#include "ncursesColorCompat.h"
 
 #define GRASS     ' '
 #define EMPTY     '.'

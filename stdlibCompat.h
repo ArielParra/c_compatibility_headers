@@ -1,6 +1,10 @@
 #ifndef stdlibCompat_h 
 #define stdlibCompat_h 
 
+#ifndef __GNUC__
+#warning "You are not using Gnu C Compiler (GCC)"
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -10,8 +14,6 @@ extern "C" {
 
 #if defined(_WIN32) || defined(__CYGWIN__)
     #include<synchapi.h>//Sleep()
-    void sysClear(){system("cls");} 
-    void sysPause(){system("pause");}
     #define ultoa(args...) _ultoa(args)
  
 #else
@@ -19,13 +21,15 @@ extern "C" {
     #include<string.h>//strcmp(), strcpy()
     #include<unistd.h>//usleep()
     void Sleep(unsigned int ms){usleep(ms*1000);}
-    void sysClear(){system("clear");}
-    //void sysPause(){system("read -r -n 1 -p 'Presiona cualquier tecla para contiuar . . .'");}//Español
-    void sysPause(){system("read -r -n 1 -p 'Press any key to continue . . .'");}//English
     /*Redefinition of Windows system("pause") to sysPause() or system("cls" to sysclear)*/
     #define system(cmd) do{ \
-        if(strcmp(cmd,"pause")==0 || strcmp(cmd,"PAUSE")==0){sysPause();}\
-        else if(strcmp(cmd,"cls")==0 || strcmp(cmd,"CLS")==0){sysClear();}\
+        if(strcmp(cmd,"pause")==0 || strcmp(cmd,"PAUSE")==0){\
+            /*system("read -r -n 1 -p 'Presiona cualquier tecla para contiuar . . .'");//Español*/\
+            system("read -r -n 1 -p 'Press any key to continue . . .'");\
+            }\
+        else if(strcmp(cmd,"cls")==0 || strcmp(cmd,"CLS")==0){\
+            system("clear");\
+            }\
         else{system(cmd);}\
     }while(0)
     char *strrev(char *str){

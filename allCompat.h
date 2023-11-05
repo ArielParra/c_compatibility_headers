@@ -1,6 +1,10 @@
 #ifndef multiCompat_h
 #define multiCompat_h
 
+#ifndef __GNUC__
+#warning "You are not using Gnu C Compiler (GCC)"
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

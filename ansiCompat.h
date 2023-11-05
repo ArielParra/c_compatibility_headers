@@ -1,6 +1,10 @@
 #ifndef ansiCompat_h
 #define ansiCompat_h
 
+#ifndef __GNUC__
+#warning "You are not using Gnu C Compiler (GCC)"
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -77,6 +81,9 @@ extern "C" {
 #define BG_CYAN_LIGHT       "\x1b[106m"
 #define BG_WHITE_LIGHT      "\x1b[107m"
 
+#include<stdio.h>//printf()
+
+void setTitle(const char *str){printf("\033]0;%s\007",str);}
 
 /*Windows ANSI compatibility by setting output mode to handle virtual terminal sequences*/
 #if defined(_WIN32) || defined(__CYGWIN__)
@@ -100,17 +107,12 @@ void setANSI(){//sets virtual terminal
 void setUTF8(){SetConsoleOutputCP(CP_UTF8);}//Unicode compatibility, can also be done with system("chcp 65001 > NUL");
 
 #else//*NIX
+#define SetConsoleTitle(str) setTitle(str)
 void setANSI(void){}
 void setUTF8(void){}//not needed in most *NIX systems
 //void setUTF8(){system("export LANG=en_US.UTF-8");}
 //void setUTF8(){setlocale(LC_ALL, "en_US.UTF-8");}//with <ncurses.h> needs -lncurses as compiler argument
 #endif//windows detection
-
-#include<stdio.h>//printf()
-
-void setTitle(const char *str){printf("\033]0;%s\007",str);}
-
-void ansiGotoxy(int x,int y){printf("%c[%d;%df",0x1B,y,x);}
 
 #ifdef __cplusplus
 }
