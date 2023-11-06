@@ -20,7 +20,7 @@ Name1 := example-stdlibCompat-$(UNAME)
 Name2 := example-playSound-$(UNAME)
 Name3 := example-ansiCompat-$(UNAME)
 Name4 := example-ncursesCompat-$(UNAME)
-Name5 := example-ncursesColorCompat-$(UNAME)
+Name5 := example-ncursesColor-$(UNAME)
 Name6 := example-conioCompat-$(UNAME)
 Name7 := example-windowsCompat-$(UNAME)
 Name8 := example-allCompat-$(UNAME)
@@ -40,7 +40,7 @@ $(Name3): ansiExample.c ansiCompat.h stdlibCompat.h windowsCompat.h
 $(Name4): ncursesExample.c ncursesCompat.h
 	$(CC) -o $(call FixPath,$(Name4)) $< $(FLAGS) $(CFLAGS)
 
-$(Name5): ncursesColorCompatExample.c ncursesColorCompat.h
+$(Name5): ncursesColorExample.c ncursesColorCompat.h
 	$(CC) -o $(call FixPath,$(Name5)) $< $(FLAGS) $(CFLAGS)
 
 $(Name6): conioExample.c conioCompat.h

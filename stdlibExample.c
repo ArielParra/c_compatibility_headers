@@ -7,9 +7,6 @@ int main(){
     system("cls");
     printf("Terminal screen was cleared!\n");
     
-    Sleep(1000);
-    printf("1000 ms have passed!\n");
-    
     int base[] = {2, 8, 10, 16};
 
     int numI=123;

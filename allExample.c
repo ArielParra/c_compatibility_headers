@@ -73,6 +73,6 @@ int main(){
     gotoxy(x,y++);printf("Sound Stop\n");
     Sleep(1000);
         
-    exitCompat();
+    endCompat();
     return 0;
 }

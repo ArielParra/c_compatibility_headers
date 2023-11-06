@@ -74,13 +74,14 @@ extern "C" {
     #if defined(__linux__)
 
         #include <stdlib.h>//getenv()
-        int GV_NATIVE = 0;
+        
         void Play_Sound(const char* file){
             char SoundCommand[strlen(file)+15+17];
             if (getenv("WSL_DISTRO_NAME")){
-                GV_NATIVE = 0; strcpy(SoundCommand, "ffplay -nodisp ");
+                #define GV_WSL 1 
+                strcpy(SoundCommand, "ffplay -nodisp ");
             } else {
-                GV_NATIVE = 1; strcpy(SoundCommand, "aplay ");
+                strcpy(SoundCommand, "aplay ");
             }
             strcat(SoundCommand, file);
             strcat(SoundCommand,">/dev/null 2>&1 &");
@@ -88,16 +89,15 @@ extern "C" {
         }
         void Stop_Sound(){
             if (getenv("WSL_DISTRO_NAME")){
-                GV_NATIVE = 0;  system("pkill ffplay >/dev/null 2>&1 &");
+                #define GV_WSL 1
+                system("pkill ffplay >/dev/null 2>&1 &");
             } else {
-                GV_NATIVE = 1; system("pkill aplay >/dev/null 2>&1 &");
+                system("pkill aplay >/dev/null 2>&1 &");
             }
         }
-
-        #if GV_WSL == 0
+        #ifdef GV_WSL
             #warning "You are on WSL, you need ffmpeg package to use Play_Sound()"
         #endif
-
     #elif defined(__APPLE__) || defined(__MACH__)
         
         void Play_Sound(const char* file){
