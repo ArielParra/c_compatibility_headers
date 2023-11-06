@@ -37,37 +37,36 @@ else
 $(error TARGET is invalid. Please use a valid target platform, linux,windows,macos,freebsd or openbsd)
 endif
 
-Name1 := example-stdlibCompat-$(UNAME)
+Name1 := example-stdlib-$(UNAME)
 Name2 := example-playSound-$(UNAME)
-Name3 := example-ansiCompat-$(UNAME)
-Name4 := example-ncursesCompat-$(UNAME)
-Name5 := example-ncursesColorCompat-$(UNAME)
-Name6 := example-conioCompat-$(UNAME)
-Name7 := example-windowsCompat-$(UNAME)
+Name3 := example-ansi-$(UNAME)
+Name4 := example-ncurses-$(UNAME)
+Name5 := example-ncursesColor-$(UNAME)
+Name6 := example-conio-$(UNAME)
+Name7 := example-windows-$(UNAME)
 Name8 := example-allCompat-$(UNAME)
-
 
 all: $(Name1) $(Name2) $(Name3) $(Name4) $(Name5) $(Name6) $(Name7) $(Name8)
 
-$(Name1): stdlibExample.c stdlibCompat.h
+$(Name1): stdlibExample.c stdlib.h
 	$(CC) -o $(call FixPath,$(Name1)) $< $(FLAGS) $(CFLAGS)
 
-$(Name2): PlaySoundExample.c PlaySound.h windowsCompat.h
+$(Name2): PlaySoundExample.c PlaySound.h windows.h
 	$(CC) -o $(call FixPath,$(Name2)) $< $(FLAGS) $(CFLAGS)
 
-$(Name3): ansiExample.c ansiCompat.h stdlibCompat.h windowsCompat.h
+$(Name3): ansiExample.c ansi.h stdlib.h windows.h
 	$(CC) -o $(call FixPath,$(Name3)) $< $(FLAGS) $(CFLAGS)
 
-$(Name4): ncursesExample.c ncursesCompat.h
+$(Name4): ncursesExample.c ncurses.h
 	$(CC) -o $(call FixPath,$(Name4)) $< $(FLAGS) $(CFLAGS)
 
-$(Name5): ncursesColorCompatExample.c ncursesColorCompat.h
+$(Name5): ncursesColorExample.c ncursesColor.h
 	$(CC) -o $(call FixPath,$(Name5)) $< $(FLAGS) $(CFLAGS)
 
-$(Name6): conioExample.c conioCompat.h
+$(Name6): conioExample.c conio.h
 	$(CC) -o $(call FixPath,$(Name6)) $< $(FLAGS) $(CFLAGS)
 
-$(Name7): windowsExample.c windowsCompat.h
+$(Name7): windowsExample.c windows.h
 	$(CC) -o $(call FixPath,$(Name7)) $< $(FLAGS) $(CFLAGS)
 
 $(Name8): allExample.c allCompat.h

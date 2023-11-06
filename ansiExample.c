@@ -1,10 +1,9 @@
-#include<stdio.h>//printf()
-#include<string.h>
-#include<math.h>//floor()
-#include<stdlib.h>
-#include "ansiCompat.h"
-#include "stdlibCompat.h"//sysClear(), sysPause()
-#include "windowsCompat.h"//Sleep()
+#include <stdio.h>//printf()
+#include <string.h>
+#include <stdlib.h>
+#include "ansi.h"
+#include "stdlib.h"//sysClear(), sysPause()
+#include "windows.h"//Sleep()
 
 
 //int main(int argc,char *argv[]){

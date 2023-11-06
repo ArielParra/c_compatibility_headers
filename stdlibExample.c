@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>//You make want to verify the uses of system()
-#include "stdlibCompat.h"
+#include "stdlib.h"
 
 int main(){
     
@@ -34,5 +34,6 @@ int main(){
         printf("this the string in base %d: \"%s\"\n", base[i],stringU);
     }
     
+    system("pause");
 return 0;
 }

@@ -7,7 +7,6 @@ ifdef OS  #Windows OS Detection
 	EXT := .exe
 else  	  #*NIX using GNU make
 	CC := gcc
-	FLAGS := -lncurses
 	RM := rm -f 
 	FixPath = $1
 	UNAME = $(shell uname)
@@ -16,7 +15,7 @@ else  	  #*NIX using GNU make
 		FLAGS = -framework AudioUnit
 	endif
 	ifeq ($(UNAME),Linux) #Linux
-		FLAGS = -lasound
+		FLAGS = -lasound -lm
 	endif
 endif
 
@@ -28,13 +27,13 @@ Name3 := jingleBell-$(UNAME)
 
 all: $(Name1) $(Name2) $(Name3)
 
-$(Name1): beep.c beep.h
+$(Name1): beep.c Beep.h
 	$(CC) -o $(call FixPath,$(Name1)) $< $(FLAGS) $(CFLAGS)
 
-$(Name2): beep_mario.c beep.h
+$(Name2): beep_mario.c Beep.h
 	$(CC) -o $(call FixPath,$(Name2)) $< $(FLAGS) $(CFLAGS)
 
-$(Name3): beep_jingleBell.c beep.h
+$(Name3): beep_jingleBell.c Beep.h
 	$(CC) -o $(call FixPath,$(Name3)) $< $(FLAGS) $(CFLAGS)
 
 clean:

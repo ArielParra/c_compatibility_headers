@@ -1,4 +1,4 @@
-#include "conioCompat.h"//startCompat(), endCompat(), gotoxy(), getch(), clrscr()
+#include "conio.h"//startCompat(), endCompat(), gotoxy(), getch(), clrscr()
 
 int main() {
     startCompat();

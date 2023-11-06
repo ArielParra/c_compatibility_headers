@@ -42,11 +42,8 @@
  * mode at 8kHz, mono, request for 20ms latency. Device is opened on first call
  * and never closed. */
 #include <alsa/asoundlib.h>
-#warning "Beep() needs -lasound as compiler argument"
-#include <unistd.h>
-#if !defined(Sleep)
-void Sleep(int ms){usleep(ms*1000);}
-#endif
+#warning "Beep() needs -lasound -lm as compiler arguments"
+#include <math.h>//M_PI
 int Beep(int freq, int ms) {
     static snd_pcm_t* pcm = NULL;
     if (pcm == NULL) {
@@ -89,7 +86,7 @@ int Beep(int freq, int ms) {
 
 #elif defined(__APPLE__) || defined(__MACH__)
 #include <AudioUnit/AudioUnit.h>
-#warning "Beep() needs '-framework AudioUnit' as compiler argument"
+#warning "Beep() needs '-framework AudioUnit' as compiler arguments"
 static dispatch_semaphore_t stopped, playing, done;
 
 static int beep_freq;
@@ -170,8 +167,14 @@ int Beep(int freq, int ms) {
   return 0;
 }
 #else
-#error "unknown platform"
+    #error "unknown platform"
 #endif
 
+#include <unistd.h>//usleep
+#if !defined(Sleep)
+void Sleep(int ms){usleep(ms*1000);}
+#endif
+
+#define _beep Beep
 
 #endif /* BEEP_H */

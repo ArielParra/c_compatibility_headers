@@ -2,11 +2,7 @@ build/
 .vscode/
 obj/
 bin/
-example-stdlibCompat-*
-example-playSound-*
-example-ansiCompat-*
-example-ncursesCompat-*
-example-allCompat-*
+example-*
 beep/*.exe
 beep/beep-*
 beep/mario-*

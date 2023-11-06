@@ -39,19 +39,19 @@ extern "C" {
         else{system(cmd);}\
     }while(0)
     
-    #define TO_ASCII(num, str, base) \
-    do { \
-    if(base<2){exit(1);} \
-    size_t i=0; \
-    if(num==0){str[i++]='0';str[i]='\0';return str;} \
-    int isNegative=0; \
-    if (num<0){isNegative=1;num=-num;} \
-    while(num!=0){ \
-        str[i++]= (num%base> 9) ? (num%base - 10) + 'a' : num%base + '0'; \
-        num/=base; \
-    }\
-    if (isNegative==1 && base==10){str[i++] = '-';}\
-    str[i] = '\0'; \
+    #define TO_ASCII(num, str, base) do{ \
+        if(base<2) exit(1); \
+        size_t i=0; \
+        if(num==0){ str[i++]='0';str[i]='\0';return str; } \
+        int isNegative=0; \
+        if (num<0){ isNegative=1;num=-num; } \
+        while(num!=0){ \
+            str[i++]=(num%base> 9) ? (num%base - 10) + 'a' : num%base + '0'; \
+            num/=base; \
+        }\
+        if (isNegative==1 && base==10) str[i++] = '-'; \
+        str[i] = '\0'; \
+        /*strrev function:*/ \
         char *p1,*p2; \
         if (! str || ! *str) return str; \
         for (p1=str,p2=str+strlen(str)-1;p2>p1;++p1,--p2){ \

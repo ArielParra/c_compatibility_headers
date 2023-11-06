@@ -1,6 +1,6 @@
 //code from: https://cncpp.divilabs.com/2013/12/c-code-for-mario-theme-intro-song.html
 //#include<stdlib.h>  //For System Pause
-#include "beep.h"
+#include "Beep.h"
     
     int main()
     {
@@ -140,7 +140,5 @@
         Beep (932,100);Sleep(125);
         Beep (1046,675);
        
-    
-        system ("pause");
         return 0;
-    }   //Press any key to exit
+    }   

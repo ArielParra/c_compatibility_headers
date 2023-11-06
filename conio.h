@@ -148,12 +148,21 @@ extern "C" {
         }
         attron(COLOR_PAIR(fg_color));refresh();
     }
-    #define cprintf(format, ...)do{ printf(format, __VA_ARGS__); } while (0)
-    #define _cprintf cprintf
-    #define cputs(string) puts(string)
     /*Old turbo C <conio.h> functions | END*/
     
     /*conio.h Compatibility | START*/
+    
+    #define cprintf(format, ...) do{ printf(format, __VA_ARGS__); }while (0)
+    #define _cprintf cprintf
+    #define cputs(string) puts(string)
+    #define  cscanf(format, ...) do{ scanf(format,__VA_ARGS__); }while(0)
+    #define _cscanf cscanf
+    #define cgets gets //unsecure function
+    #define _cgets cgets
+    #define putch putchar
+    #define _putch putch
+
+
     int kbhit(){
         int ch=0, r=0; 
         nodelay(stdscr, TRUE);

@@ -3,7 +3,7 @@
 //#include <curses.h>
 //#include <stdlib.h>
 
-#include "ncursesColorCompat.h"
+#include "ncursesColor.h"
 
 #define GRASS     ' '
 #define EMPTY     '.'

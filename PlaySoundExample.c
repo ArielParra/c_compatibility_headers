@@ -3,7 +3,7 @@
 //#include<windows.h> 
 //#include<conio.h>
 //#include<stdlib.h>
-#include "windowsCompat.h"//Sleep()
+#include "windows.h"//Sleep()
 #include "PlaySound.h"//PlaySound()
 
 int main(){

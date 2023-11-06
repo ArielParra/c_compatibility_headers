@@ -3,7 +3,7 @@
 // using the BEEP() function
 
 //#include <stdio.h>
-#include "beep.h"
+#include "Beep.h"
 
 // Driver Code
 int main()

@@ -28,25 +28,25 @@ Name8 := example-allCompat-$(UNAME)
 
 all: $(Name1) $(Name2) $(Name3) $(Name4) $(Name5) $(Name6) $(Name7) $(Name8)
 
-$(Name1): stdlibExample.c stdlibCompat.h
+$(Name1): stdlibExample.c stdlib.h
 	$(CC) -o $(call FixPath,$(Name1)) $< $(FLAGS) $(CFLAGS)
 
-$(Name2): PlaySoundExample.c PlaySound.h windowsCompat.h
+$(Name2): PlaySoundExample.c PlaySound.h windows.h
 	$(CC) -o $(call FixPath,$(Name2)) $< $(FLAGS) $(CFLAGS)
 
-$(Name3): ansiExample.c ansiCompat.h stdlibCompat.h windowsCompat.h
+$(Name3): ansiExample.c ansi.h stdlib.h windows.h
 	$(CC) -o $(call FixPath,$(Name3)) $< $(FLAGS) $(CFLAGS)
 
-$(Name4): ncursesExample.c ncursesCompat.h
+$(Name4): ncursesExample.c ncurses.h
 	$(CC) -o $(call FixPath,$(Name4)) $< $(FLAGS) $(CFLAGS)
 
-$(Name5): ncursesColorExample.c ncursesColorCompat.h
+$(Name5): ncursesColorExample.c ncursesColor.h
 	$(CC) -o $(call FixPath,$(Name5)) $< $(FLAGS) $(CFLAGS)
 
-$(Name6): conioExample.c conioCompat.h
+$(Name6): conioExample.c conio.h
 	$(CC) -o $(call FixPath,$(Name6)) $< $(FLAGS) $(CFLAGS)
 
-$(Name7): windowsExample.c windowsCompat.h
+$(Name7): windowsExample.c windows.h
 	$(CC) -o $(call FixPath,$(Name7)) $< $(FLAGS) $(CFLAGS)
 
 $(Name8): allExample.c allCompat.h

@@ -2,8 +2,8 @@
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
-#include"ansiCompat.h"
-#include"stdlibCompat.h"
+#include"ansi.h"
+#include"stdlib.h"
 
 
 void color(const char *arg){

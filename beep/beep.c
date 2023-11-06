@@ -1,5 +1,5 @@
 //code from: https://github.com/zserge/beep/blob/master/beep.h
-#include "beep.h"
+#include "Beep.h"
 
 #include <stdlib.h>
 

@@ -1,7 +1,7 @@
 /*You need to manualy comment the windows libraries*/
 //#include<windows.h> 
 #include <stdio.h>
-#include "windowsCompat.h"
+#include "windows.h"
 
 int main(){
     SetConsoleTitle("Hello World!");

@@ -1,8 +1,8 @@
 #ifndef ncursesColorCompat_h 
 #define ncursesColorCompat_h
 #include <stdio.h>
-#include "ansiCompat.h"
-#include "ncursesCompat.h"
+#include "ansi.h"
+#include "ncurses.h"
 
 #ifndef __GNUC__
     #warning "You are not using Gnu C Compiler (GCC)"
