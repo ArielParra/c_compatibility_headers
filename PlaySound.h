@@ -72,10 +72,10 @@ extern "C" {
 #elif defined(__unix__)|| defined(__APPLE__) || defined(__MACH__) //*NIX
 
     #if defined(__linux__)
-        #include <stdlib.h>//system()
+        #include <stdlib.h>//getenv()
         void Play_Sound(const char* file){
             char SoundCommand[strlen(file)+15+17];
-            if (system("echo $WSL_DISTRO_NAME >/dev/null 2>&1 &") == 0) {
+            if (getenv("WSL_DISTRO_NAME")) {
                 #warning "You are using WSL, you need the ffmpeg package to use Play_Sound()"
                 strcpy(SoundCommand, "ffplay -nodisp ");
             } else {
@@ -86,7 +86,7 @@ extern "C" {
             system(SoundCommand);
         }
         void Stop_Sound(){
-            if (system("echo $WSL_DISTRO_NAME >/dev/null 2>&1 &") == 0) {
+            if (getenv("WSL_DISTRO_NAME")) {
                 system("pkill ffplay >/dev/null 2>&1 &");
             } else{
                 system("pkill aplay >/dev/null 2>&1 &");
