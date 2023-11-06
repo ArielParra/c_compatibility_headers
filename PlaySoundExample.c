@@ -3,12 +3,9 @@
 //#include<windows.h> 
 //#include<conio.h>
 //#include<stdlib.h>
-#include "windowsCompat.h"
-#include "PlaySound.h"
+#include "windowsCompat.h"//Sleep()
+#include "PlaySound.h"//PlaySound()
 
-//int main(int argc,char *argv[]){
-//int main(int argc,char **argv){
-//int main(void){
 int main(){
    
  printf("You can use the original PlaySound command\n");
@@ -21,7 +18,7 @@ int main(){
     Sleep(1000);
     
     const char* song="song.wav";
-    printf("Or you can call Play_Sound() with a const string\n");//insted of fflush(stdou)
+    printf("Or you can call Play_Sound() with a const string\n");
     Sleep(2000);
     Play_Sound(song);
     printf("Sound Play\n");

@@ -17,9 +17,13 @@
 extern "C" {
 #endif
 
-#include <stdlib.h>
+/*Shared C libraries | START*/
+#include <stdlib.h>//scanf(),printf()
+#include<unistd.h>//usleep()
+/*Shared C libraries | END*/
 
 /*<conio.h> Turbo C color macros | START*/
+#define delay(ms) usleep(ms*1000)
 #define BLACK        0
 #define BLUE         1
 #define GREEN        2
@@ -38,10 +42,10 @@ extern "C" {
 #define WHITE        15
 /*<conio.h> Turbo C color macros | END*/
 
-#if defined(_WIN32) || defined(_CYGWIN_) /*OS detection | START*/
-    #include<stdio.h>//scanf(),printf()
-    #include<windows.h>//GetConsoleScreenBufferInfo(),GetStdHandle(),SetConsoleCursorPosition(),COORD
-    #include<conio.h>//kbhit(),getch();
+#if defined(_WIN32) || defined(_CYGWIN_)/*OS detection | START*/
+    
+    #include <windows.h>//GetConsoleScreenBufferInfo(),GetStdHandle(),SetConsoleCursorPosition(),COORD
+    #include <conio.h>//kbhit(),getch();
 
     /*Old turbo C <conio.h> functions | START*/
     void clrscr(){ system("cls"); }; 
@@ -80,17 +84,15 @@ extern "C" {
             default:attr = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE; // Default to white
         }
         SetConsoleTextAttribute(hConsole, attr);
-    }
-    void delay(int ms){Sleep(ms);} 
+    } 
     #define cprintf _cprintf
     #define cputs _cputs
     /*Old turbo C <conio.h> functions | END*/
 
     /*My Functions | START*/
     void startCompat(){}
-    void exitCompat(){}
-    /*My Functions | START*/
-
+    void endCompat(){}
+    /*My Functions | END*/
 
 #else//*NIX
 
@@ -100,12 +102,9 @@ extern "C" {
 
     /*Old turbo C <conio.h> functions | START*/
     void clrscr(){ system("clear"); }
-    void gotoxy(int x,int y){ printf("%c[%d;%df",0x1B,y,x);fflush(stdout); }
-        
-    #include<unistd.h>//usleep()
-    void delay(unsigned int ms){usleep(ms*1000);} 
+    void gotoxy(int x,int y){ printf("%c[%d;%df",0x1B,y,x);fflush(stdout); } 
 
-    void textbackground(int color) {//Not tested
+    void textbackground(int color){//Not tested
         int bg_color = COLOR_BLACK;  
         switch(color){
             case BLACK:         bg_color = COLOR_BLACK;   break;
@@ -127,7 +126,7 @@ extern "C" {
         }
         bkgd(COLOR_PAIR(bg_color)); refresh();
     }
-    void textcolor(int color) {//Not tested
+    void textcolor(int color){//Not tested
         int fg_color = COLOR_WHITE;  
         switch(color){
             case BLACK:         fg_color = COLOR_BLACK;   break;
@@ -149,46 +148,26 @@ extern "C" {
         }
         attron(COLOR_PAIR(fg_color));refresh();
     }
-
     #define cprintf(format, ...)do{ printf(format, __VA_ARGS__); } while (0)
     #define _cprintf cprintf
     #define cputs(string) puts(string)
     /*Old turbo C <conio.h> functions | END*/
-
     
     /*conio.h Compatibility | START*/
-
     int kbhit(){
-    int ch=0, r=0; 
+        int ch=0, r=0; 
         nodelay(stdscr, TRUE);
         ch = getch();
         if(ch == ERR){r = FALSE;}  // no input
         else{r = TRUE;ungetch(ch);}// input
         nodelay(stdscr, FALSE);
-    return(r);
-    }//kbhit()  
+        return(r);
+    }
     #define _kbhit() kbhit()
 
     #include <string.h>//strcat()
-    void startCompat(){ //first function to be called inside main
-        /*ncurses initialization*/
-        initscr();            // Start curses mode
-        keypad(stdscr, TRUE); // enables the use of function keys,arrow keys,etc.
-        noecho();             // Dont echo() output of getch(), for a similiar functionality as conio
-        cbreak();             // will break with ctrl +c like on Windows
-        refresh();            // Update the screen to use ncurses mode
-    }//startCompat()
-    void exitCompat(){refresh();echo();fflush(stdout);endwin();}
-
-    int getche(){
-        raw();
-        echo();
-        int ch = getch();
-        noecho();
-        return ch;
-    }
-    int nocbreak_getch() {
-        raw();
+    int nocbreak_getch(){
+        raw();//nocbreak for getch
         int ch = getch();
         cbreak();
         return ch;
@@ -196,11 +175,29 @@ extern "C" {
     #undef  getch
     #define getch() nocbreak_getch()
     #define _getch() nocbreak_getch()
+        int getche(){
+        echo();
+        int ch = getch();
+        noecho();
+        return ch;
+    }
+    #define _getche getche
     /*conio.h Compatibility | END*/
-
+    
+    /*My Functions | START*/
+    void startCompat(){ //first function to be called inside main
+        initscr();            // Start curses mode
+        keypad(stdscr, TRUE); // enables the use of function keys,arrow keys,etc.
+        noecho();             // Dont echo() output of getch(), for a similiar functionality as conio
+        cbreak();             // will break with ctrl +c like on Windows
+        refresh();            // Update the screen to use ncurses mode
+    }
+    void endCompat(){
+        refresh();echo();fflush(stdout);endwin();
+    }
+    /*My Functions | END*/
 
 #endif/*OS detection | END*/
-
 
 #ifdef __cplusplus
 }

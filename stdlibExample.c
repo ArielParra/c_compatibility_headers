@@ -1,22 +1,8 @@
-/*You need to manualy comment the windows libraries*/
-//#include<windows.h> 
-//#include<conio.h>
-#include<stdio.h>
-#include<stdlib.h>//You make want to verify the uses of system()
-#include"stdlibCompat.h"
-#include"windowsCompat.h"
+#include <stdio.h>
+#include <stdlib.h>//You make want to verify the uses of system()
+#include "stdlibCompat.h"
 
-//int main(int argc,char *argv[]){
-//int main(int argc,char **argv){
-//int main(void){
-int main() {
-    SetConsoleTitle("Hello World!");
-    char hello_world[]="Hello World!";
-    printf("This is a string: \"%s\"\n",hello_world);
-    strrev(hello_world);
-    printf("This the string in reverse: \"%s\"\n",hello_world);
-
-    system("pause");
+int main(){
     
     system("cls");
     printf("Terminal screen was cleared!\n");

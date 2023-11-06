@@ -24,9 +24,9 @@ extern "C" {
 
 
 #if defined(_WIN32) || defined(_CYGWIN_) /*OS detection | START*/
-    #include<stdio.h>//scanf(),printf()
-    #include<windows.h>//GetConsoleScreenBufferInfo(),GetStdHandle(),SetConsoleCursorPosition(),COORD
-    #include<conio.h>//getch();
+    #include <stdio.h>//scanf(),printf()
+    #include <windows.h>//GetConsoleScreenBufferInfo(),GetStdHandle(),SetConsoleCursorPosition(),COORD
+    #include <conio.h>//getch();
 
     /*KEYS for getch() from <conio.h> | START*/
     #define KEY_LEFT 75     //ascii 75 is K
@@ -159,12 +159,11 @@ extern "C" {
 #else//*NIX
 
     /*<ncurses.h> includes <stdio.h> */ 
-    #include <ncurses.h>//getch(),scanw(),
+    #include <ncurses.h>
     #warning "ncurses.h needs -lncurses as a compiler argument"
 
-    /*getch() Key definitions*/
-    #undef  KEY_ENTER // on ncurses is ctrl + m 
-    #define KEY_ENTER '\n' //to work like on windows
+    #undef  KEY_ENTER      // on ncurses is ctrl + m 
+    #define KEY_ENTER '\n' // to work like Windows KEY_ENTER
 
 #endif/*OS detection | END*/
 

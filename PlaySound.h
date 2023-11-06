@@ -21,19 +21,19 @@ extern "C" {
     //#pragma comment(lib, "winmm") //Microsoft Visual C++ (MSVC) specific macro
     //void Play_Sound(const char* file){PlaySound(TEXT(file),NULL,SND_ASYNC);}//PlaySound() will stop while using getch()
     
-    #warning  "PlaySound() needs -lwinmm as compiler argument"
+    #warning "PlaySound() needs -lwinmm as compiler argument"
 
-    DWORD WINAPI ThreadFunction(LPVOID lpParameter) {
+    DWORD WINAPI ThreadFunction(LPVOID lpParameter){
         const char* file = (const char*)lpParameter;
         PlaySoundA(file, NULL, SND_ASYNC);
         return 0; 
     }
     #include<stdio.h>//fprintf(),stderr
-    void Play_Sound(const char* file) {
+    void Play_Sound(const char* file){
         HANDLE hThread = CreateThread(NULL, 0, ThreadFunction, (LPVOID)file, 0, NULL);
         if (!hThread) {fprintf(stderr, "Failed to create Play_Sound() thread.\n");exit(1);}
     }//Play_Sound() will not stop while using getch()
-    void Stop_Sound(){PlaySound(NULL, 0, 0);}
+    void Stop_Sound(){ PlaySound(NULL, 0, 0); }
 
     /* Using sox or ffmpeg ffplay apps, 
     sox.exe needs 14 dlls to work and only uses 4.96MB in total, 
@@ -72,47 +72,70 @@ extern "C" {
 #elif defined(__unix__)|| defined(__APPLE__) || defined(__MACH__) //*NIX
 
     #if defined(__linux__)
+
         #include <stdlib.h>//getenv()
+        int GV_NATIVE = 0;
         void Play_Sound(const char* file){
             char SoundCommand[strlen(file)+15+17];
-            if (getenv("WSL_DISTRO_NAME")) {
-                #warning "You are using WSL, you need the ffmpeg package to use Play_Sound()"
-                strcpy(SoundCommand, "ffplay -nodisp ");
+            if (getenv("WSL_DISTRO_NAME")){
+                GV_NATIVE = 0; strcpy(SoundCommand, "ffplay -nodisp ");
             } else {
-                strcpy(SoundCommand, "aplay ");
+                GV_NATIVE = 1; strcpy(SoundCommand, "aplay ");
             }
             strcat(SoundCommand, file);
             strcat(SoundCommand,">/dev/null 2>&1 &");
             system(SoundCommand);
         }
         void Stop_Sound(){
-            if (getenv("WSL_DISTRO_NAME")) {
-                system("pkill ffplay >/dev/null 2>&1 &");
-            } else{
-                system("pkill aplay >/dev/null 2>&1 &");
+            if (getenv("WSL_DISTRO_NAME")){
+                GV_NATIVE = 0;  system("pkill ffplay >/dev/null 2>&1 &");
+            } else {
+                GV_NATIVE = 1; system("pkill aplay >/dev/null 2>&1 &");
             }
         }
 
+        #if GV_WSL == 0
+            #warning "You are on WSL, you need ffmpeg package to use Play_Sound()"
+        #endif
+
     #elif defined(__APPLE__) || defined(__MACH__)
         
-        void Play_Sound(const char* file){char SoundCommand[strlen(file)+7+17];strcpy(SoundCommand, "afplay ");strcat(SoundCommand, file);strcat(SoundCommand,">/dev/null 2>&1 &");system(SoundCommand);}
+        void Play_Sound(const char* file){
+            char SoundCommand[strlen(file)+7+17];
+            strcpy(SoundCommand, "afplay ");strcat(SoundCommand, file);
+            strcat(SoundCommand,">/dev/null 2>&1 &");system(SoundCommand);
+        }
         void Stop_Sound(){system("pkill afplay >/dev/null 2>&1 &");}
 
     #elif defined(__OpenBSD__)
 
-        void Play_Sound(const char* file){char SoundCommand[strlen(file)+9+17];strcpy(SoundCommand, "aucat -i ");strcat(SoundCommand, file);strcat(SoundCommand,">/dev/null 2>&1 &");system(SoundCommand);}
+        void Play_Sound(const char* file){
+            char SoundCommand[strlen(file)+9+17];
+            strcpy(SoundCommand, "aucat -i ");strcat(SoundCommand, file);
+            strcat(SoundCommand,">/dev/null 2>&1 &");system(SoundCommand);
+        }
         void Stop_Sound(){system("pkill aucat >/dev/null 2>&1 &");}
 
     #else //other *NIX using a bash shell
         
         /*having the */
         #warning  "To use Play_Sound you need the sox package"
-        void Play_Sound(const char* file){char SoundCommand[strlen(file)+14+18];strcpy(SoundCommand, "bash -c 'play ");strcat(SoundCommand, file);strcat(SoundCommand,">/dev/null 2>&1 &'");system(SoundCommand);}
+        void Play_Sound(const char* file){
+            char SoundCommand[strlen(file)+14+18];
+            strcpy(SoundCommand, "bash -c 'play ");strcat(SoundCommand, file);
+            strcat(SoundCommand,">/dev/null 2>&1 &'");system(SoundCommand);
+            }
         void Stop_Sound(){system("bash -c 'pkill play >/dev/null 2>&1 &'");}
 
         /*having the ffmpeg package to use the ffplay command*/
-        //void Play_Sound(const char* file){char SoundCommand[strlen(file)+24+18];strcpy(SoundCommand, "bash -c 'ffplay -nodisp ");strcat(SoundCommand, file);strcat(SoundCommand,">/dev/null 2>&1 &'");system(SoundCommand);}
-        //void Stop_Sound(){system("bash -c 'pkill ffplay >/dev/null 2>&1 &'");}
+        /*
+        void Play_Sound(const char* file){
+            char SoundCommand[strlen(file)+24+18];
+            strcpy(SoundCommand, "bash -c 'ffplay -nodisp ");strcat(SoundCommand, file);
+            strcat(SoundCommand,">/dev/null 2>&1 &'");system(SoundCommand);
+        }
+        void Stop_Sound(){system("bash -c 'pkill ffplay >/dev/null 2>&1 &'");}
+        */
     #endif 
 #endif//OS detection 
 

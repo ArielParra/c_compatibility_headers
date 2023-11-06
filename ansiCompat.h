@@ -2,16 +2,18 @@
 #define ansiCompat_h
 
 #ifndef __GNUC__
-#warning "You are not using Gnu C Compiler (GCC)"
+    #warning "You are not using Gnu C Compiler (GCC)"
+#endif
+
+#ifdef __clang__
+    #warning "Clang compiler is being used"
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*ANSI Escape Codes Definitions*/
-
-/*Text modifiers*/
+/*Text modifiers | START*/
 #define RESET_TEXT          "\x1b[0m"
 #define BOLD_ON             "\x1b[1m"
 #define BOLD_OFF            "\x1b[22m"
@@ -22,7 +24,7 @@ extern "C" {
 #define REVERSE_OFF         "\x1b[27m"
 #define INVISIBLE_ON        "\x1b[8m"
 #define INVISIBLE_OFF       "\x1b[28m"
-/*Usually not supported */
+/*Usually not supported*/
 #define DIM_ON              "\x1b[2m"
 #define DIM_OFF             "\x1b[22m"
 #define CROSS_ON            "\x1b[9m"
@@ -31,14 +33,17 @@ extern "C" {
 #define BLINK_OFF           "\x1b[25m"
 #define ITALIC_ON           "\x1b[3m"
 #define ITALIC_OFF          "\x1b[23m"
+/*Text modifiers | END*/
 
-/*Terminal modifiers*/
-#define RESET_COLOR         "\x1b[0m"      //Reset color to default terminal color
-#define CURSOR_OFF          "\033[?25h"    //Hide Terminal Cursor
-#define CURSOR_ON           "\033[?25l"    //Show Terminal Cursor
-#define CLEAR_SCREEN        "\e[1;1H\e[2J" //Clear Screen 
+/*Terminal modifiers | START*/
+#define RESET_COLOR         "\x1b[0m"
+#define CURSOR_OFF          "\033[?25h"
+#define CURSOR_ON           "\033[?25l"
+#define CLEAR_SCREEN        "\e[1;1H\e[2J"
+/*Terminal modifiers | END*/
 
-/*Foreground colors (ansi)*/
+/*ANSI COLORS | START*/
+/*Foreground colors*/
 #define FG_BLACK            "\x1b[30m"
 #define FG_RED              "\x1b[31m"       
 #define FG_GREEN            "\x1b[32m"      
@@ -48,19 +53,7 @@ extern "C" {
 #define FG_CYAN             "\x1b[36m"
 #define FG_WHITE            "\x1b[37m"
 #define FG_DEFAULT          "\x1b[39m" 
-
-
-/*Light colors (aixterm)*/
-#define FG_BLACK_LIGHT      "\x1b[90m"
-#define FG_RED_LIGHT        "\x1b[91m"       
-#define FG_GREEN_LIGHT      "\x1b[92m"      
-#define FG_YELLOW_LIGHT     "\x1b[93m"   
-#define FG_BLUE_LIGHT       "\x1b[94m"       
-#define FG_MAGENTA_LIGHT    "\x1b[95m"    
-#define FG_CYAN_LIGHT       "\x1b[96m"
-#define FG_WHITE_LIGHT      "\x1b[97m"
-    
-/*Background Colors (ansi)*/
+/*Background Colors*/
 #define BG_BLACK            "\x1b[40m"
 #define BG_RED              "\x1b[41m"
 #define BG_GREEN            "\x1b[42m"
@@ -70,8 +63,19 @@ extern "C" {
 #define BG_CYAN             "\x1b[46m"
 #define BG_WHITE            "\x1b[47m"
 #define BG_DEFAULT          "\x1b[49m" 
+/*ANSI COLORS | END*/
 
-/*Background Light Colors (axiterm)*/
+/*AXITERM COLORS | START*/
+/*Light colors*/
+#define FG_BLACK_LIGHT      "\x1b[90m"
+#define FG_RED_LIGHT        "\x1b[91m"       
+#define FG_GREEN_LIGHT      "\x1b[92m"      
+#define FG_YELLOW_LIGHT     "\x1b[93m"   
+#define FG_BLUE_LIGHT       "\x1b[94m"       
+#define FG_MAGENTA_LIGHT    "\x1b[95m"    
+#define FG_CYAN_LIGHT       "\x1b[96m"
+#define FG_WHITE_LIGHT      "\x1b[97m"
+/*Background Light Colors*/
 #define BG_BLACK_LIGHT      "\x1b[100m"
 #define BG_RED_LIGHT        "\x1b[101m"
 #define BG_GREEN_LIGHT      "\x1b[102m"
@@ -80,39 +84,47 @@ extern "C" {
 #define BG_MAGENTA_LIGHT    "\x1b[105m"
 #define BG_CYAN_LIGHT       "\x1b[106m"
 #define BG_WHITE_LIGHT      "\x1b[107m"
+/*AXITERM COLORS | END*/
 
+/*Shared C libraries | START*/
 #include<stdio.h>//printf()
+/*Shared C libraries | END*/
 
-/*Windows ANSI compatibility by setting output mode to handle virtual terminal sequences*/
-#if defined(_WIN32) || defined(__CYGWIN__)
+#if defined(_WIN32) || defined(__CYGWIN__)/*OS detection | START*/
 
-#include <windows.h>//DWORD,GetConsoleMode(),GetStdHandle(),SetConsoleOutputCP()
+    #include <windows.h>//DWORD,GetConsoleMode(),GetStdHandle(),SetConsoleOutputCP()
 
-//For some old MinGW/CYGWIN distributions
-#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING 
-#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
-#endif
-#ifndef CP_UTF8 
-#define CP_UTF8 65001 
-#endif
-
-void setANSI(){//sets virtual terminal
-    DWORD console_mode;
-    GetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), &console_mode);
-    console_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-    SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), console_mode);
-}
-void setUTF8(){SetConsoleOutputCP(CP_UTF8);}//Unicode compatibility, can also be done with system("chcp 65001 > NUL");
+    //For some old MinGW/CYGWIN distributions
+    #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING 
+    #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+    #endif
+    #ifndef CP_UTF8 
+    #define CP_UTF8 65001 
+    #endif
+    
+    /*My Functions | START*/
+    void setANSI(){//sets virtual terminal
+        DWORD console_mode;
+        GetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), &console_mode);
+        console_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+        SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), console_mode);
+    }
+    void setUTF8(){SetConsoleOutputCP(CP_UTF8);}//Unicode compatibility, can also be done with system("chcp 65001 > NUL");
+    /*My Functions | END*/
 
 #else//*NIX
-void setANSI(void){}
-void setUTF8(void){}//not needed in most *NIX systems
-//void setUTF8(){system("export LANG=en_US.UTF-8");}
-/*//with <ncurses.h> needs -lncurses as compiler argument
-#include <ncurses.h>
-void setUTF8(){setlocale(LC_ALL, "en_US.UTF-8");}
-*/
-#endif//windows detection
+    
+    /*My Functions | START*/
+    void setANSI(void){}
+    void setUTF8(void){}//not needed in most *NIX systems
+    //void setUTF8(){system("export LANG=en_US.UTF-8");}
+    /*//with <ncurses.h> needs -lncurses as compiler argument
+    #include <ncurses.h>
+    void setUTF8(){setlocale(LC_ALL, "en_US.UTF-8");}
+    */
+    /*My Functions | END*/
+
+#endif/*OS detection | END*/
 
 #ifdef __cplusplus
 }

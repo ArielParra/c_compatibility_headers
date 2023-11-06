@@ -13,16 +13,20 @@
 extern "C" {
 #endif
 
-/*Shared C libraries*/
+/*Shared C libraries | START*/
 #include<stdlib.h>//system() //Windows: itoa(), ltoa(), _ultoa()
+/*Shared C libraries | END*/
 
-#if defined(_WIN32) || defined(__CYGWIN__)
+#if defined(_WIN32) || defined(__CYGWIN__)/*OS detection | START*/
+
     #define ultoa(args...) _ultoa(args)
     void sysClear(){ system("cls"); } 
     void sysPause(){ system("pause"); }
+
 #else//*NIX
-    #include<stdio.h> //sprintf()
-    #include<string.h>//strcmp(), strcpy()
+
+    #include <stdio.h> //sprintf()
+    #include <string.h>//strcmp(), strcpy()
 
     void sysClear(){system("clear");}
     //void sysPause(){system("read -r -n 1 -p 'Presiona cualquier tecla para contiuar . . .'");}//Español
@@ -35,7 +39,6 @@ extern "C" {
         else{system(cmd);}\
     }while(0)
     
-    //to save lines of code in header
     #define TO_ASCII(num, str, base) \
     do { \
     if(base<2){exit(1);} \
@@ -64,7 +67,7 @@ extern "C" {
     #define _itoa(args...) itoa(args)
     #define _sleep(args) Sleep(args)
 
-#endif//system detection 
+#endif/*OS detection | END*/
 
 #ifdef __cplusplus
 }

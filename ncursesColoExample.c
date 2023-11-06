@@ -1,9 +1,8 @@
-//recovered from https://www.linuxjournal.com/content/programming-color-ncurses
 /* quest.c */
+//recovered from https://www.linuxjournal.com/content/programming-color-ncurses
 //#include <curses.h>
 //#include <stdlib.h>
 
-/*Right wall bugs are expected on Linux and Windows*/
 #include "ncursesColorCompat.h"
 
 #define GRASS     ' '
