@@ -4,14 +4,6 @@
 #include "ansi.h"
 #include "ncurses.h"
 
-#ifndef __GNUC__
-    #warning "You are not using Gnu C Compiler (GCC)"
-#endif
-
-#ifdef __clang__
-    #warning "Clang compiler is being used"
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif

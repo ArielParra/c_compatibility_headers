@@ -1,4 +1,11 @@
-# Windows.h references
+# ansi.h
+
+[sol-prog: ansi-escape-codes](https://github.com/sol-prog/ansi-escape-codes-windows-posix-terminals-c-programming-examples)
+[stackoverflow ansi escape codes](https://stackoverflow.com/questions/7414983/how-can-i-use-ansi-escape-codes-for-outputting-colored-text-in-c-and-c)
+[Microsoft Learn: Virtual Terminal ](https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences)
+[Microsoft Learn: SetConsoleMode ](https://learn.microsoft.com/en-us/windows/console/setconsolemode)
+
+# windows.h references
 
 [Microsoft Learn: Sleep](https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-sleep)
 [Isak Jonsson: strrev](https://web.archive.org/web/20120419151258/http://www8.cs.umu.se/~isak/snippets/strrev.c)
@@ -24,7 +31,7 @@
 # Github conio.h projects references
 
 [thradams: Turbo C like <conio.h>](https://github.com/thradams/conio)
-[zoelabbb: conio.h](https://github.com/zoelabbb/conio.h)
+[zoelabbb: conio4linux](https://github.com/zoelabbb/conio.h)
 [nowres: conio for linux](https://github.com/nowres/conio-for-linux)
 [pushkar147: conio4gcc](https://github.com/pushkar147/conio4gcc)
 [casualsnek: linuxconio](https://github.com/casualsnek/linuxconio)
@@ -51,3 +58,4 @@
 [GNU: getch name macros](https://www.gnu.org/software/guile-ncurses/manual/html_node/Getting-characters-from-the-keyboard.html)
 [Ncurses Source Code](https://github.com/mirror/ncurses)
 [justinmeza: wincurses](https://github.com/justinmeza/wincurses)
+

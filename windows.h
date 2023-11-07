@@ -1,14 +1,6 @@
 #ifndef windowsCompat_h 
 #define windowsCompat_h 
 
-#ifndef __GNUC__
-    #warning "You do not have the Gnu C Compiler (GCC)"
-#endif
-
-#ifdef __clang__
-    #warning "Clang compiler is being used"
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif

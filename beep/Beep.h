@@ -1,18 +1,18 @@
 /*
  * The MIT License (MIT)
- * 
+ *
  * Copyright (c) 2020 Serge Zaitsev
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,17 +25,17 @@
 #define BEEP_H
 
 #ifndef __GNUC__
-    #warning "You are not using Gnu C Compiler (GCC)"
+#warning "You are not using Gnu C Compiler (GCC)"
 #endif
 
 #ifdef __clang__
-    #warning "Clang compiler is being used"
+#warning "Clang compiler is being used"
 #endif
 
 #if defined(_WIN32) || defined(_CYGWIN_)
 /* On Windows use the built-in Beep() function from  <windows.h>*/
-#include <utilapiset.h> 
-#include <synchapi.h>//Sleep()
+#include <synchapi.h> //Sleep()
+#include <utilapiset.h>
 
 #elif __linux__
 /* On Linux use alsa in synchronous mode, open "default" device in signed 8-bit
@@ -43,45 +43,47 @@
  * and never closed. */
 #include <alsa/asoundlib.h>
 #warning "Beep() needs -lasound -lm as compiler arguments"
-#include <math.h>//M_PI
+#include <math.h> //M_PI
 int Beep(int freq, int ms) {
-    static snd_pcm_t* pcm = NULL;
-    if (pcm == NULL) {
-        if (snd_pcm_open(&pcm, "default", SND_PCM_STREAM_PLAYBACK, 0) < 0) {
-            fprintf(stderr, "Error opening PCM device\n");
-            return -1;
-        }
-
-        if (snd_pcm_set_params(pcm, SND_PCM_FORMAT_S16_LE, SND_PCM_ACCESS_RW_INTERLEAVED, 1, 44100, 1, 20000) < 0) {
-            fprintf(stderr, "Error setting PCM parameters\n");
-            return -1;
-        }
+  static snd_pcm_t *pcm = NULL;
+  if (pcm == NULL) {
+    if (snd_pcm_open(&pcm, "default", SND_PCM_STREAM_PLAYBACK, 0) < 0) {
+      fprintf(stderr, "Error opening PCM device\n");
+      return -1;
     }
 
-    long frames;
-    long phase = 0;
-
-    for (int i = 0; i < ms / 50; i++) {
-        snd_pcm_prepare(pcm);
-
-        short buf[2400];  // Use the correct buffer size
-
-        for (int j = 0; j < 2400; j++) {
-            double t = 2.0 * M_PI * freq * phase / 44100.0;
-            buf[j] = (short)(32767.0 * sin(t));
-            phase++;
-        }
-
-        int r = snd_pcm_writei(pcm, buf, 2400);  // Use the correct buffer size
-
-        if (r == -EPIPE) {
-            fprintf(stderr, "Underrun occurred\n");
-            snd_pcm_prepare(pcm);
-        } else if (r < 0) {
-            fprintf(stderr, "Error writing to PCM: %s\n", snd_strerror(r));
-        }
+    if (snd_pcm_set_params(pcm, SND_PCM_FORMAT_S16_LE,
+                           SND_PCM_ACCESS_RW_INTERLEAVED, 1, 44100, 1,
+                           20000) < 0) {
+      fprintf(stderr, "Error setting PCM parameters\n");
+      return -1;
     }
-    return 0;
+  }
+
+  long frames;
+  long phase = 0;
+
+  for (int i = 0; i < ms / 50; i++) {
+    snd_pcm_prepare(pcm);
+
+    short buf[2400]; // Use the correct buffer size
+
+    for (int j = 0; j < 2400; j++) {
+      double t = 2.0 * M_PI * freq * phase / 44100.0;
+      buf[j] = (short)(32767.0 * sin(t));
+      phase++;
+    }
+
+    int r = snd_pcm_writei(pcm, buf, 2400); // Use the correct buffer size
+
+    if (r == -EPIPE) {
+      fprintf(stderr, "Underrun occurred\n");
+      snd_pcm_prepare(pcm);
+    } else if (r < 0) {
+      fprintf(stderr, "Error writing to PCM: %s\n", snd_strerror(r));
+    }
+  }
+  return 0;
 }
 
 #elif defined(__APPLE__) || defined(__MACH__)
@@ -167,12 +169,12 @@ int Beep(int freq, int ms) {
   return 0;
 }
 #else
-    #error "unknown platform"
+#error "unknown platform"
 #endif
 
-#include <unistd.h>//usleep
+#include <unistd.h> //usleep
 #if !defined(Sleep)
-void Sleep(int ms){usleep(ms*1000);}
+void Sleep(int ms) { usleep(ms * 1000); }
 #endif
 
 #define _beep Beep
