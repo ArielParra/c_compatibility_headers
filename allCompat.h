@@ -6,12 +6,12 @@ extern "C" {
 #endif
 
 /*Will implent all functions when finished*/
-#include "ncurses.h"
-#include "ansi.h"
-#include "PlaySound.h"
-#include "stdlib.h"//important to be after PlaySound.h
-#include "conio.h"
-#include "windows.h"
+#include "ncurses_h/ncurses.h"
+#include "ansi/ansi.h"
+#include "windows_h/PlaySound.h"
+#include "stdlib_h/stdlib.h"//important to be after PlaySound.h
+#include "conio_h/conio.h"
+#include "windows_h/windows.h"
 
 
 #include <string.h>//strcmp(), strncmp()

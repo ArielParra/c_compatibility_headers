@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include "ansi.h"
-#include "stdlib.h"//sysClear(), sysPause()
-#include "windows.h"//Sleep()
+#include "../stdlib_h/stdlib.h"//sysClear(), sysPause()
+#include "../windows_h/windows.h"//Sleep()
 
 
 //int main(int argc,char *argv[]){

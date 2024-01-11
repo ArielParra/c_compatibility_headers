@@ -1,7 +1,7 @@
 #ifndef ncursesColorCompat_h 
 #define ncursesColorCompat_h
 #include <stdio.h>
-#include "ansi.h"
+#include "../ansi/ansi.h"
 #include "ncurses.h"
 
 #ifdef __cplusplus

@@ -49,6 +49,7 @@ make
 
 # Alternatives
 
+- [tapio rlutil](https://github.com/tapio/rlutil)
 - [pdcurses](https://pdcurses.org/)
 - [justinmeza wincurses](https://github.com/justinmeza/wincurses)
 - [ncurses MinGW Port](https://invisible-island.net/ncurses/#download_mingw)
